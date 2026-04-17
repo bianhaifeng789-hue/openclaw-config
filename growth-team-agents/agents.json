@@ -1,0 +1,30 @@
+[
+  {
+    "id": "ua-lead",
+    "name": "投放决策官",
+    "role": "UA Lead",
+    "description": "根据ROI/LTV/日报数据输出预算分配、加减量、止损决策",
+    "can_call": ["ltv-analyst", "creative-strategist", "monetization"]
+  },
+  {
+    "id": "monetization",
+    "name": "变现优化官",
+    "role": "Monetization",
+    "description": "负责IAA/IAP变现分析，输出底价、瀑布、频次和收入优化建议",
+    "can_call": ["ua-lead"]
+  },
+  {
+    "id": "ltv-analyst",
+    "name": "LTV留存分析官",
+    "role": "LTV Analyst",
+    "description": "分析留存、LTV、回收周期与渠道质量，输出预算边界判断",
+    "can_call": ["ua-lead"]
+  },
+  {
+    "id": "creative-strategist",
+    "name": "素材策略官",
+    "role": "Creative Strategist",
+    "description": "分析素材表现，输出创意结论与下一轮测试池建议",
+    "can_call": ["ua-lead"]
+  }
+]

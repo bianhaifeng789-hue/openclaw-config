@@ -1,0 +1,35 @@
+# OpenClaw Workspace .gitignore
+
+# 环境变量（包含 API Key）
+.env
+.env.local
+
+# 运行时状态文件
+.openclaw/
+state/
+
+# Trace 日志
+_trace_*.jsonl
+
+# 临时文件
+*.log
+*.tmp
+*.bak
+
+# 测试输出
+_test_output/
+_screenshot.png
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Node modules
+node_modules/
+
+# 缓存
+.cache/

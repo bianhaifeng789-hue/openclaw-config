@@ -109,6 +109,28 @@ function buildNarrative(input, productType) {
     productType,
     overall,
     regions: { uscaau, jpkr },
+    metrics: {
+      overall: {
+        h1: parseNum(input.h1Roi),
+        h6: parseNum(input.h6Roi),
+        h12: parseNum(input.h12Roi),
+        d0: parseNum(input.d0Roi)
+      },
+      uscaau: {
+        h1: parseNum(input.uscaauH1),
+        h6: parseNum(input.uscaauH6),
+        h12: parseNum(input.uscaauH12),
+        d0: parseNum(input.uscaauD0),
+        cpi: parseNum(input.uscaauCpi)
+      },
+      jpkr: {
+        h1: parseNum(input.jpkrH1),
+        h6: parseNum(input.jpkrH6),
+        h12: parseNum(input.jpkrH12),
+        d0: parseNum(input.jpkrD0),
+        cpi: parseNum(input.jpkrCpi)
+      }
+    },
     summary: {
       overallZone: overall.zone,
       coreReason,

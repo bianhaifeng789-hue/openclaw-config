@@ -1,33 +1,43 @@
 ---
 name: iaa-feishu-reporting
 description: |
-  IAA日报中文结论与飞书卡片生成
-
-  功能：
-  - 把分析结果转成中文运营结论
-  - 生成飞书日报卡片 JSON
-  - 适合每日直接发给运营团队
+  IAA 日报飞书输出能力。
+  支持把固定 CSV 模板一键转换成：
+  - 中文运营结论
+  - 飞书卡片 JSON
+  - 飞书发送载荷
 
   Use when:
-  - 需要日报文字结论
-  - 需要飞书卡片
-  - 需要把分析结果直接发出去
-
-  Keywords:
-  - 飞书日报, 中文结论, 卡片生成, 运营结论
+  - 需要把 IAA 日报直接发到飞书
+  - 需要从 CSV 一键生成运营日报
 ---
 
 # IAA 飞书日报输出
 
-## 脚本
+## 可用脚本
 
-- `impl/bin/iaa-daily-report-to-text.js`
-- `impl/bin/iaa-daily-report-feishu-card.js`
+### 1. CSV → 中文日报
+```bash
+node impl/bin/iaa-csv-to-text-report.js templates/iaa-daily-report-template.csv
+```
 
-## 作用
+### 2. CSV → 飞书卡片 JSON
+```bash
+node impl/bin/iaa-csv-to-feishu-card.js templates/iaa-daily-report-template.csv
+```
 
-### 文字版
-直接输出适合运营看的中文结论。
+### 3. CSV → 统一机器人入口
+```bash
+node impl/bin/iaa-report-robot.js --mode=both --file=templates/iaa-daily-report-template.csv
+```
 
-### 卡片版
-直接生成飞书卡片 JSON，可通过 `message` / 飞书卡片工具发送。
+### 4. CSV → 飞书发送载荷
+```bash
+node impl/bin/iaa-report-to-feishu-payload.js --file=templates/iaa-daily-report-template.csv --format=card
+```
+
+## 推荐流程
+
+1. 运营填好 CSV
+2. 运行机器人入口或飞书载荷脚本
+3. 直接发送到飞书会话

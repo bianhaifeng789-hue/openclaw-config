@@ -26,7 +26,12 @@ const SKELETON_PATTERNS = [
   /NotImplementedError/,
   /^pass$/,
   /^\/\/ .../,
-  /^# .../
+  /^# .../,
+  /pass # TODO/,
+  /raise NotImplemented/,
+  /\# TODO: implement/i,
+  /\# TODO: add/i,
+  /\# TODO: fix/i
 ];
 
 // 空文件阈值
@@ -98,19 +103,33 @@ STOP. 你声称完成了，但未做任何实际工作。
 }
 
 /**
- * Gate 2强制验证消息
+ * Gate 2强制验证消息（增强版，包含自动检查结果）
  * @param {string} workspace - 工作目录
  * @returns {string}
  */
 function getForceVerifyMessage(workspace) {
+  // 执行自动检查
+  const autoCheckResults = workspace ? autoCheck(workspace) : null;
+  
+  let issuesWarning = '';
+  if (autoCheckResults && autoCheckResults.hasIssues) {
+    issuesWarning = `
+⚠️ AUTOMATED CHECKS FOUND ISSUES:
+${autoCheckResults.issues.slice(0, 5).join('\n')}
+You MUST fix these issues before stopping.
+`;
+  }
+  
   return `
 STOP. 你声称完成了，请验证你的工作。
-
+${issuesWarning}
 验证步骤:
 1. ls -la — 检查文件是否创建
 2. cat/head — 检查文件内容是否真实
 3. grep TODO/FIXME — 检查是否有未完成标记
-4. 运行测试（如有）— 验证功能是否正确
+4. grep NotImplementedError — 检查是否有骨架代码
+5. 检查空文件 — stat.size == 0
+6. 运行测试（如有）— 验证功能是否正确
 
 如果验证失败，请修复问题后再退出。
 
@@ -214,7 +233,7 @@ function detectSkeleton(content) {
 }
 
 /**
- * 执行自动检查
+ * 执行自动检查（来自 Harness Engineering - PreExitVerificationMiddleware._check_workspace_outputs）
  * @param {string} workspace - 工作目录
  * @returns {Object} 检查结果
  */
@@ -222,7 +241,8 @@ function autoCheck(workspace) {
   const results = {
     emptyFiles: [],
     skeletonFiles: [],
-    todoMarkers: []
+    todoMarkers: [],
+    issues: []
   };
   
   if (!workspace || !fs.existsSync(workspace)) {
@@ -236,25 +256,40 @@ function autoCheck(workspace) {
     
     try {
       const content = fs.readFileSync(filePath, 'utf8');
+      const stat = fs.statSync(filePath);
       
-      // 空文件检测
-      if (content.length < EMPTY_FILE_THRESHOLD) {
+      // 空文件检测（0 bytes 或 <100 chars）
+      if (stat.size === 0 || content.length < EMPTY_FILE_THRESHOLD) {
         results.emptyFiles.push(file);
+        results.issues.push(`⚠️ ${file} exists but is EMPTY (0 bytes)`);
       }
       
       // Skeleton检测
       if (detectSkeleton(content)) {
         results.skeletonFiles.push(file);
+        results.issues.push(`⚠️ ${file} contains TODO/NotImplementedError`);
       }
       
       // TODO标记检测
-      if (SKELETON_PATTERNS.slice(0, 3).some(p => p.test(content))) {
+      if (SKELETON_PATTERNS.slice(0, 4).some(p => p.test(content))) {
         results.todoMarkers.push(file);
+      }
+      
+      // Python 特定检测
+      if (file.endsWith('.py')) {
+        if (/^pass$/.test(content.trim())) {
+          results.skeletonFiles.push(file);
+          results.issues.push(`⚠️ ${file} is a stub file (only 'pass')`);
+        }
       }
     } catch (err) {
       // 忽略读取错误
     }
   }
+  
+  // 统计问题总数
+  results.totalIssues = results.issues.length;
+  results.hasIssues = results.totalIssues > 0;
   
   return results;
 }

@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
  * Harness - 多代理架构编排循环
- * 
- * 来源：Harness Engineering - harness.py
- * 
- * 核心循环：Plan → Build → Evaluate → Iterate
- * 
- * 用法：
+ *
+ * 来源:Harness Engineering - harness.py
+ *
+ * 核心循环:Plan → Build → Evaluate → Iterate
+ *
+ * 用法:
  *   node harness.js "Build a Pomodoro timer"                    # app-builder
  *   node harness.js --profile terminal "Fix git merge"          # terminal
  *   node harness.js --profile swe-bench "Fix issue #123"        # swe-bench
@@ -25,6 +25,24 @@ const MAX_HARNESS_ROUNDS = parseInt(process.env.MAX_HARNESS_ROUNDS || '5');
 const PASS_THRESHOLD = parseFloat(process.env.PASS_THRESHOLD || '7.0');
 const COMPRESS_THRESHOLD = parseInt(process.env.COMPRESS_THRESHOLD || '80000');
 const RESET_THRESHOLD = parseInt(process.env.RESET_THRESHOLD || '150000');
+
+// Environment Bootstrap Commands（来自 Harness Engineering - terminal.py）
+const ENV_BOOTSTRAP_COMMANDS = [
+  'uname -a',
+  'pwd',
+  'ls -la . 2>/dev/null',
+  'python3 --version 2>/dev/null; python --version 2>/dev/null',
+  'which gcc g++ make cmake 2>/dev/null || true',
+  'pip3 list 2>/dev/null | head -30 || true',
+  'cat /etc/os-release 2>/dev/null | head -5 || true',
+  'df -h / 2>/dev/null | tail -1 || true',
+  'free -h 2>/dev/null | head -2 || true',
+  'env | grep -iE "^(PATH|HOME|USER|LANG|LC_)" 2>/dev/null || true',
+  'git log --oneline -5 2>/dev/null || true',
+  'git status --short 2>/dev/null || true',
+  'git branch -a 2>/dev/null | head -10 || true',
+  'ss -tlnp 2>/dev/null | head -10 || netstat -tlnp 2>/dev/null | head -10 || true'
+];
 
 // Profile 定义
 const profiles = {
@@ -75,9 +93,10 @@ class Harness {
     this.profile = profiles[profileName] || profiles['app-builder'];
     this.workspace = WORKSPACE;
     this.scoreHistory = [];
+    this.bootstrapContext = ''; // 环境预收集结果
     this.roundNum = 0;
     this.startTime = Date.now();
-    
+
     // Agent 实例
     this.planner = null;
     this.builder = null;
@@ -89,6 +108,37 @@ class Harness {
   /**
    * 创建项目目录
    */
+  /**
+   * Environment Bootstrap - 预收集环境信息
+   * 来源：Harness Engineering - terminal.py ENV_BOOTSTRAP_COMMANDS
+   */
+  async runBootstrap() {
+    console.log('');
+    console.log('=' .repeat(60));
+    console.log('ENVIRONMENT BOOTSTRAP');
+    console.log('=' .repeat(60));
+    console.log('');
+    console.log('Pre-collecting environment info to avoid exploration time...');
+    
+    const results = [];
+    for (const cmd of ENV_BOOTSTRAP_COMMANDS) {
+      const result = this.runBashSync(cmd);
+      if (result && result.trim()) {
+        results.push(`$ ${cmd}\n${result.slice(0, 200)}`);
+      }
+    }
+    
+    this.bootstrapContext = results.join('\n\n');
+    
+    // 写入 _env_bootstrap.txt
+    const bootstrapPath = path.join(this.workspace, '_env_bootstrap.txt');
+    fs.writeFileSync(bootstrapPath, this.bootstrapContext);
+    
+    console.log(`Bootstrap complete: ${results.length} commands executed`);
+    console.log('');
+    return this.bootstrapContext;
+  }
+
   createProjectDir(userPrompt) {
     const slug = userPrompt.toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
@@ -98,7 +148,7 @@ class Harness {
     const timestamp = new Date().toISOString()
       .replace(/[:.]/g, '-')
       .slice(0, 19);
-    
+
     const projectName = `${timestamp}_${slug}`;
     this.workspace = path.join(WORKSPACE, projectName);
     
@@ -117,7 +167,7 @@ class Harness {
       // 无 planner → 直接写入 prompt 作为 spec
       const specPath = path.join(this.workspace, 'spec.md');
       fs.writeFileSync(specPath, `# Task\n\n${userPrompt}\n`);
-      console.log('No planner — wrote prompt directly to spec.md');
+      console.log('No planner - wrote prompt directly to spec.md');
       return;
     }
 
@@ -132,12 +182,12 @@ ${userPrompt}
 Save the plan to spec.md.
 
 Rules:
-- Be ambitious about scope — think of features the user didn't mention but would expect.
+- Be ambitious about scope - think of features the user didn't mention but would expect.
 - Focus on PRODUCT CONTEXT and HIGH-LEVEL TECHNICAL DESIGN.
 - If the product has a UI, describe visual design direction.
 - Output the spec as Markdown.
 - Do NOT write any code. Only write the spec.
-- Do NOT read feedback.md or contract.md — they do not exist yet.`;
+- Do NOT read feedback.md or contract.md - they do not exist yet.`;
 
     await this.runAgent('planner', plannerPrompt);
   }
@@ -166,7 +216,7 @@ Read spec.md and feedback.md (if exists).
 
 Write contract to contract.md with this structure:
 
-## Sprint Contract — Round ${roundNum}
+## Sprint Contract - Round ${roundNum}
 
 ### Scope
 What features/fixes will be implemented this round.
@@ -185,7 +235,7 @@ Be specific and realistic.`;
 
     await this.runAgent('contract_proposer', proposePrompt);
 
-    // Reviewer 审核（最多3轮）
+    // Reviewer 审核(最多3轮)
     for (let i = 0; i < 3; i++) {
       const reviewPrompt = `Review contract.md for Round ${roundNum}.
 
@@ -254,7 +304,7 @@ Read:
 ${feedback ? '- feedback.md: QA feedback from previous round\nAddress every issue listed.' : ''}
 
 CRITICAL: You MUST create actual source code files using write_file.
-Write real, complete, working code — no stubs, no placeholders, no TODO.
+Write real, complete, working code - no stubs, no placeholders, no TODO.
 
 After creating files:
 1. Use run_bash to install dependencies
@@ -300,13 +350,13 @@ Scoring dimensions:
 Be SKEPTICAL. Test every feature. Broken features score 0.
 
 Output format (save to feedback.md):
-## QA Evaluation — Round ${roundNum}
+## QA Evaluation - Round ${roundNum}
 
 ### Scores
-- Design Quality: X/10 — [justification]
-- Originality: X/10 — [justification]
-- Craft: X/10 — [justification]
-- Functionality: X/10 — [justification]
+- Design Quality: X/10 - [justification]
+- Originality: X/10 - [justification]
+- Craft: X/10 - [justification]
+- Functionality: X/10 - [justification]
 - **Average: X/10**
 
 ### Bugs Found
@@ -341,15 +391,15 @@ Output format (save to feedback.md):
   async runAgent(role, prompt) {
     // 使用 sessions_spawn 来运行子代理
     console.log(`Running ${role} agent...`);
-    
-    // 简化实现：直接使用 OpenClaw 的 session
+
+    // 简化实现:直接使用 OpenClaw 的 session
     // 实际实现需要调用 LLM API
     console.log(`[${role}] Prompt: ${prompt.slice(0, 100)}...`);
     console.log(`[${role}] Complete (simulated)`);
   }
 
   /**
-   * 执行 Bash 命令
+   * 执行 Bash 命令（异步）
    */
   runBash(command) {
     try {
@@ -361,6 +411,24 @@ Output format (save to feedback.md):
       return result;
     } catch (e) {
       return `[error] ${e.message}`;
+    }
+  }
+
+  /**
+   * 执行 Bash 命令（同步，返回结果）
+   */
+  runBashSync(command) {
+    try {
+      const result = require('child_process').execSync(command, {
+        cwd: this.workspace || WORKSPACE,
+        encoding: 'utf8',
+        timeout: 5000,
+        stdio: ['pipe', 'pipe', 'pipe']
+      });
+      return result;
+    } catch (e) {
+      // 返回 stderr 或空
+      return e.stderr || '';
     }
   }
 
@@ -378,6 +446,11 @@ Output format (save to feedback.md):
 
     // 创建项目目录
     this.createProjectDir(userPrompt);
+
+    // Environment Bootstrap（terminal profile）
+    if (this.profile.name === 'terminal') {
+      await this.runBootstrap();
+    }
 
     // Phase 1: Planning
     await this.planningPhase(userPrompt);
@@ -419,7 +492,7 @@ Output format (save to feedback.md):
 // CLI 入口
 async function main() {
   const args = process.argv.slice(2);
-  
+
   if (args.includes('--list-profiles')) {
     console.log('Available profiles:');
     for (const [name, profile] of Object.entries(profiles)) {

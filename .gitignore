@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Runtime traces and temp
+traces/
+.openclaw/
+
+# State and local runtime data
+state/
+
+# Build metadata / generated typings and sourcemaps
+impl/dist/**/*.d.ts
+impl/dist/**/*.d.ts.map
+impl/dist/**/*.js.map
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Local lock files and transient memory artifacts
+memory/.consolidate-lock
+memory/.dreams/

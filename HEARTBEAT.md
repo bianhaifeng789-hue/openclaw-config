@@ -18,13 +18,13 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 ## tasks:
 
   - name: idle-session-compact
-    interval: 1h
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/idle-session-compact.js check` to check idle sessions. If idleSessionCount > 0, run idle-session-compact.js run to execute graded compression (Level 0-3). Update heartbeat-state.json idleSessionCount. Send Feishu card with compression stats."
 
   - name: heartbeat-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js check` first. If services not enabled, run `node /Users/mar2game/.openclaw/workspace/impl/bin/auto-trigger-cli.js init` to enable all services (Notifier, Bridge, Analytics). Then run heartbeat-cli.js run for tasks. Send Feishu card for any completed tasks."
 
   - name: task-visualizer
@@ -38,8 +38,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/compact-cli.js memory` to check if MEMORY.md needs compaction. If needsCompact=true, run compact-cli.js auto glm-5. Send Feishu card with compression stats."
 
   - name: context-pressure-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/compact-cli.js auto glm-5` to check context pressure. If needsAction=true, execute appropriate level compact (Level 0-3). Send Feishu warning card if urgency >= 2."
 
   - name: time-based-mc
@@ -53,8 +53,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js auto-dream` to check dream state. If consolidation needed AND sessionCount >= 5, spawn forked agent to review sessions, update MEMORY.md, send Feishu card notification."
 
   - name: memory-maintenance
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Check memory/heartbeat-state.json lastMemoryReview. If > 2h since last review, read memory/YYYY-MM-DD.md (today+yesterday), extract key info (decisions, progress, preferences), update MEMORY.md AUTO_UPDATE blocks, update heartbeat-state.json lastMemoryReview"
 
   - name: insights-analysis
@@ -123,8 +123,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Check MCP server approval pending list. If pending approvals, send Feishu approval card."
 
   - name: extract-memories
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Extract memories from recent sessions. First run `node /Users/mar2game/.openclaw/workspace/impl/bin/memory-signals.js analyze <messages_json>` to detect correction/reinforcement signals. Update MEMORY.md with high-importance memories and signal summary. Send Feishu memory card with signals detected.
 
   # NOTE: 非核心统计已停用

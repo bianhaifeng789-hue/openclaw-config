@@ -1,0 +1,41 @@
+[
+  {
+    "name": "US TikTok Campaign",
+    "impressions": 150000,
+    "clicks": 4200,
+    "conversions": 260,
+    "spend": 890,
+    "roas": 0.31,
+    "targetCtr": 0.02,
+    "targetCvr": 0.08,
+    "targetCpa": 3.2,
+    "targetRoas": 0.35,
+    "minSpendThreshold": 100
+  },
+  {
+    "name": "JP Google Campaign",
+    "impressions": 80000,
+    "clicks": 1400,
+    "conversions": 75,
+    "spend": 410,
+    "roas": 0.41,
+    "targetCtr": 0.015,
+    "targetCvr": 0.07,
+    "targetCpa": 5.8,
+    "targetRoas": 0.35,
+    "minSpendThreshold": 80
+  },
+  {
+    "name": "BR Meta Campaign",
+    "impressions": 110000,
+    "clicks": 1600,
+    "conversions": 42,
+    "spend": 350,
+    "roas": 0.14,
+    "targetCtr": 0.018,
+    "targetCvr": 0.07,
+    "targetCpa": 4.5,
+    "targetRoas": 0.3,
+    "minSpendThreshold": 60
+  }
+]

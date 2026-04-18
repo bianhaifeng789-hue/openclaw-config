@@ -1,0 +1,32 @@
+[
+  {
+    "name": "US TikTok",
+    "spend": 890,
+    "impressions": 150000,
+    "clicks": 4200,
+    "installs": 260,
+    "revenue": 275.9,
+    "roas": 0.31,
+    "cpi": 3.42
+  },
+  {
+    "name": "JP Google",
+    "spend": 410,
+    "impressions": 80000,
+    "clicks": 1400,
+    "installs": 75,
+    "revenue": 168.1,
+    "roas": 0.41,
+    "cpi": 5.47
+  },
+  {
+    "name": "BR Meta",
+    "spend": 350,
+    "impressions": 110000,
+    "clicks": 1600,
+    "installs": 42,
+    "revenue": 49,
+    "roas": 0.14,
+    "cpi": 8.33
+  }
+]

@@ -18,17 +18,17 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 ## tasks:
 
   - name: idle-session-compact
-    interval: 30m
+    interval: 1h
     priority: high
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/idle-session-compact.js check` to check idle sessions. If idleSessionCount > 0, run idle-session-compact.js run to execute graded compression (Level 0-3). Update heartbeat-state.json idleSessionCount. Send Feishu card with compression stats."
 
   - name: heartbeat-check
-    interval: 30m
+    interval: 1h
     priority: high
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js check` first. If services not enabled, run `node /Users/mar2game/.openclaw/workspace/impl/bin/auto-trigger-cli.js init` to enable all services (Notifier, Bridge, Analytics). Then run heartbeat-cli.js run for tasks. Send Feishu card for any completed tasks."
 
   - name: task-visualizer
-    interval: 30m
+    interval: 1h
     priority: high
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js tasks` to get active tasks. If has running tasks, send Feishu card via message tool with task summary. If tasks completed recently (< 5min), send completion card."
 
@@ -38,13 +38,13 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/compact-cli.js memory` to check if MEMORY.md needs compaction. If needsCompact=true, run compact-cli.js auto glm-5. Send Feishu card with compression stats."
 
   - name: context-pressure-check
-    interval: 30m
+    interval: 1h
     priority: high
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/compact-cli.js auto glm-5` to check context pressure. If needsAction=true, execute appropriate level compact (Level 0-3). Send Feishu warning card if urgency >= 2."
 
   - name: time-based-mc
-    interval: 1h
-    priority: medium
+    interval: 2h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/compact-cli.js run glm-5 --level=0` to execute TimeBasedMC (clear old tool results). Update heartbeat-state.json lastTimeBasedMC. Send Feishu card if tokens saved > 5000."
 
   - name: auto-dream
@@ -79,8 +79,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
   #   prompt: "Check buddy stats and notification thresholds. If Buddy milestone or idle threshold reached, send Feishu card with Buddy status."
 
   - name: away-summary
-    interval: 30m
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Record user activity. If user away > 30min and returns, generate 'while you were away' summary, send Feishu card."
 
   - name: side-query-stats
@@ -203,8 +203,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-15) - MCP OAuth Auto-Refresh
   - name: mcp-oauth-refresh
-    interval: 30m
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/mcp-oauth-refresh.js scan` to check all OAuth tokens. If tokens expiring within 60s, auto-refresh. Send Feishu warning card if refresh failed or tokens expired.
     interval: 1h
     priority: high

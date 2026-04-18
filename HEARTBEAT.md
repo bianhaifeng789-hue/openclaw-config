@@ -28,8 +28,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js check` first. If services not enabled, run `node /Users/mar2game/.openclaw/workspace/impl/bin/auto-trigger-cli.js init` to enable all services (Notifier, Bridge, Analytics). Then run heartbeat-cli.js run for tasks. Send Feishu card for any completed tasks."
 
   - name: task-visualizer
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js tasks` to get active tasks. If has running tasks, send Feishu card via message tool with task summary. If tasks completed recently (< 5min), send completion card."
 
   - name: memory-compact
@@ -81,8 +81,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
   #   prompt: "Check buddy stats and notification thresholds. If Buddy milestone or idle threshold reached, send Feishu card with Buddy status."
 
   - name: away-summary
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Record user activity. If user away > 30min and returns, generate 'while you were away' summary, send Feishu card."
 
   - name: side-query-stats
@@ -113,8 +113,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Check internal logging stats. Export logs if needed, send Feishu log card."
 
   - name: rate-limit-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Check rate limit status. If approaching limits or exhausted, send Feishu warning card."
 
   - name: mcp-approval-poll
@@ -205,8 +205,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-15) - MCP OAuth Auto-Refresh
   - name: mcp-oauth-refresh
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/mcp-oauth-refresh.js scan` to check all OAuth tokens. If tokens expiring within 60s, auto-refresh. Send Feishu warning card if refresh failed or tokens expired.
     interval: 1h
     priority: high
@@ -218,8 +218,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/title-generator.js status` to check title generation status. If pending titles exist, generate and send Feishu card."
 
   - name: subagent-limit-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/subagent-limiter.js status` to check active subagents. If at limit (>3), send Feishu warning card with eviction recommendations."
 
   # 新增服务 (2026-04-15) - 任务进度反馈
@@ -286,20 +286,20 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-15) - Gateway API Status
   - name: gateway-api-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `curl http://localhost:8001/api/health` to check Gateway API health. If not responding, suggest user run `node /Users/mar2game/.openclaw/workspace/impl/bin/gateway-api.js start`. Send Feishu card with API status."
 
   # 新增服务 (2026-04-15) - Async Task Monitor
   - name: async-task-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/async-task.js status` to check async tasks. If running tasks exist, report progress. If failed tasks, analyze errors and send Feishu alert."
 
   # 新增服务 (2026-04-15) - 运营数据分析
   - name: ad-analytics-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Check ad-analytics stats from recent campaigns. Run roi-calculator.js metrics with latest data. If ROI > 200%, send Feishu performance card."
 
   - name: ltv-analysis-check

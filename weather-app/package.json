@@ -1,0 +1,13 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "description": "天气预报网站",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve",
+    "dev": "npx live-server"
+  },
+  "keywords": ["weather", "forecast", "chinese"],
+  "author": "OpenClaw Assistant",
+  "license": "MIT"
+}

@@ -1,0 +1,55 @@
+{
+  "lastChecks": {},
+  "servicesEnabled": true,
+  "lastMemoryReview": 1776428067084,
+  "lastInitTime": 1776162250,
+  "lastRuns": {
+    "task-visualizer": 1776223095473,
+    "away-summary": 1776223095518,
+    "rate-limit-check": 1776223095561,
+    "memory-maintenance": 1776220962754,
+    "extract-memories": 1776223095603,
+    "auto-dream": 1776170579000,
+    "memory-compact": 1776170579000,
+    "loop-detection-check": 1776221480000,
+    "memory-signals-check": 1776221480000,
+    "sandbox-audit-check": 1776221480000,
+    "error-handler-check": 1776224260000,
+    "title-generation-check": 1776224260000,
+    "subagent-limit-check": 1776224260000,
+    "task-progress-report": 1776224700000,
+    "anxiety-detection-check": null
+  },
+  "lastMemoryExtraction": 1776223095603,
+  "lastMemorySignalsCheck": 1776221480000,
+  "lastSandboxAuditCheck": 1776221480000,
+  "lastErrorHandlerCheck": 1776224260000,
+  "signalsStats": {
+    "corrections": 0,
+    "reinforcements": 0,
+    "lastAnalyzed": null
+  },
+  "loopStats": {
+    "warnCount": 0,
+    "hardStopCount": 0,
+    "totalCalls": 0
+  },
+  "anxietyStats": {
+    "triggeredCount": 0,
+    "warningCount": 0,
+    "checkpointCount": 0,
+    "lastTriggered": null,
+    "patternsDetected": []
+  },
+  "sandboxStats": {
+    "highRiskOps": 0,
+    "totalOps": 0,
+    "lastAudit": null
+  },
+  "errorHandlerStats": {
+    "totalCalls": 0,
+    "totalErrors": 0,
+    "errorRate": 0,
+    "lastCheck": null
+  }
+}

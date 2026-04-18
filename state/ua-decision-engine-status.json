@@ -1,0 +1,17 @@
+{
+  "skill": "ua-decision-engine",
+  "status": "validated",
+  "checks": {
+    "skillWritten": true,
+    "scriptWritten": true,
+    "samplesWritten": true,
+    "skillReadBack": true,
+    "sampleExecuted": true
+  },
+  "sampleResult": {
+    "recoveryModel": "medium-payback",
+    "roasAction": "lower",
+    "accountAction": "scale",
+    "topScaleCampaign": "camp_us_a"
+  }
+}

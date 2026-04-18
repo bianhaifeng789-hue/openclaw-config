@@ -1,0 +1,10 @@
+{
+  "name": "openclaw-plugin-claude-code-patterns",
+  "version": "1.0.0",
+  "description": "Claude Code patterns for OpenClaw",
+  "main": "index.js",
+  "openclaw": {
+    "plugin": true,
+    "hooks": ["onStart", "onHeartbeat", "preCompact"]
+  }
+}

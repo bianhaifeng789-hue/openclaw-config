@@ -1,0 +1,49 @@
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "matcher": {
+        "toolName": "*"
+      },
+      "command": "node ~/.openclaw/workspace-dispatcher/impl/bin/dangling-tool-patcher.js status",
+      "timeout": 3000,
+      "description": "Check dangling tool calls before tool execution"
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": {
+        "toolName": "sessions_spawn"
+      },
+      "command": "node ~/.openclaw/workspace-dispatcher/impl/bin/subagent-limiter.js status",
+      "timeout": 3000,
+      "description": "Check subagent limit before spawn"
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": {
+        "toolName": "*"
+      },
+      "command": "node ~/.openclaw/workspace-dispatcher/impl/bin/tool-error-handler.js status",
+      "timeout": 3000,
+      "description": "Handle tool errors after execution"
+    },
+    {
+      "event": "PostModelUse",
+      "matcher": {
+        "firstExchange": true
+      },
+      "command": "node ~/.openclaw/workspace-dispatcher/impl/bin/session-startup-hook.js run",
+      "timeout": 10000,
+      "description": "Generate session title after first exchange"
+    },
+    {
+      "event": "Stop",
+      "command": "node ~/.openclaw/workspace-dispatcher/impl/bin/title-generator.js status",
+      "timeout": 5000,
+      "description": "Generate session title on stop"
+    }
+  ],
+  "enabled": true,
+  "version": "1.1.0",
+  "description": "DeerFlow integration: error handling + subagent limit + title generation"
+}

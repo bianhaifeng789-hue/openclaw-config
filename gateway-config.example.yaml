@@ -1,0 +1,229 @@
+# OpenClaw Gateway Configuration Example
+# 
+# Guidelines:
+# - Copy this file to `gateway-config.yaml` and customize
+# - Run `make config-upgrade` to merge new fields when config_version changes
+# - Environment variables supported: $VAR_NAME
+# - Config version: bump when schema changes
+
+# ============================================================================
+# Config Version (used to detect outdated config files)
+# ============================================================================
+# Bump this number when the config schema changes.
+# Run `make config-upgrade` or `scripts/config-upgrade.sh` to merge new fields.
+config_version: 1
+
+# ============================================================================
+# Logging
+# ============================================================================
+log_level: info
+
+# ============================================================================
+# Agents Configuration
+# ============================================================================
+agents:
+  defaults:
+    model: bailian/glm-5
+    heartbeat:
+      enabled: true
+      interval: 1800000  # 30min
+    thinking:
+      enabled: false  # Adaptive (thinking-controller.js)
+    
+  # Named agents (optional)
+  named:
+    dispatcher:
+      model: bailian/glm-5
+      heartbeat_enabled: true
+    
+# ============================================================================
+# LLM Providers
+# ============================================================================
+llm:
+  providers:
+    # Bailian (default)
+    - name: bailian
+      type: bailian
+      models:
+        - name: glm-5
+          api_key: ${BAILIAN_API_KEY}
+          max_tokens: 4096
+          temperature: 0.7
+          supports_thinking: false
+          supports_vision: false
+    
+    # OpenAI (optional)
+    - name: openai
+      type: openai
+      models:
+        - name: gpt-4o
+          api_key: ${OPENAI_API_KEY}
+          max_tokens: 4096
+          temperature: 0.7
+          supports_vision: true
+    
+    # Anthropic (optional)
+    - name: anthropic
+      type: anthropic
+      models:
+        - name: claude-3-5-sonnet-20241022
+          api_key: ${ANTHROPIC_API_KEY}
+          max_tokens: 4096
+          supports_thinking: true
+          supports_vision: true
+
+# ============================================================================
+# Channels (IM integrations)
+# ============================================================================
+channels:
+  # Feishu (primary)
+  - name: feishu
+    enabled: true
+    app_id: ${FEISHU_APP_ID}
+    app_secret: ${FEISHU_APP_SECRET}
+    verify_token: ${FEISHU_VERIFY_TOKEN}
+  
+  # Telegram (optional)
+  - name: telegram
+    enabled: false
+    bot_token: ${TELEGRAM_BOT_TOKEN}
+  
+  # Discord (optional)
+  - name: discord
+    enabled: false
+    bot_token: ${DISCORD_BOT_TOKEN}
+
+# ============================================================================
+# Sandbox Configuration
+# ============================================================================
+sandbox:
+  enabled: false  # OpenClaw uses guardrails instead
+  type: local  # local / docker
+  base_dir: .openclaw-data
+
+# ============================================================================
+# Circuit Breaker (LLM failure protection)
+# ============================================================================
+circuit_breaker:
+  enabled: true
+  failure_threshold: 5  # Number of consecutive failures before tripping
+  recovery_timeout_sec: 60  # Time in seconds before attempting recovery
+
+# ============================================================================
+# Token Usage Tracking
+# ============================================================================
+token_usage:
+  enabled: true
+  log_level: info  # Track LLM token usage per model call
+
+# ============================================================================
+# Memory Configuration
+# ============================================================================
+memory:
+  enabled: true
+  type: file  # file / sqlite
+  path: memory/memory.json
+  max_injection_tokens: 2000
+  tfidf:
+    enabled: true
+    similarity_weight: 0.6
+    confidence_weight: 0.4
+
+# ============================================================================
+# Summarization Configuration
+# ============================================================================
+summarization:
+  enabled: true
+  trigger:
+    - type: tokens
+      value: 4000
+  keep:
+    type: messages
+    value: 20
+
+# ============================================================================
+# Skills Configuration
+# ============================================================================
+skills:
+  enabled: true
+  auto_discovery: true
+  directories:
+    - skills/
+  
+  # Description optimization
+  description:
+    trigger_required: true  # Skills must have "Use when [triggers]" in description
+    max_length: 1024
+
+# ============================================================================
+# Guardrails Configuration
+# ============================================================================
+guardrails:
+  enabled: true
+  blocked_patterns:
+    - "rm -rf /"
+    - "git push --force"
+    - "curl | sh"
+  blocked_paths:
+    - .ssh/
+    - .env
+    - credentials
+
+# ============================================================================
+# Hooks Configuration
+# ============================================================================
+hooks:
+  PreToolUse:
+    - matcher: "*"
+      hooks:
+        - type: command
+          command: node impl/bin/dangling-tool-patcher.js check
+    
+    - matcher: sessions_spawn
+      hooks:
+        - type: command
+          command: node impl/bin/subagent-limiter.js check
+  
+  PostToolUse:
+    - matcher: "*"
+      hooks:
+        - type: command
+          command: node impl/bin/tool-error-handler.js handle
+  
+  Stop:
+    - type: command
+      command: node impl/bin/title-generator.js generate
+
+# ============================================================================
+# Extensions Configuration (MCP + Skills)
+# ============================================================================
+# Note: extensions-config.json is separate file for MCP/Skills state
+# See: state/extensions-config.json
+
+# ============================================================================
+# Paths Configuration (standardized directories)
+# ============================================================================
+paths:
+  base_dir: .openclaw-data
+  layout:
+    memory: memory/memory.json
+    user_profile: USER.md
+    agents: agents/{agent_name}/
+    threads: threads/{thread_id}/
+    workspace: threads/{thread_id}/workspace/
+    uploads: threads/{thread_id}/uploads/
+    outputs: threads/{thread_id}/outputs/
+
+# ============================================================================
+# Debug Configuration
+# ============================================================================
+debug:
+  enabled: false
+  trace_llm: false
+  trace_tools: false
+
+---
+
+# Copy this file to gateway-config.yaml
+# Run: node impl/bin/setup-wizard.js run (interactive setup)
+# Or: make setup (via Makefile)

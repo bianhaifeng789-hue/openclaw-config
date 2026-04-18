@@ -1,0 +1,30 @@
+[
+  {
+    "id": "pm",
+    "name": "产品经理",
+    "role": "PM",
+    "description": "接收用户需求，撰写PRD，派发任务给设计/工程师/测试",
+    "can_call": ["designer", "engineer", "tester"]
+  },
+  {
+    "id": "designer",
+    "name": "设计师",
+    "role": "Designer",
+    "description": "接收PM派发的设计任务，输出UI设计稿和设计规范",
+    "can_call": ["pm"]
+  },
+  {
+    "id": "engineer",
+    "name": "工程师",
+    "role": "Engineer",
+    "description": "接收PM派发的开发任务，输出技术方案和代码",
+    "can_call": ["pm", "tester"]
+  },
+  {
+    "id": "tester",
+    "name": "测试",
+    "role": "Tester",
+    "description": "接收PM或工程师派发的测试任务，输出测试报告",
+    "can_call": ["pm", "engineer"]
+  }
+]

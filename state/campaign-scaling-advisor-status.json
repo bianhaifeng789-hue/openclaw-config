@@ -1,0 +1,17 @@
+{
+  "skill": "campaign-scaling-advisor",
+  "status": "validated",
+  "checks": {
+    "skillWritten": true,
+    "scriptWritten": true,
+    "sampleWritten": true,
+    "skillReadBack": true,
+    "sampleExecuted": true
+  },
+  "sampleResult": {
+    "topScaleCampaign": "camp_us_a",
+    "topScaleBudgetChange": "+10%",
+    "trimCampaigns": ["camp_jp_b", "camp_kr_c"],
+    "holdCampaign": "camp_gcc_d"
+  }
+}

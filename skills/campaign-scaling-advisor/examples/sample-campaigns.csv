@@ -1,0 +1,5 @@
+campaign,target_roas,actual_d1_roas,actual_d3_roas,actual_d7_roas,delivery_status,spend,volume_signal,age_days
+camp_us_a,0.35,0.31,0.38,0.52,limited,800,stable,5
+camp_jp_b,0.40,0.22,0.29,0.34,stable,1200,stable,6
+camp_kr_c,0.32,0.12,0.18,0.20,stable,900,weak,4
+camp_gcc_d,0.28,0.00,0.00,0.00,stable,60,weak,1

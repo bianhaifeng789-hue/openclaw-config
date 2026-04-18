@@ -135,18 +135,18 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-15) - DeerFlow 功能集成
   - name: loop-detection-check
-    interval: 30m
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/loop-detector.js status` to check loop detection stats. If high-risk loops detected (>3 hard stops), send Feishu alert card with loop patterns."
 
   - name: loop-detection-enhanced-check
-    interval: 30m
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/loop-detector-enhanced.js status` to check enhanced loop detection stats. If loops detected (fileEdit ≥4 or commandRepeat ≥3 or errorRepeat ≥3), send Feishu warning card with loop types and suggestions."
 
   - name: time-budget-check
-    interval: 30m
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/time-budget.js status` to check time budget stats. If tasks approaching critical threshold (>85%), send Feishu warning card with budget usage and remaining time."
 
   - name: task-tracking-check
@@ -161,13 +161,13 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-17) - Harness Engineering 移植
   - name: anxiety-detection-check
-    interval: 30m
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/anxiety-detector.js status` to check anxiety detection stats. If anxiety triggered (>2 resets in last hour), send Feishu warning card with anxiety patterns and checkpoint info."
 
   - name: pre-exit-gate-check
-    interval: 30m
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/pre-exit-gate.js status` to check gate stats. If forced starts > 5 or forced verifies > 10 in last hour, send Feishu card with gate enforcement stats."
 
   - name: memory-signals-check
@@ -177,8 +177,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-17) - Harness Engineering 移植 P3
   - name: skeleton-detection-check
-    interval: 30m
-    priority: medium
+    interval: 2h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/skeleton-detector.js check` to detect skeleton files. If skeletons found, send Feishu warning card with skeleton list and action required."
 
   - name: trace-stats-check
@@ -321,31 +321,31 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/tool-auto-fix.js status` to check auto-fix stats. If blockedCount > 10 in last hour, analyze common error patterns and send Feishu summary card with recommendations."
 
   # 新增服务 (2026-04-17) - Harness Engineering 完整移植
-  - name: harness-planner-check
-    interval: 1h
-    priority: medium
-    prompt: "Check if spec.md exists in harness-projects/. If not and new task pending, run `node ~/.openclaw/workspace/impl/bin/planner.js` to generate spec. Send Feishu card with spec outline."
+  # NOTE: 以下 5 个任务引用的脚本当前不存在，已停用
+  # - name: harness-planner-check
+  #   interval: 1h
+  #   priority: medium
+  #   prompt: "Check if spec.md exists in harness-projects/. If not and new task pending, run `node /Users/mar2game/.openclaw/workspace/impl/bin/planner.js` to generate spec. Send Feishu card with spec outline."
 
-  - name: harness-builder-check
-    interval: 1h
-    priority: high
-    prompt: "Check if source files exist in harness-projects/. If spec.md exists but no code, run `node ~/.openclaw/workspace/impl/bin/builder.js --round 1`. Send Feishu card with files created."
+  # - name: harness-builder-check
+  #   interval: 1h
+  #   priority: high
+  #   prompt: "Check if source files exist in harness-projects/. If spec.md exists but no code, run `node /Users/mar2game/.openclaw/workspace/impl/bin/builder.js --round 1`. Send Feishu card with files created."
 
-  - name: harness-evaluator-check
-    interval: 30m
-    priority: high
-    prompt: "Check if feedback.md exists in harness-projects/. If code exists but no evaluation, run `node ~/.openclaw/workspace/impl/bin/evaluator.js --round 1`. Send Feishu card with QA scores."
+  # - name: harness-evaluator-check
+  #   interval: 30m
+  #   priority: high
+  #   prompt: "Check if feedback.md exists in harness-projects/. If code exists but no evaluation, run `node /Users/mar2game/.openclaw/workspace/impl/bin/evaluator.js --round 1`. Send Feishu card with QA scores."
 
-  - name: harness-browser-test-check
-    interval: 30m
-    priority: high
-    prompt: "Check if _screenshot.png exists in harness-projects/. If not, run `node ~/.openclaw/workspace/impl/bin/browser-test.js` for active project. Send Feishu card with test results."
+  # - name: harness-browser-test-check
+  #   interval: 30m
+  #   priority: high
+  #   prompt: "Check if _screenshot.png exists in harness-projects/. If not, run `node /Users/mar2game/.openclaw/workspace/impl/bin/browser-test.js` for active project. Send Feishu card with test results."
 
-  - name: harness-score-trend-check
-    interval: 30m
-    priority: high
-    prompt: "Run `node ~/.openclaw/workspace/impl/bin/score-analyzer.js status` to check score history. If scores declining or PIVOT recommended, send Feishu warning card with strategy change recommendation."
-
+  # - name: harness-score-trend-check
+  #   interval: 30m
+  #   priority: high
+  #   prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/score-analyzer.js status` to check score history. If scores declining or PIVOT recommended, send Feishu warning card with strategy change recommendation."
 ---
 
 ## 执行规则

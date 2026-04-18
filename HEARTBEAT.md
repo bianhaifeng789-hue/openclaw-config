@@ -18,8 +18,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 ## tasks:
 
   - name: idle-session-compact
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/idle-session-compact.js check` to check idle sessions. If idleSessionCount > 0, run idle-session-compact.js run to execute graded compression (Level 0-3). Update heartbeat-state.json idleSessionCount. Send Feishu card with compression stats."
 
   - name: heartbeat-check

@@ -43,7 +43,7 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/compact-cli.js auto glm-5` to check context pressure. If needsAction=true, execute appropriate level compact (Level 0-3). Send Feishu warning card if urgency >= 2."
 
   - name: time-based-mc
-    interval: 2h
+    interval: 6h
     priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/compact-cli.js run glm-5 --level=0` to execute TimeBasedMC (clear old tool results). Update heartbeat-state.json lastTimeBasedMC. Send Feishu card if tokens saved > 5000."
 
@@ -86,7 +86,7 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Record user activity. If user away > 30min and returns, generate 'while you were away' summary, send Feishu card."
 
   - name: side-query-stats
-    interval: 2h
+    interval: 6h
     priority: low
     prompt: "Check side query stats. Report query counts, success rates, cache performance."
 
@@ -141,18 +141,18 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-15) - DeerFlow 功能集成
   - name: loop-detection-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/loop-detector.js status` to check loop detection stats. If high-risk loops detected (>3 hard stops), send Feishu alert card with loop patterns."
 
   - name: loop-detection-enhanced-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/loop-detector-enhanced.js status` to check enhanced loop detection stats. If loops detected (fileEdit ≥4 or commandRepeat ≥3 or errorRepeat ≥3), send Feishu warning card with loop types and suggestions."
 
   - name: time-budget-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/time-budget.js status` to check time budget stats. If tasks approaching critical threshold (>85%), send Feishu warning card with budget usage and remaining time."
 
   - name: task-tracking-check
@@ -167,23 +167,23 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-17) - Harness Engineering 移植
   - name: anxiety-detection-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/anxiety-detector.js status` to check anxiety detection stats. If anxiety triggered (>2 resets in last hour), send Feishu warning card with anxiety patterns and checkpoint info."
 
   - name: pre-exit-gate-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/pre-exit-gate.js status` to check gate stats. If forced starts > 5 or forced verifies > 10 in last hour, send Feishu card with gate enforcement stats."
 
   - name: memory-signals-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Check memory/heartbeat-state.json lastMemorySignalsCheck. If > 2h since last check, analyze recent user messages with `node /Users/mar2game/.openclaw/workspace/impl/bin/memory-signals.js analyze`. Update heartbeat-state.json with correction/reinforcement counts. Send Feishu card if significant signals detected (>5 corrections or >10 reinforcements)."
 
   # 新增服务 (2026-04-17) - Harness Engineering 移植 P3
   - name: skeleton-detection-check
-    interval: 2h
+    interval: 6h
     priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/skeleton-detector.js check` to detect skeleton files. If skeletons found, send Feishu warning card with skeleton list and action required."
 

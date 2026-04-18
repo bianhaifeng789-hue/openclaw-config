@@ -23,13 +23,13 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/idle-session-compact.js check` to check idle sessions. If idleSessionCount > 0, run idle-session-compact.js run to execute graded compression (Level 0-3). Update heartbeat-state.json idleSessionCount. Send Feishu card with compression stats."
 
   - name: heartbeat-check
-    interval: 1h
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js check` first. If services not enabled, run `node /Users/mar2game/.openclaw/workspace/impl/bin/auto-trigger-cli.js init` to enable all services (Notifier, Bridge, Analytics). Then run heartbeat-cli.js run for tasks. Send Feishu card for any completed tasks."
 
   - name: task-visualizer
-    interval: 1h
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js tasks` to get active tasks. If has running tasks, send Feishu card via message tool with task summary. If tasks completed recently (< 5min), send completion card."
 
   - name: memory-compact
@@ -38,8 +38,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/compact-cli.js memory` to check if MEMORY.md needs compaction. If needsCompact=true, run compact-cli.js auto glm-5. Send Feishu card with compression stats."
 
   - name: context-pressure-check
-    interval: 1h
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/compact-cli.js auto glm-5` to check context pressure. If needsAction=true, execute appropriate level compact (Level 0-3). Send Feishu warning card if urgency >= 2."
 
   - name: time-based-mc
@@ -54,10 +54,12 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   - name: memory-maintenance
     interval: 2h
+    priority: medium
     prompt: "Check memory/heartbeat-state.json lastMemoryReview. If > 2h since last review, read memory/YYYY-MM-DD.md (today+yesterday), extract key info (decisions, progress, preferences), update MEMORY.md AUTO_UPDATE blocks, update heartbeat-state.json lastMemoryReview"
 
   - name: insights-analysis
     interval: 6h
+    priority: low
     prompt: "Check memory/heartbeat-state.json lastInsightsAnalysis. If > 6h since last analysis, read last 10 daily notes and MEMORY.md, analyze user patterns/work style/preferences, generate insights report, update MEMORY.md User Profile block, update heartbeat-state.json"
 
   - name: magic-docs-scan

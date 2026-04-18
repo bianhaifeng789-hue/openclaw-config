@@ -25,3 +25,6 @@ impl/dist/**/*.js.map
 # Local lock files and transient memory artifacts
 memory/.consolidate-lock
 memory/.dreams/
+
+# Local backups and one-off test scripts
+*.bak

@@ -1,0 +1,1 @@
+{"version":3,"file":"types.js","sourceRoot":"","sources":["../../src/vim/types.ts"],"names":[],"mappings":"AAAA;;GAEG;AAuBH,MAAM,CAAC,MAAM,eAAe,GAAa;IACvC,IAAI,EAAE,QAAQ;IACd,KAAK,EAAE,CAAC;IACR,eAAe,EAAE,IAAI;IACrB,mBAAmB,EAAE,IAAI;IACzB,WAAW,EAAE,IAAI;CAClB,CAAA;AAED,MAAM,UAAU,qBAAqB;IACnC,OAAO,eAAe,CAAA;AACxB,CAAC"}

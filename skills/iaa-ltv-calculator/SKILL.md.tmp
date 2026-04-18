@@ -1,0 +1,206 @@
+---
+name: iaa-ltv-calculator
+description: |
+  IAA（广告变现）专用 LTV 计算技能
+  
+  针对快速回收产品（3-30天回本）
+  
+  功能：
+  - IAA LTV计算（基于eCPM、展示次数、留存）
+  - 快速回收评估（3/7/14/30天）
+  - 预算分配建议（基于LTV和目标ROI）
+  - ARPU优化建议
+  
+  Use when:
+  - 计算广告变现产品LTV
+  - 评估快速回收周期
+  - 制定预算分配策略
+  - 优化ARPU
+  
+  Keywords:
+  - IAA, LTV, eCPM, ARPU, 回收周期, 快速回收, 预算分配
+---
+
+# IAA LTV 计算指南
+
+## 快速回收产品（3-30天）
+
+### 核心公式
+
+```
+日ARPU = (eCPM / 1000) × 展示次数
+
+LTV = Σ(日ARPU × 当日留存率)
+
+回收周期 = CPI / 日ARPU
+
+盈亏平衡点 = LTV ≥ CPI 的天数
+```
+
+## IAA LTV计算
+
+### 基于eCPM和展示次数
+
+```bash
+node impl/bin/iaa-ltv-calculator.js ltv \
+  --ecpm 8 \
+  --impressions 5 \
+  --d1 0.5 \
+  --d7 0.25
+```
+
+### 输出示例
+
+```json
+{
+  "ltv": {
+    "day3": "$0.036",
+    "day7": "$0.072",
+    "day14": "$0.108",
+    "day30": "$0.180",
+    "day90": "$0.250"
+  },
+  "metrics": {
+    "dailyArpu": "$0.040",
+    "decayRate": "0.910"
+  }
+}
+```
+
+## 快速回收评估
+
+### 计算盈亏平衡点
+
+```bash
+node impl/bin/iaa-ltv-calculator.js recovery \
+  --cpi 0.3 \
+  --ecpm 8 \
+  --impressions 5 \
+  --d1 0.5 \
+  --d7 0.25
+```
+
+### 输出示例
+
+```json
+{
+  "recovery": {
+    "breakevenDay": "超过30天",
+    "dailyArpuRecovery": "7.5天"
+  },
+  "roi": {
+    "day3": "-88.0%",
+    "day7": "-76.0%",
+    "day14": "-64.0%",
+    "day30": "-40.0%"
+  }
+}
+```
+
+## 预算分配建议
+
+### 基于LTV和目标ROI
+
+```bash
+node impl/bin/iaa-ltv-calculator.js budget \
+  --ltv 0.5 \
+  --target-roi 150 \
+  --daily-budget 1000
+```
+
+### 输出示例
+
+```json
+{
+  "cpiTargets": {
+    "targetCPI": "$0.200",
+    "safeCPI": "$0.350",
+    "maxCPI": "$0.400"
+  },
+  "budgetAllocation": {
+    "google": 400,
+    "facebook": 300,
+    "tiktok": 200,
+    "other": 100
+  }
+}
+```
+
+## ARPU优化建议
+
+### 提升eCPM和展示次数
+
+```bash
+node impl/bin/iaa-ltv-calculator.js optimize \
+  --current-arpu 0.1 \
+  --d1 0.5 \
+  --d7 0.25
+```
+
+### 输出示例
+
+```json
+{
+  "projected": {
+    "optimizedArpu": "$0.150",
+    "optimizedLtv7": "$0.200",
+    "optimizedLtv30": "$0.400",
+    "improvement": "100%"
+  }
+}
+```
+
+## 行业基准（美国IAA市场）
+
+| 产品类型 | D7 LTV | D30 LTV | 回收周期建议 |
+|----------|--------|---------|--------------|
+| 超休闲 | $0.20-0.50 | $0.30-0.80 | ≤3天 |
+| 休闲 | $0.50-1.00 | $1.00-2.00 | ≤7天 |
+| 中重度 | $1.00-2.00 | $2.00-4.00 | ≤14天 |
+
+## 快速回收产品要求
+
+### D3回本产品
+
+```
+要求：
+- eCPM ≥ $10
+- 展示次数 ≥ 10次/天
+- D1留存 ≥ 50%
+- CPI ≤ $0.30
+
+目标：
+- D3 LTV ≥ $0.30
+- D3 ROI ≥ 100%
+```
+
+### D7回本产品
+
+```
+要求：
+- eCPM ≥ $8
+- 展示次数 ≥ 5次/天
+- D1留存 ≥ 40%
+- D7留存 ≥ 20%
+- CPI ≤ $0.50
+
+目标：
+- D7 LTV ≥ $0.50
+- D7 ROI ≥ 100%
+```
+
+### D30回本产品
+
+```
+要求：
+- eCPM ≥ $6
+- 展示次数 ≥ 3次/天
+- D1留存 ≥ 30%
+- D7留存 ≥ 15%
+- D30留存 ≥ 5%
+- CPI ≤ $1.00
+
+目标：
+- D30 LTV ≥ $1.00
+- D30 ROI ≥ 100%
+```

@@ -1,0 +1,10 @@
+{
+  "task": "build-overseas-ops-foundation",
+  "status": "written",
+  "currentStep": "files-created",
+  "checks": {
+    "entityTemplateWritten": true,
+    "platformTemplateWritten": true,
+    "readmeWritten": true
+  }
+}

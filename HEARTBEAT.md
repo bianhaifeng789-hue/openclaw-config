@@ -65,16 +65,18 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     priority: medium
     prompt: "Check memory/magic-docs-state.json lastScanAt. If > 6h since last scan, scan workspace for # MAGIC DOC: markers, update markersFound in magic-docs-state.json. If markers found, send Feishu card with updated files list"
 
-  - name: phase1-8-stats-check
-    interval: 1h
-    priority: medium
-    prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js status` to get module stats. If notable achievements (high hitRate, saved tokens), send Feishu card showing progress."
+  # NOTE: 非核心统计已停用
+  # - name: phase1-8-stats-check
+  #   interval: 1h
+  #   priority: medium
+  #   prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js status` to get module stats. If notable achievements (high hitRate, saved tokens), send Feishu card showing progress."
 
   # 新接入的 5 个服务
-  - name: buddy-companion
-    interval: 1h
-    priority: medium
-    prompt: "Check buddy stats and notification thresholds. If Buddy milestone or idle threshold reached, send Feishu card with Buddy status."
+  # NOTE: 非核心功能已停用
+  # - name: buddy-companion
+  #   interval: 1h
+  #   priority: medium
+  #   prompt: "Check buddy stats and notification thresholds. If Buddy milestone or idle threshold reached, send Feishu card with Buddy status."
 
   - name: away-summary
     interval: 30m
@@ -91,15 +93,16 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     priority: low
     prompt: "Check argument substitution stats. Report substitution counts, binding sources."
 
-  - name: mailbox-check
-    interval: 1h
-    priority: medium
-    prompt: "Check teammate mailbox. If pending messages, report counts and priorities."
+  # NOTE: 非核心功能已停用
+  # - name: mailbox-check
+  #   interval: 1h
+  #   priority: medium
+  #   prompt: "Check teammate mailbox. If pending messages, report counts and priorities."
 
   # 新增服务 (2026-04-13)
   - name: diagnostic-tracking
-    interval: 1h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Check diagnostic tracking stats. If new errors/warnings found, send Feishu diagnostic card."
 
   - name: internal-logging
@@ -113,8 +116,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Check rate limit status. If approaching limits or exhausted, send Feishu warning card."
 
   - name: mcp-approval-poll
-    interval: 1h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Check MCP server approval pending list. If pending approvals, send Feishu approval card."
 
   - name: extract-memories
@@ -122,10 +125,11 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     priority: medium
     prompt: "Extract memories from recent sessions. First run `node /Users/mar2game/.openclaw/workspace/impl/bin/memory-signals.js analyze <messages_json>` to detect correction/reinforcement signals. Update MEMORY.md with high-importance memories and signal summary. Send Feishu memory card with signals detected.
 
-  - name: tool-use-summary
-    interval: 1h
-    priority: medium
-    prompt: "Generate tool use summary. If notable progress, send Feishu summary card."
+  # NOTE: 非核心统计已停用
+  # - name: tool-use-summary
+  #   interval: 1h
+  #   priority: medium
+  #   prompt: "Generate tool use summary. If notable progress, send Feishu summary card."
 
   # 新增服务 (2026-04-14) - 健康监控（渐进式频率）
   - name: health-monitor
@@ -150,13 +154,13 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/time-budget.js status` to check time budget stats. If tasks approaching critical threshold (>85%), send Feishu warning card with budget usage and remaining time."
 
   - name: task-tracking-check
-    interval: 1h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/task-tracking.js status` to check task tracking stats. If _todo.md missing in active workspace, suggest Agent create it. Report todoCreated and todoUpdates counts."
 
   - name: error-guidance-check
-    interval: 1h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/error-guidance.js status` to check error guidance stats. If guidance sent > 10 in last hour, analyze top error patterns and send Feishu summary card with recommendations."
 
   # 新增服务 (2026-04-17) - Harness Engineering 移植
@@ -182,14 +186,14 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/skeleton-detector.js check` to detect skeleton files. If skeletons found, send Feishu warning card with skeleton list and action required."
 
   - name: trace-stats-check
-    interval: 1h
+    interval: 6h
     priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/trace-writer.js stats` to check trace stats. Report event counts, duration, and agent activity."
 
   # 新增服务 (2026-04-15) - OpenClaw Setup Wizard
   - name: setup-verification
-    interval: 1h
-    priority: medium
+    interval: 24h
+    priority: low
     prompt: "Check if gateway-config.yaml exists. If not, suggest user run `node /Users/mar2game/.openclaw/workspace/impl/bin/setup-wizard.js run` to generate config. Send Feishu card with setup guide."
 
   - name: sandbox-audit-check
@@ -244,14 +248,14 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-15) - Guardrails + Summarization
   - name: guardrails-check
-    interval: 1h
-    priority: high
+    interval: 6h
+    priority: medium
     prompt: "Check state/guardrails-config.json. If blocked_patterns updated, send Feishu security alert card with blocked patterns list."
 
   # 新增服务 (2026-04-15) - Skills激活监测
   - name: skill-activation-monitor
-    interval: 1h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Check skills activation stats in last hour. Count which Skills were triggered by user requests. If low activation (<5 skills), analyze top inactive Skills and suggest description improvements. Send Feishu card with activation stats."
 
   # 新增服务 (2026-04-15) - Doctor 系统诊断
@@ -268,8 +272,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-15) - Circuit Breaker Status
   - name: circuit-breaker-check
-    interval: 1h
-    priority: high
+    interval: 6h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/circuit-breaker.js status` to check circuit breaker state. If OPEN, send Feishu alert card with recovery time. If HALF-OPEN, send recovery test card."
 
   # 新增服务 (2026-04-15) - Token Usage Monitoring
@@ -286,8 +290,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-15) - Async Task Monitor
   - name: async-task-check
-    interval: 1h
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/async-task.js status` to check async tasks. If running tasks exist, report progress. If failed tasks, analyze errors and send Feishu alert."
 
   # 新增服务 (2026-04-15) - 运营数据分析
@@ -308,19 +312,19 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/text-only-nudge.js status` to check text-only nudge stats. If nudgesSent > 5 in last hour, analyze weak model patterns and send Feishu summary card with recommendations."
 
   - name: safe-split-check
-    interval: 1h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/compact-cli.js safe-split` to test safe split functionality. Report adjustment count and success rate."
 
   - name: role-based-compact-check
-    interval: 1h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/compact-cli.js role-config default` to check role-based compact configuration. Report retention percentages for evaluator/builder/default."
 
   # 新增服务 (2026-04-17) - Harness Engineering 深度对比补充
   - name: tool-auto-fix-check
-    interval: 1h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/tool-auto-fix.js status` to check auto-fix stats. If blockedCount > 10 in last hour, analyze common error patterns and send Feishu summary card with recommendations."
 
   # 新增服务 (2026-04-17) - Harness Engineering 完整移植

@@ -1,0 +1,20 @@
+{
+  "skill": "roas-target-strategy",
+  "status": "validated",
+  "checks": {
+    "skillWritten": true,
+    "scriptWritten": true,
+    "sampleWritten": true,
+    "skillReadBack": true,
+    "sampleExecuted": true
+  },
+  "sampleResult": {
+    "action": "lower",
+    "mainControlWindow": "D1",
+    "recommendedTargetRoasRange": {
+      "min": 0.3,
+      "max": 0.37
+    },
+    "adjustmentStyle": "moderate"
+  }
+}

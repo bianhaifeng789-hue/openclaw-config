@@ -212,10 +212,14 @@ const tools = {
   delegate_task: async (args) => {
     const { task, role = 'assistant' } = args;
     
-    // 创建 sub-agent（全新上下文）
-    // 这里需要外部注入 Agent 类
-    // 简化版本：返回提示信息
-    return `[delegate_task placeholder] Task: ${task.slice(0, 100)}... Role: ${role}. To implement: spawn Agent with clean context and return result[:8000].`;
+    // 调用 delegate-task.js
+    try {
+      const delegateModule = require('./delegate-task.js');
+      const result = await delegateModule.delegateTask({ task, role });
+      return result;
+    } catch (err) {
+      return `[error] delegate_task failed: ${err.message}`;
+    }
   },
 
   /**

@@ -60,6 +60,22 @@ const TOOL_SCHEMAS = [
   {
     type: 'function',
     function: {
+      name: 'edit_file',
+      description: 'Replace an exact string in a file. For modifying existing files — only sends the diff.',
+      parameters: {
+        type: 'object',
+        required: ['path', 'old_string', 'new_string'],
+        properties: {
+          path: { type: 'string', description: 'Relative path inside workspace' },
+          old_string: { type: 'string', description: 'Exact string to find and replace (must match EXACTLY including whitespace/indentation)' },
+          new_string: { type: 'string', description: 'New string to replace with' }
+        }
+      }
+    }
+  },
+  {
+    type: 'function',
+    function: {
       name: 'list_files',
       description: 'List all files in a directory recursively.',
       parameters: {

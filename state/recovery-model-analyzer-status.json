@@ -1,0 +1,19 @@
+{
+  "skill": "recovery-model-analyzer",
+  "status": "validated",
+  "checks": {
+    "skillWritten": true,
+    "scriptWritten": true,
+    "sampleWritten": true,
+    "skillReadBack": true,
+    "sampleExecuted": true
+  },
+  "sampleResult": {
+    "model": "medium-payback",
+    "recommendedOptimizationWindow": "D1",
+    "d0": "17.9%",
+    "d1": "35.8%",
+    "d3": "57.9%",
+    "d7": "82.9%"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "skill": "account-adjustment-strategy",
+  "status": "validated",
+  "checks": {
+    "skillWritten": true,
+    "scriptWritten": true,
+    "sampleWritten": true,
+    "skillReadBack": true,
+    "sampleExecuted": true
+  },
+  "sampleResult": {
+    "recommendedAction": "scale",
+    "suggestedBudgetAdjustment": "+15% to +20%",
+    "mainDecisionWindow": "D3"
+  }
+}

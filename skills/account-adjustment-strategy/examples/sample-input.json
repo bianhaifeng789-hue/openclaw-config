@@ -1,0 +1,12 @@
+{
+  "recovery_model": "medium-payback",
+  "optimization_stage": "scaling",
+  "target_roas": 0.35,
+  "actual_d0_roas": 0.16,
+  "actual_d1_roas": 0.29,
+  "actual_d3_roas": 0.49,
+  "actual_d7_roas": 0.73,
+  "delivery_status": "limited",
+  "spend_trend": "flat",
+  "volume_signal": "weak"
+}

@@ -1,10 +1,18 @@
 {
   "task": "build-overseas-ops-foundation",
-  "status": "written",
-  "currentStep": "files-created",
+  "status": "synced-to-feishu",
+  "currentStep": "mapping-added-and-doc-synced",
   "checks": {
     "entityTemplateWritten": true,
     "platformTemplateWritten": true,
-    "readmeWritten": true
+    "mappingTemplateWritten": true,
+    "readmeWritten": true,
+    "feishuDocCreated": true,
+    "feishuDocWritten": true,
+    "feishuDocReadBack": true
+  },
+  "feishu": {
+    "docToken": "EmG4dTe1uo7ogaxFxgqcaMVZnKd",
+    "title": "海外主体与平台注册资料模板（第一版）"
   }
 }

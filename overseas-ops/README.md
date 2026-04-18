@@ -8,10 +8,11 @@
    - 海外主体总表模板
 2. `platform-registration-template.md`
    - 平台注册资料模板
+3. `entity-platform-mapping.md`
+   - 主体与平台映射表
 
 ## 后续建议扩展
 
-- `entity-platform-mapping.md`：主体与平台映射表
 - `registration-checklist.md`：开户缺失项检查表
 - `platform-notes/`：各平台特殊要求与驳回经验
 - `entity-files/`：主体资料索引目录

@@ -1,0 +1,4 @@
+name,impressions,clicks,conversions,spend,roas,targetCtr,targetCvr,targetCpa,targetRoas,minSpendThreshold
+US TikTok Campaign,150000,4200,260,890,0.31,0.02,0.08,3.2,0.35,100
+JP Google Campaign,80000,1400,75,410,0.41,0.015,0.07,5.8,0.35,80
+BR Meta Campaign,110000,1600,42,350,0.14,0.018,0.07,4.5,0.3,60

@@ -108,8 +108,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Check internal logging stats. Export logs if needed, send Feishu log card."
 
   - name: rate-limit-check
-    interval: 30m
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Check rate limit status. If approaching limits or exhausted, send Feishu warning card."
 
   - name: mcp-approval-poll
@@ -207,37 +207,40 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
     prompt: "Check state/error-handler-state.json. If errors.length > 5 in last hour, analyze error patterns and send Feishu alert card with top error types and recommendations."
 
   - name: title-generation-check
-    interval: 30m
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/title-generator.js status` to check title generation status. If pending titles exist, generate and send Feishu card."
 
   - name: subagent-limit-check
-    interval: 30m
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/subagent-limiter.js status` to check active subagents. If at limit (>3), send Feishu warning card with eviction recommendations."
 
   # 新增服务 (2026-04-15) - 任务进度反馈
-  - name: task-progress-report
-    interval: 5m
-    priority: high
-    prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/task-progress-reporter.js check` to check if progress card needed. If shouldSend=true, send Feishu progress card and update lastProgressCard timestamp."
+  # NOTE: 5m 高频，如不需要实时进度可启用
+  # - name: task-progress-report
+  #   interval: 5m
+  #   priority: high
+  #   prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/task-progress-reporter.js check` to check if progress card needed. If shouldSend=true, send Feishu progress card and update lastProgressCard timestamp."
 
   # 新增服务 (2026-04-15) - 心跳保活
-  - name: keepalive-check
-    interval: 5m
-    priority: medium
-    prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/keepalive-sender.js check` to check if keepalive needed. If shouldSend=true AND active=true, run keepalive-sender.js message to get message, send brief Feishu message (not card). If timeout=true, send warning card. This prevents user thinking agent offline."
+  # NOTE: 5m 高频，如不需要实时保活可启用
+  # - name: keepalive-check
+  #   interval: 5m
+  #   priority: medium
+  #   prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/keepalive-sender.js check` to check if keepalive needed. If shouldSend=true AND active=true, run keepalive-sender.js message to get message, send brief Feishu message (not card). If timeout=true, send warning card. This prevents user thinking agent offline."
 
   # 新增服务 (2026-04-15) - Memory TF-IDF + SSE Streaming
   - name: memory-facts-check
-    interval: 2h
-    priority: medium
+    interval: 6h
+    priority: low
     prompt: "Check state/memory-facts.json. If facts.length > 10, analyze and extract high-confidence facts (>=0.8) to MEMORY.md. Send Feishu card with facts summary."
 
-  - name: sse-stream-check
-    interval: 5m
-    priority: medium
-    prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/sse-stream-bridge.js active` to check active streams. If active streams, check shouldSendUpdate for each. If shouldSend=true, generate Feishu update message."
+  # NOTE: SSE streaming 检查 5m 较频繁，如需可启用
+  # - name: sse-stream-check
+  #   interval: 5m
+  #   priority: medium
+  #   prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/sse-stream-bridge.js active` to check active streams. If active streams, check shouldSendUpdate for each. If shouldSend=true, generate Feishu update message."
 
   # 新增服务 (2026-04-15) - Guardrails + Summarization
   - name: guardrails-check
@@ -277,8 +280,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-15) - Gateway API Status
   - name: gateway-api-check
-    interval: 30m
-    priority: high
+    interval: 2h
+    priority: medium
     prompt: "Run `curl http://localhost:8001/api/health` to check Gateway API health. If not responding, suggest user run `node /Users/mar2game/.openclaw/workspace/impl/bin/gateway-api.js start`. Send Feishu card with API status."
 
   # 新增服务 (2026-04-15) - Async Task Monitor
@@ -300,8 +303,8 @@ node /Users/mar2game/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check
 
   # 新增服务 (2026-04-17) - Harness Engineering 补充移植
   - name: text-only-nudge-check
-    interval: 30m
-    priority: high
+    interval: 6h
+    priority: low
     prompt: "Run `node /Users/mar2game/.openclaw/workspace/impl/bin/text-only-nudge.js status` to check text-only nudge stats. If nudgesSent > 5 in last hour, analyze weak model patterns and send Feishu summary card with recommendations."
 
   - name: safe-split-check

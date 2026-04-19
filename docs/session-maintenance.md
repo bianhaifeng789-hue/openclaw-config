@@ -8,6 +8,8 @@ This workspace keeps session maintenance separate from the main heartbeat schedu
   - `run`: remove old `.checkpoint.*` / `.reset.*` files older than configured retention
 - `impl/bin/session-pressure.js`
   - report session context pressure with warn/alert/critical thresholds
+- `impl/bin/session-recommend.js`
+  - recommend whether to continue, wrap up, or switch to a new session based on pressure and compaction history
 
 ## Config
 See `config/session-maintenance.json`.

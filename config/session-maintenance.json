@@ -11,6 +11,12 @@
       "interval": "6h",
       "cmd": "node impl/bin/session-pressure.js",
       "description": "Check active session context pressure and surface hot sessions"
+    },
+    {
+      "name": "session-recommend",
+      "interval": "6h",
+      "cmd": "node impl/bin/session-recommend.js",
+      "description": "Recommend whether to continue, compact, or switch to a new session"
     }
   ],
   "notes": "Separate session maintenance from heartbeat. Run manually or via dedicated cron if needed."

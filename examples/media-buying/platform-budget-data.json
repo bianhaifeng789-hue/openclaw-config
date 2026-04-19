@@ -1,0 +1,56 @@
+[
+  {
+    "platform": "tiktok",
+    "roas": 0.32,
+    "cpi": 2.8,
+    "spend": 1200,
+    "installs": 428,
+    "retention": 0.38,
+    "scale": 800
+  },
+  {
+    "platform": "meta",
+    "roas": 0.25,
+    "cpi": 3.5,
+    "spend": 900,
+    "installs": 257,
+    "retention": 0.32,
+    "scale": 600
+  },
+  {
+    "platform": "google",
+    "roas": 0.38,
+    "cpi": 3.2,
+    "spend": 600,
+    "installs": 187,
+    "retention": 0.45,
+    "scale": 300
+  },
+  {
+    "platform": "unity",
+    "roas": 0.15,
+    "cpi": 1.8,
+    "spend": 400,
+    "installs": 222,
+    "retention": 0.18,
+    "scale": 1000
+  },
+  {
+    "platform": "ironsource",
+    "roas": 0.12,
+    "cpi": 1.5,
+    "spend": 300,
+    "installs": 200,
+    "retention": 0.15,
+    "scale": 500
+  },
+  {
+    "platform": "mintegral",
+    "roas": 0.08,
+    "cpi": 1.2,
+    "spend": 200,
+    "installs": 166,
+    "retention": 0.12,
+    "scale": 400
+  }
+]

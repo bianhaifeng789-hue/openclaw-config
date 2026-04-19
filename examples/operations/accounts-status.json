@@ -1,0 +1,46 @@
+{
+  "platforms": [
+    {
+      "name": "Google AdMob",
+      "status": "registered",
+      "accountId": "pub-1234567890",
+      "email": "admob@company.com"
+    },
+    {
+      "name": "Unity Ads",
+      "status": "registered",
+      "accountId": "unity-567890",
+      "email": "unity@company.com"
+    },
+    {
+      "name": "ironSource",
+      "status": "pending",
+      "nextStep": "验证邮箱",
+      "email": "ironsource@company.com"
+    },
+    {
+      "name": "AppLovin",
+      "status": "pending",
+      "nextStep": "填写公司信息",
+      "email": "applovin@company.com"
+    },
+    {
+      "name": "Facebook Ads",
+      "status": "failed",
+      "error": "邮箱验证超时",
+      "email": "fb@company.com"
+    },
+    {
+      "name": "TikTok Ads",
+      "status": "pending",
+      "nextStep": "开始注册",
+      "email": "tiktok@company.com"
+    },
+    {
+      "name": "Google Ads",
+      "status": "pending",
+      "nextStep": "设置付款方式",
+      "email": "googleads@company.com"
+    }
+  ]
+}

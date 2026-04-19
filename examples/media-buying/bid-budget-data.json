@@ -1,0 +1,74 @@
+[
+  {
+    "name": "US TikTok - Ad Set A",
+    "spend": 120,
+    "installs": 35,
+    "revenue": 42,
+    "ctr": 0.018,
+    "cpi": 3.43,
+    "roas": 0.35,
+    "retention": 0.38,
+    "isNew": false,
+    "hours": 48
+  },
+  {
+    "name": "US TikTok - Ad Set B",
+    "spend": 65,
+    "installs": 0,
+    "revenue": 0,
+    "ctr": 0.005,
+    "cpi": 999,
+    "roas": 0,
+    "retention": 0,
+    "isNew": false,
+    "hours": 24
+  },
+  {
+    "name": "JP Google - Ad Set C",
+    "spend": 85,
+    "installs": 12,
+    "revenue": 28,
+    "ctr": 0.015,
+    "cpi": 7.08,
+    "roas": 0.33,
+    "retention": 0.45,
+    "isNew": true,
+    "hours": 18
+  },
+  {
+    "name": "BR Meta - Ad Set D",
+    "spend": 150,
+    "installs": 18,
+    "revenue": 20,
+    "ctr": 0.014,
+    "cpi": 8.33,
+    "roas": 0.13,
+    "retention": 0.12,
+    "isNew": false,
+    "hours": 72
+  },
+  {
+    "name": "DE Meta - Ad Set E",
+    "spend": 95,
+    "installs": 28,
+    "revenue": 38,
+    "ctr": 0.016,
+    "cpi": 3.39,
+    "roas": 0.40,
+    "retention": 0.38,
+    "isNew": false,
+    "hours": 36
+  },
+  {
+    "name": "US Meta - New Creative",
+    "spend": 45,
+    "installs": 8,
+    "revenue": 12,
+    "ctr": 0.022,
+    "cpi": 5.63,
+    "roas": 0.27,
+    "retention": 0.32,
+    "isNew": true,
+    "hours": 12
+  }
+]

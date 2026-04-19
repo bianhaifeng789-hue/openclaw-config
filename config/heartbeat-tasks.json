@@ -17,6 +17,46 @@
       "enabled": true
     },
     {
+      "name": "transcript-compress",
+      "interval": "12h",
+      "priority": "medium",
+      "cmd": "node impl/bin/transcript-compressor.js check",
+      "prompt": "检查 transcript 文件大小，超过 100KB 自动压缩",
+      "enabled": true
+    },
+    {
+      "name": "cache-lru-cleanup",
+      "interval": "5m",
+      "priority": "critical",
+      "cmd": "node impl/bin/cache-lru-manager.js cleanup",
+      "prompt": "清理过期 Bootstrap Cache 和 Context Window Cache",
+      "enabled": true
+    },
+    {
+      "name": "memory-smart-extract",
+      "interval": "12h",
+      "priority": "medium",
+      "cmd": "node impl/bin/memory-smart-extractor.js extract",
+      "prompt": "智能触发记忆提取（关键词/长度/信号）",
+      "enabled": true
+    },
+    {
+      "name": "gateway-state-save",
+      "interval": "1h",
+      "priority": "high",
+      "cmd": "node impl/bin/gateway-state-saver.js save",
+      "prompt": "保存 Gateway 状态用于 restart 恢复",
+      "enabled": true
+    },
+    {
+      "name": "archive-cleanup",
+      "interval": "24h",
+      "priority": "low",
+      "cmd": "node impl/bin/archive-cleaner.js check --older-than=7d",
+      "prompt": "检查归档文件，超过 7 天自动清理",
+      "enabled": true
+    },
+    {
       "name": "extract-memories",
       "interval": "24h",
       "priority": "low",

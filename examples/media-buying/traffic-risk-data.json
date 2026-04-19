@@ -1,0 +1,52 @@
+[
+  {
+    "name": "TikTok US - Normal",
+    "ctr": 0.018,
+    "cvr": 0.04,
+    "installs": 150,
+    "retention": 0.35,
+    "roas": 0.28,
+    "spend": 450,
+    "cpi": 3.0
+  },
+  {
+    "name": "Meta BR - Suspicious",
+    "ctr": 0.15,
+    "cvr": 0.005,
+    "installs": 800,
+    "retention": 0.02,
+    "roas": 0.02,
+    "spend": 600,
+    "cpi": 0.75
+  },
+  {
+    "name": "Unity IN - Dump Traffic",
+    "ctr": 0.08,
+    "cvr": 0.008,
+    "installs": 1200,
+    "retention": 0.05,
+    "roas": 0.03,
+    "spend": 800,
+    "cpi": 0.67
+  },
+  {
+    "name": "Google US - Quality",
+    "ctr": 0.012,
+    "cvr": 0.05,
+    "installs": 85,
+    "retention": 0.45,
+    "roas": 0.35,
+    "spend": 280,
+    "cpi": 3.3
+  },
+  {
+    "name": "Pangle ID - Borderline",
+    "ctr": 0.06,
+    "cvr": 0.015,
+    "installs": 400,
+    "retention": 0.12,
+    "roas": 0.08,
+    "spend": 350,
+    "cpi": 0.88
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "companyName": "Game Studio Inc.",
+  "country": "US",
+  "forms": [
+    {
+      "name": "W-8BEN-E（AdMob）",
+      "platform": "AdMob",
+      "status": "completed",
+      "submittedDate": "2026-04-01",
+      "confirmedDate": "2026-04-15"
+    },
+    {
+      "name": "W-8BEN-E（Unity Ads）",
+      "platform": "Unity",
+      "status": "completed",
+      "submittedDate": "2026-04-05",
+      "confirmedDate": "2026-04-18"
+    },
+    {
+      "name": "W-8BEN-E（ironSource）",
+      "platform": "ironSource",
+      "status": "pending",
+      "action": "填写并提交表格",
+      "expectedDate": "2026-04-25"
+    },
+    {
+      "name": "W-8BEN-E（AppLovin）",
+      "platform": "AppLovin",
+      "status": "missing",
+      "action": "准备表格"
+    }
+  ],
+  "compliance": [
+    {
+      "name": "隐私政策页面",
+      "status": "completed",
+      "url": "https://gamestudio.com/privacy"
+    },
+    {
+      "name": "GDPR 合规",
+      "status": "completed",
+      "checkDate": "2026-04-10"
+    },
+    {
+      "name": "COPPA 合规",
+      "status": "pending",
+      "action": "添加年龄验证和家长同意流程"
+    },
+    {
+      "name": "数据删除功能",
+      "status": "pending",
+      "action": "实现用户数据删除接口"
+    },
+    {
+      "name": "Cookie政策页面",
+      "status": "completed",
+      "url": "https://gamestudio.com/cookies"
+    }
+  ],
+  "lastUpdate": "2026-04-18T13:53:00Z"
+}

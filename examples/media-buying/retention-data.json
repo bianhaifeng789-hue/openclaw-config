@@ -1,0 +1,41 @@
+{
+  "cohorts": [
+    {
+      "name": "US TikTok D7",
+      "installDate": "2026-04-11",
+      "installs": 490,
+      "d1": 175,
+      "d3": 98,
+      "d7": 49,
+      "d14": 25,
+      "d30": 10
+    },
+    {
+      "name": "JP Google D7",
+      "installDate": "2026-04-11",
+      "installs": 210,
+      "d1": 74,
+      "d3": 42,
+      "d7": 21,
+      "d14": 11,
+      "d30": 4
+    },
+    {
+      "name": "BR Meta D7",
+      "installDate": "2026-04-11",
+      "installs": 180,
+      "d1": 54,
+      "d3": 27,
+      "d7": 9,
+      "d14": 3,
+      "d30": 1
+    }
+  ],
+  "platform": "All",
+  "period": "D7-D30",
+  "benchmark": {
+    "d1": 35,
+    "d7": 20,
+    "d30": 8
+  }
+}

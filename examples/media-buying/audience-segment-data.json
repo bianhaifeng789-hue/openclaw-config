@@ -1,0 +1,57 @@
+[
+  {
+    "name": "US Broad 18-35",
+    "type": "broad",
+    "ctr": 0.015,
+    "cvr": 0.04,
+    "cpi": 3.2,
+    "roas": 0.25,
+    "retention": 0.35,
+    "spend": 450,
+    "installs": 140
+  },
+  {
+    "name": "US Interest - Gaming",
+    "type": "interest",
+    "ctr": 0.028,
+    "cvr": 0.03,
+    "cpi": 4.1,
+    "roas": 0.18,
+    "retention": 0.28,
+    "spend": 280,
+    "installs": 68
+  },
+  {
+    "name": "US LAL 1% Purchasers",
+    "type": "lookalike",
+    "ctr": 0.022,
+    "cvr": 0.05,
+    "cpi": 2.8,
+    "roas": 0.32,
+    "retention": 0.42,
+    "spend": 350,
+    "installs": 125
+  },
+  {
+    "name": "US Remarketing 7d",
+    "type": "remarketing",
+    "ctr": 0.042,
+    "cvr": 0.08,
+    "cpi": 5.5,
+    "roas": 0.48,
+    "retention": 0.55,
+    "spend": 200,
+    "installs": 36
+  },
+  {
+    "name": "US Custom High LTV",
+    "type": "custom",
+    "ctr": 0.018,
+    "cvr": 0.06,
+    "cpi": 3.0,
+    "roas": 0.38,
+    "retention": 0.48,
+    "spend": 180,
+    "installs": 60
+  }
+]

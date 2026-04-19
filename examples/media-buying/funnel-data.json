@@ -1,0 +1,42 @@
+[
+  {
+    "name": "US Video A",
+    "impressions": 150000,
+    "clicks": 4200,
+    "conversions": 260,
+    "ctr": 0.028,
+    "cvr": 0.062
+  },
+  {
+    "name": "US Video B - Misleading",
+    "impressions": 120000,
+    "clicks": 4800,
+    "conversions": 48,
+    "ctr": 0.040,
+    "cvr": 0.010
+  },
+  {
+    "name": "JP Video C",
+    "impressions": 80000,
+    "clicks": 1400,
+    "conversions": 75,
+    "ctr": 0.018,
+    "cvr": 0.054
+  },
+  {
+    "name": "BR Video D",
+    "impressions": 110000,
+    "clicks": 1600,
+    "conversions": 32,
+    "ctr": 0.015,
+    "cvr": 0.020
+  },
+  {
+    "name": "DE Video E - Quality",
+    "impressions": 60000,
+    "clicks": 900,
+    "conversions": 54,
+    "ctr": 0.015,
+    "cvr": 0.060
+  }
+]

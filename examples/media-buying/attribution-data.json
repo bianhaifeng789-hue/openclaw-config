@@ -1,0 +1,37 @@
+[
+  {
+    "source": "TikTok US Campaign",
+    "platform_installs": 280,
+    "mmp_installs": 262,
+    "platform_events": 145,
+    "mmp_events": 138
+  },
+  {
+    "source": "Meta BR Campaign",
+    "platform_installs": 45,
+    "mmp_installs": 38,
+    "platform_events": 22,
+    "mmp_events": 15
+  },
+  {
+    "source": "Google JP Campaign",
+    "platform_installs": 78,
+    "mmp_installs": 75,
+    "platform_events": 52,
+    "mmp_events": 48
+  },
+  {
+    "source": "Unity IN Campaign",
+    "platform_installs": 160,
+    "mmp_installs": 85,
+    "platform_events": 40,
+    "mmp_events": 22
+  },
+  {
+    "source": "Meta DE Campaign",
+    "platform_installs": 88,
+    "mmp_installs": 85,
+    "platform_events": 45,
+    "mmp_events": 42
+  }
+]

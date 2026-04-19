@@ -1,0 +1,71 @@
+{
+  "companyName": "Game Studio Inc.",
+  "country": "US",
+  "steps": [
+    {
+      "name": "公司名称核准",
+      "status": "completed",
+      "completedDate": "2026-04-01"
+    },
+    {
+      "name": "营业执照申请",
+      "status": "completed",
+      "completedDate": "2026-04-05"
+    },
+    {
+      "name": "税务登记",
+      "status": "pending",
+      "action": "提交税务登记表",
+      "expectedDate": "2026-04-20"
+    },
+    {
+      "name": "银行开户",
+      "status": "pending",
+      "action": "预约银行开户",
+      "expectedDate": "2026-04-25"
+    },
+    {
+      "name": "外汇账户",
+      "status": "not_started",
+      "issue": "等待银行开户完成"
+    },
+    {
+      "name": "W-8BEN 表格",
+      "status": "pending",
+      "action": "填写税务表格",
+      "expectedDate": "2026-04-30"
+    }
+  ],
+  "documents": [
+    {
+      "name": "营业执照",
+      "status": "ready",
+      "path": "docs/business-license.pdf"
+    },
+    {
+      "name": "税务登记证",
+      "status": "pending",
+      "path": null
+    },
+    {
+      "name": "银行开户许可证",
+      "status": "pending",
+      "path": null
+    },
+    {
+      "name": "公司章程",
+      "status": "ready",
+      "path": "docs/articles.pdf"
+    },
+    {
+      "name": "法人身份证",
+      "status": "ready",
+      "path": "docs/id.pdf"
+    },
+    {
+      "name": "W-8BEN 表格",
+      "status": "pending",
+      "path": null
+    }
+  ]
+}

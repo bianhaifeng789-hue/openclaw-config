@@ -1,0 +1,32 @@
+[
+  {
+    "name": "US Video 15s A",
+    "three_sec_rate": 0.75,
+    "completion_rate": 0.35,
+    "duration": 15
+  },
+  {
+    "name": "US Video 30s B - Draggy",
+    "three_sec_rate": 0.72,
+    "completion_rate": 0.15,
+    "duration": 30
+  },
+  {
+    "name": "JP Video 20s C",
+    "three_sec_rate": 0.55,
+    "completion_rate": 0.28,
+    "duration": 20
+  },
+  {
+    "name": "BR Video 25s D",
+    "three_sec_rate": 0.40,
+    "completion_rate": 0.12,
+    "duration": 25
+  },
+  {
+    "name": "DE Video 15s E",
+    "three_sec_rate": 0.68,
+    "completion_rate": 0.32,
+    "duration": 15
+  }
+]

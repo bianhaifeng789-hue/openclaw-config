@@ -1,0 +1,71 @@
+{
+  "platforms": [
+    {
+      "name": "AdMob",
+      "category": "monetization",
+      "accountCreated": true,
+      "sdkIntegrated": true,
+      "adUnitsConfigured": true,
+      "ecpm": 8.50,
+      "dailyRevenue": 125.00
+    },
+    {
+      "name": "Unity Ads",
+      "category": "monetization",
+      "accountCreated": true,
+      "sdkIntegrated": false,
+      "adUnitsConfigured": false,
+      "ecpm": null
+    },
+    {
+      "name": "ironSource",
+      "category": "monetization",
+      "accountCreated": true,
+      "sdkIntegrated": true,
+      "adUnitsConfigured": false,
+      "ecpm": 6.20
+    },
+    {
+      "name": "AppLovin MAX",
+      "category": "monetization",
+      "accountCreated": false,
+      "sdkIntegrated": false,
+      "adUnitsConfigured": false
+    },
+    {
+      "name": "TikTok Ads",
+      "category": "ads",
+      "accountReady": true,
+      "fundingSetup": true,
+      "campaignCreated": true,
+      "dailySpend": 1400
+    },
+    {
+      "name": "Google Ads",
+      "category": "ads",
+      "accountReady": true,
+      "fundingSetup": false,
+      "campaignCreated": false
+    },
+    {
+      "name": "Meta Ads",
+      "category": "ads",
+      "accountReady": false,
+      "fundingSetup": false,
+      "campaignCreated": false
+    },
+    {
+      "name": "Google Play",
+      "category": "store",
+      "accountCreated": true,
+      "appPublished": true,
+      "appId": "com.company.app"
+    },
+    {
+      "name": "Apple App Store",
+      "category": "store",
+      "accountCreated": false,
+      "appPublished": false
+    }
+  ]
+}

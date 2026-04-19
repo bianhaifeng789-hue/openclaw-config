@@ -1,0 +1,45 @@
+{
+  "dailyBudget": 5000,
+  "monthlyBudget": 150000,
+  "consumedDaily": 4200,
+  "consumedMonthly": 98000,
+  "platforms": [
+    {
+      "name": "TikTok",
+      "budget": 1500,
+      "consumed": 1400,
+      "roi": 1.35
+    },
+    {
+      "name": "Google Ads",
+      "budget": 1200,
+      "consumed": 950,
+      "roi": 1.28
+    },
+    {
+      "name": "Meta",
+      "budget": 1000,
+      "consumed": 850,
+      "roi": 0.95
+    },
+    {
+      "name": "Unity",
+      "budget": 800,
+      "consumed": 600,
+      "roi": 1.12
+    },
+    {
+      "name": "ironSource",
+      "budget": 500,
+      "consumed": 400,
+      "roi": 0.88
+    }
+  ],
+  "alerts": [
+    {
+      "platform": "TikTok",
+      "type": "high_consumption",
+      "message": "消耗接近预算上限"
+    }
+  ]
+}

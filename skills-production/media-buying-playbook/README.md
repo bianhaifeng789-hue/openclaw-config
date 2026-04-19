@@ -1,6 +1,6 @@
-# 投放岗位总索引
+# 投放 & 运营岗位总索引
 
-用于汇总当前与海外安卓 APP 投放测试、买量分析、变现优化相关的 Skills 和 Scripts，方便后续快速查找和调用。
+用于汇总当前与海外安卓 APP 投放测试、买量分析、变现优化、运营管理相关的 Skills 和 Scripts，方便后续快速查找和调用。
 
 ---
 
@@ -51,6 +51,45 @@
 
 ---
 
+---
+
+## 投放岗位飞书卡片脚本
+
+### P0/P1 报告卡片（15个）
+- ads-report-feishu-card.js ✅
+- creative-analyzer-feishu-card.js ✅
+- campaign-diagnoser-feishu-card.js ✅
+- auto-bid-budget-feishu-card.js ✅
+- geo-channel-feishu-card.js ✅
+- mmp-attribution-feishu-card.js ✅
+- creative-testing-feishu-card.js ✅
+- audience-segmentation-feishu-card.js ✅
+- fraud-risk-feishu-card.js ✅
+- cross-platform-budget-feishu-card.js ✅
+- funnel-analysis-feishu-card.js ✅
+- ltv-analysis-feishu-card.js ✅
+- roi-analysis-feishu-card.js ✅
+- retention-analysis-feishu-card.js ✅
+- video-creative-feishu-card.js ✅
+
+### 样例数据（14个）
+examples/media-buying/*.json ✅
+
+---
+
+## 运营岗位飞书卡片脚本
+
+### 运营管理卡片（4个）
+- account-registration-checklist-feishu-card.js ✅
+- budget-monitor-feishu-card.js ✅
+- platform-status-feishu-card.js ✅
+- company-registration-progress-feishu-card.js ✅
+
+### 样例数据（6个）
+examples/operations/*.json ✅
+
+---
+
 ## 2. 已有配套能力
 
 ### 平台与注册
@@ -91,22 +130,53 @@
 ## 3. 已有脚本入口
 
 ### 当前已落地脚本
-- `scripts/creative-analyzer.js`
-  - 创意表现分析报告
 
-- `scripts/campaign-diagnoser.js`
-  - 投放结构诊断报告
+#### Markdown 版本
+- `scripts/creative-analyzer.js` - 创意表现分析报告
+- `scripts/campaign-diagnoser.js` - 投放结构诊断报告
+- `scripts/ads-report-cli.js` - 日报 / 周报生成
 
-- `scripts/ads-report-cli.js`
-  - 日报 / 周报生成
+#### 飞书卡片版本 ✅ 新增
+
+**P0/P1 报告卡片**
+- `scripts/ads-report-feishu-card.js` - 投放日报/周报飞书卡片
+- `scripts/creative-analyzer-feishu-card.js` - 创意表现分析飞书卡片
+- `scripts/campaign-diagnoser-feishu-card.js` - Campaign 诊断飞书卡片
+- `scripts/auto-bid-budget-feishu-card.js` - 出价预算规则飞书卡片 ✅ 新增
+- `scripts/geo-channel-feishu-card.js` - GEO × 渠道分析飞书卡片 ✅ 新增
+- `scripts/mmp-attribution-feishu-card.js` - MMP 归因检查飞书卡片 ✅ 新增
+
+**P2 分析卡片**
+- `scripts/creative-testing-feishu-card.js` - 创意测试 SOP 结果
+- `scripts/audience-segmentation-feishu-card.js` - 受众分层分析
+- `scripts/fraud-risk-feishu-card.js` - 流量异常风险检查
+- `scripts/cross-platform-budget-feishu-card.js` - 多平台预算分配
 
 ### 使用方式
+
+#### Markdown 输出
 ```bash
-node /Users/mar2game/.openclaw/workspace/scripts/creative-analyzer.js data.json
-node /Users/mar2game/.openclaw/workspace/scripts/campaign-diagnoser.js data.json
-node /Users/mar2game/.openclaw/workspace/scripts/ads-report-cli.js data.json daily
-node /Users/mar2game/.openclaw/workspace/scripts/ads-report-cli.js data.json weekly
+node scripts/creative-analyzer.js data.json
+node scripts/campaign-diagnoser.js data.json
+node scripts/ads-report-cli.js data.json daily
+node scripts/ads-report-cli.js data.json weekly
 ```
+
+#### 飞书卡片输出 ✅ 新增
+```bash
+# 投放日报卡片
+node scripts/ads-report-feishu-card.js data.json --mode=daily
+node scripts/ads-report-feishu-card.js data.json --mode=weekly
+
+# 创意表现卡片
+node scripts/creative-analyzer-feishu-card.js creative-data.json
+
+# Campaign 诊断卡片
+node scripts/campaign-diagnoser-feishu-card.js campaign-data.json
+```
+
+#### 飞书直接发送
+通过 OpenClaw message tool 发送卡片 JSON
 
 ---
 

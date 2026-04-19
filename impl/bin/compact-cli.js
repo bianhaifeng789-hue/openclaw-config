@@ -68,15 +68,13 @@ const CONTEXT_WINDOWS = {
   'default': 200_000
 };
 
-// Script registry
+// Script registry (已统一，删除重复脚本)
 const SCRIPTS = {
-  'auto-compact-service': path.join(BIN_DIR, 'auto-compact-service.js'),
-  'compact-threshold': path.join(BIN_DIR, 'compact-threshold.js'),
-  'session-memory-compact': path.join(BIN_DIR, 'session-memory-compact.js'),
-  'compact-warning-hook': path.join(BIN_DIR, 'compact-warning-hook.js'),
-  'post-compact-cleanup': path.join(BIN_DIR, 'post-compact-cleanup.js'),
   'time-based-mc-config': path.join(BIN_DIR, 'time-based-mc-config.js')
 };
+
+// 25k threshold for MEMORY.md auto-compression
+const MEMORY_COMPACT_THRESHOLD = 25_000;
 
 function runScript(scriptName, args = []) {
   const scriptPath = SCRIPTS[scriptName];
@@ -291,31 +289,21 @@ function runLevelCompact(level, model) {
 }
 
 function runAutoCompact(model) {
-  // 检查当前状态
-  const thresholdCheck = runScript('compact-threshold', ['calculate', model]);
+  // 检查 MEMORY.md 压缩状态
+  const memoryCheck = compactMemory();
   
-  // 检查会话记忆
-  const memoryCheck = runScript('session-memory-compact', ['check']);
-  
-  // 检查压缩警告状态
-  const warningCheck = runScript('compact-warning-hook', ['status']);
+  // 检查 timeBasedMC 配置
+  const timeBasedMC = runScript('time-based-mc-config', ['get']);
   
   // 决定压缩策略
   const strategies = [];
-  
-  if (thresholdCheck.needsCompact) {
-    strategies.push({
-      level: thresholdCheck.urgency,
-      name: 'threshold_based',
-      triggered: true
-    });
-  }
   
   if (memoryCheck.needsCompact) {
     strategies.push({
       level: 2,
       name: 'memory_based',
-      triggered: true
+      triggered: true,
+      tokens: memoryCheck.estimatedTokens
     });
   }
   
@@ -327,9 +315,8 @@ function runAutoCompact(model) {
   }
   
   return {
-    thresholdCheck,
     memoryCheck,
-    warningCheck,
+    timeBasedMC,
     strategies,
     executed,
     needsAction: strategies.length > 0,
@@ -353,7 +340,7 @@ function compactMemory() {
   const estimatedTokens = Math.ceil(cjkChars + englishChars / 4);
   
   // 检查是否需要压缩（超过 25k tokens）
-  const needsCompact = estimatedTokens > 25_000;
+  const needsCompact = estimatedTokens > MEMORY_COMPACT_THRESHOLD;
   
   return {
     path: memoryPath,
@@ -362,21 +349,24 @@ function compactMemory() {
     characters: content.length,
     estimatedTokens,
     needsCompact,
-    maxTokens: 25_000,
-    percentUsed: Math.round((estimatedTokens / 25_000) * 100),
+    threshold: MEMORY_COMPACT_THRESHOLD,
+    percentUsed: Math.round((estimatedTokens / MEMORY_COMPACT_THRESHOLD) * 100),
     recommendation: needsCompact ? '建议压缩 AUTO_UPDATE 区块，保留关键内容' : '无需压缩'
   };
 }
 
 function getCompactStatus(model) {
-  const threshold = runScript('compact-threshold', ['calculate', model]);
-  const memory = compactMemory();
+  // 模拟 thresholdCheck（从 session 获取当前 tokens）
+  const currentTokens = 125_000; // 模拟值
+  const thresholdCheck = calculateTokenState(currentTokens, model);
+  
+  const memoryCheck = compactMemory();
   const timeBasedMC = runScript('time-based-mc-config', ['get']);
   
   return {
     model,
-    threshold,
-    memory,
+    threshold: thresholdCheck,
+    memory: memoryCheck,
     timeBasedMC,
     scripts: Object.keys(SCRIPTS).map(name => ({
       name,

@@ -1,0 +1,90 @@
+[
+  {
+    "geo": "US",
+    "channel": "TikTok",
+    "spend": 890,
+    "installs": 260,
+    "revenue": 275.9,
+    "retention": 0.38,
+    "ctr": 0.018,
+    "cpi": 3.42,
+    "roas": 0.31
+  },
+  {
+    "geo": "US",
+    "channel": "Meta",
+    "spend": 450,
+    "installs": 120,
+    "revenue": 135,
+    "retention": 0.32,
+    "ctr": 0.012,
+    "cpi": 3.75,
+    "roas": 0.30
+  },
+  {
+    "geo": "JP",
+    "channel": "Google",
+    "spend": 410,
+    "installs": 75,
+    "revenue": 168.1,
+    "retention": 0.45,
+    "ctr": 0.015,
+    "cpi": 5.47,
+    "roas": 0.41
+  },
+  {
+    "geo": "JP",
+    "channel": "TikTok",
+    "spend": 280,
+    "installs": 52,
+    "revenue": 98,
+    "retention": 0.42,
+    "ctr": 0.020,
+    "cpi": 5.38,
+    "roas": 0.35
+  },
+  {
+    "geo": "BR",
+    "channel": "Meta",
+    "spend": 350,
+    "installs": 42,
+    "revenue": 49,
+    "retention": 0.12,
+    "ctr": 0.014,
+    "cpi": 8.33,
+    "roas": 0.14
+  },
+  {
+    "geo": "BR",
+    "channel": "Google",
+    "spend": 220,
+    "installs": 38,
+    "revenue": 28,
+    "retention": 0.08,
+    "ctr": 0.010,
+    "cpi": 5.79,
+    "roas": 0.13
+  },
+  {
+    "geo": "IN",
+    "channel": "Unity",
+    "spend": 180,
+    "installs": 150,
+    "revenue": 22,
+    "retention": 0.15,
+    "ctr": 0.025,
+    "cpi": 1.20,
+    "roas": 0.12
+  },
+  {
+    "geo": "DE",
+    "channel": "Meta",
+    "spend": 320,
+    "installs": 85,
+    "revenue": 112,
+    "retention": 0.35,
+    "ctr": 0.016,
+    "cpi": 3.76,
+    "roas": 0.35
+  }
+]

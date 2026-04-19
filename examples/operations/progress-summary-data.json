@@ -1,0 +1,30 @@
+{
+  "投放岗位": {
+    "飞书卡片脚本": 15,
+    "样例数据": 14,
+    "测试通过": "15/15",
+    "索引文档": "skills/media-buying-playbook/README.md"
+  },
+  "运营岗位": {
+    "飞书卡片脚本": 7,
+    "样例数据": 9,
+    "测试通过": "7/7",
+    "索引文档": "skills/operations-playbook/README.md"
+  },
+  "其他": {
+    "飞书卡片脚本": 4,
+    "总脚本": 26,
+    "总样例数据": 23
+  },
+  "新增脚本": [
+    "account-isolation-check-feishu-card.js",
+    "tax-compliance-status-feishu-card.js",
+    "platform-onboarding-checklist-feishu-card.js"
+  ],
+  "新增样例数据": [
+    "accounts-isolation.json",
+    "tax-status.json",
+    "onboarding-status.json"
+  ],
+  "测试时间": "2026-04-18T13:53:00Z"
+}

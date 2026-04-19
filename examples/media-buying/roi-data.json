@@ -1,0 +1,39 @@
+{
+  "campaigns": [
+    {
+      "name": "US TikTok Campaign",
+      "spend": 890,
+      "revenue": 267,
+      "impressions": 45000,
+      "clicks": 950,
+      "installs": 490,
+      "purchases": 12,
+      "purchaseRevenue": 180,
+      "adRevenue": 87
+    },
+    {
+      "name": "JP Google Campaign",
+      "spend": 410,
+      "revenue": 168,
+      "impressions": 20000,
+      "clicks": 420,
+      "installs": 210,
+      "purchases": 8,
+      "purchaseRevenue": 120,
+      "adRevenue": 48
+    },
+    {
+      "name": "BR Meta Campaign",
+      "spend": 350,
+      "revenue": 49,
+      "impressions": 18000,
+      "clicks": 360,
+      "installs": 180,
+      "purchases": 2,
+      "purchaseRevenue": 30,
+      "adRevenue": 19
+    }
+  ],
+  "period": "D7",
+  "targetROI": 1.5
+}

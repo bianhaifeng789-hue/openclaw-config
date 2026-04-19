@@ -1,0 +1,81 @@
+{
+  "projectName": "Android IAA App",
+  "platforms": [
+    {
+      "name": "AdMob",
+      "category": "monetization",
+      "status": "completed",
+      "completedDate": "2026-04-10",
+      "completedSteps": 7,
+      "totalSteps": 7,
+      "steps": [
+        "账号注册",
+        "公司验证",
+        "税务表格",
+        "SDK集成",
+        "广告位配置",
+        "测试验证",
+        "上线收款"
+      ]
+    },
+    {
+      "name": "Unity Ads",
+      "category": "monetization",
+      "status": "in_progress",
+      "currentStep": "SDK集成",
+      "completedSteps": 4,
+      "totalSteps": 7,
+      "pendingSteps": ["SDK集成", "广告位配置", "测试验证", "上线收款"]
+    },
+    {
+      "name": "ironSource",
+      "category": "monetization",
+      "status": "in_progress",
+      "currentStep": "税务表格",
+      "completedSteps": 3,
+      "totalSteps": 7,
+      "pendingSteps": ["税务表格", "SDK集成", "广告位配置", "测试验证", "上线收款"]
+    },
+    {
+      "name": "AppLovin MAX",
+      "category": "monetization",
+      "status": "not_started",
+      "completedSteps": 0,
+      "totalSteps": 7
+    },
+    {
+      "name": "Meta Audience Network",
+      "category": "monetization",
+      "status": "not_started",
+      "completedSteps": 0,
+      "totalSteps": 7
+    },
+    {
+      "name": "TikTok Ads",
+      "category": "ads",
+      "status": "completed",
+      "completedDate": "2026-04-12",
+      "completedSteps": 5,
+      "totalSteps": 5,
+      "steps": ["账号注册", "公司验证", "付款设置", "Campaign创建", "广告投放"]
+    },
+    {
+      "name": "Google Ads",
+      "category": "ads",
+      "status": "in_progress",
+      "currentStep": "付款设置",
+      "completedSteps": 3,
+      "totalSteps": 5,
+      "pendingSteps": ["付款设置", "Campaign创建", "广告投放"]
+    },
+    {
+      "name": "Meta Ads",
+      "category": "ads",
+      "status": "not_started",
+      "completedSteps": 0,
+      "totalSteps": 5
+    }
+  ],
+  "startDate": "2026-04-01",
+  "targetDate": "2026-04-30"
+}

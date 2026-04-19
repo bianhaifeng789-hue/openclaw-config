@@ -1,0 +1,27 @@
+[
+  {
+    "name": "US TikTok Campaign",
+    "spend": 890,
+    "revenue": 275.9
+  },
+  {
+    "name": "JP Google Campaign",
+    "spend": 410,
+    "revenue": 168.1
+  },
+  {
+    "name": "BR Meta Campaign",
+    "spend": 350,
+    "revenue": 49
+  },
+  {
+    "name": "DE Meta Campaign",
+    "spend": 280,
+    "revenue": 112
+  },
+  {
+    "name": "IN Unity Campaign",
+    "spend": 180,
+    "revenue": 22
+  }
+]

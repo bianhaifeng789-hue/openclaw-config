@@ -1,0 +1,76 @@
+{
+  "accounts": [
+    {
+      "id": "acc_001",
+      "platform": "AdMob",
+      "ip": "192.168.1.101",
+      "browserProfile": "profile_admob_001",
+      "company": "Game Studio A LLC",
+      "email": "admin@gamestudioa.com",
+      "phone": "+1-555-0101",
+      "healthScore": 95,
+      "riskLevel": "low",
+      "status": "active",
+      "lastLogin": "2026-04-18",
+      "revenue": 1250.00
+    },
+    {
+      "id": "acc_002",
+      "platform": "Unity Ads",
+      "ip": "192.168.1.102",
+      "browserProfile": "profile_unity_002",
+      "company": "Game Studio B Inc",
+      "email": "admin@gamestudiob.com",
+      "phone": "+1-555-0102",
+      "healthScore": 88,
+      "riskLevel": "low",
+      "status": "active",
+      "lastLogin": "2026-04-17",
+      "revenue": 850.00
+    },
+    {
+      "id": "acc_003",
+      "platform": "ironSource",
+      "ip": "192.168.1.103",
+      "browserProfile": "profile_ironsource_003",
+      "company": "Game Studio C Ltd",
+      "email": "admin@gamestudioc.com",
+      "phone": "+1-555-0103",
+      "healthScore": 72,
+      "riskLevel": "medium",
+      "status": "active",
+      "lastLogin": "2026-04-16",
+      "revenue": 420.00,
+      "alerts": ["收入下降15%"]
+    },
+    {
+      "id": "acc_004",
+      "platform": "AppLovin MAX",
+      "ip": "192.168.1.101",
+      "browserProfile": "profile_admob_001",
+      "company": "Game Studio A LLC",
+      "email": "applovin@gamestudioa.com",
+      "phone": "+1-555-0101",
+      "healthScore": 45,
+      "riskLevel": "high",
+      "status": "restricted",
+      "lastLogin": "2026-04-15",
+      "revenue": 180.00,
+      "alerts": ["账号受限", "广告位暂停"]
+    },
+    {
+      "id": "acc_005",
+      "platform": "TikTok Ads",
+      "ip": "192.168.1.104",
+      "browserProfile": "profile_tiktok_005",
+      "company": "Game Studio D Corp",
+      "email": "ads@gamestudiob.com",
+      "phone": "+1-555-0104",
+      "healthScore": 90,
+      "riskLevel": "low",
+      "status": "active",
+      "lastLogin": "2026-04-18"
+    }
+  ],
+  "lastCheck": "2026-04-18T13:53:00Z"
+}

@@ -84,9 +84,10 @@ class SkillRegistry {
    */
   _parseFrontmatter(filePath) {
     const text = fs.readFileSync(filePath, 'utf8');
-    
+
     // YAML frontmatter: --- 开始和结束
-    const match = text.match(/^---\s*\n(.*?)\n---/);
+    // Node.js 没有 re.DOTALL，用 [\s\S] 匹配所有字符
+    const match = /^---\s*\n([\s\S]*?)\n---/.exec(text);
     if (!match) {
       return null;
     }

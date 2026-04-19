@@ -1,9 +1,9 @@
 {
   "budget": 60,
-  "startTime": 1776398897183,
-  "elapsed": 0.005,
-  "remaining": 59.995,
-  "percentage": 0.00008333333333333333,
-  "phase": "normal",
+  "startTime": 1776428797410,
+  "elapsed": 37,
+  "remaining": 23,
+  "percentage": 0.6166666666666667,
+  "phase": "warning",
   "warnings": []
 }

@@ -1,41 +1,10 @@
 {
-  "lastChecks": {},
-  "servicesEnabled": true,
-  "lastMemoryReview": 1776515270000,
-  "lastInitTime": 1776162250,
-  "lastRuns": {
-    "health-monitor": 1776590576870,
-    "memory-compact": 1776590576870,
-    "extract-memories": 1776590576870,
-    "auto-dream": 1776590576870
+  "lastChecks": {
+    "awaySummary": null,
+    "rateLimit": "2026-04-17T19:12:00+08:00",
+    "memoryReview": "2026-04-17T19:12:00+08:00",
+    "insightsAnalysis": null
   },
-  "lastMemoryExtraction": 1776223095603,
-  "signalsStats": {
-    "corrections": 0,
-    "reinforcements": 0,
-    "lastAnalyzed": null
-  },
-  "loopStats": {
-    "warnCount": 0,
-    "hardStopCount": 0,
-    "totalCalls": 0
-  },
-  "anxietyStats": {
-    "triggeredCount": 0,
-    "warningCount": 0,
-    "checkpointCount": 0,
-    "lastTriggered": null,
-    "patternsDetected": []
-  },
-  "sandboxStats": {
-    "highRiskOps": 0,
-    "totalOps": 0,
-    "lastAudit": null
-  },
-  "errorHandlerStats": {
-    "totalCalls": 0,
-    "totalErrors": 0,
-    "errorRate": 0,
-    "lastCheck": null
-  }
+  "idleSessionCount": 0,
+  "created": "2026-04-17T19:12:00+08:00"
 }

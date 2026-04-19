@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-17T11:59:52.802Z",
+  "entries": {
+    "memory:memory/2026-04-14.md:1:71": {
+      "key": "memory:memory/2026-04-14.md:1:71",
+      "path": "memory/2026-04-14.md",
+      "startLine": 1,
+      "endLine": 71,
+      "source": "memory",
+      "snippet": "# 2026-04-14 - Daily Notes ## 今日进展 ### OpenClaw 升级 - 版本从 2026.4.10 → 2026.4.12 ✅ - Gateway 运行正常 ### 运营技能创建 - ad-analytics ✅ - us-timezone ✅ - content-generator ✅ - mediation-platforms ✅ - publisher-review ✅ - ad-monetization ✅ - sdk-integration ✅ - google-play-store ✅ - feishu-docs ✅ - excel-operations ✅ - ltv-calculator ✅ ### GitHub 推送 - SSH 密钥创建 ✅ - 代码推送成功 ✅ - 仓库: https://github.com/bianhaifeng789-hue/openclaw-config ### Stats - workspace skills: 541 个 - Gateway: 运行正常 (127.0.0.1:18789) ## 关键决策 - Git配置: bianhaifeng789-hue / bianhaifeng789@gmail.com - 用户身份确认 ## 下一步 - 另一台Mac部署检查（SSH连接失败，需要手动检查） # 2026-04-14 - Daily Notes ## 今日进展 ### OpenClaw 升级 - 版本从 2026.4.10 → 2026.4.12 ✅ - Gateway",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1,
+      "maxScore": 1,
+      "firstRecalledAt": "2026-04-17T11:59:52.802Z",
+      "lastRecalledAt": "2026-04-17T11:59:52.802Z",
+      "queryHashes": [
+        "7173d30fe636"
+      ],
+      "recallDays": [
+        "2026-04-17"
+      ],
+      "conceptTags": [
+        "gateway",
+        "2026.4.10",
+        "2026.4.12",
+        "ad-analytics",
+        "us-timezone",
+        "content-generator",
+        "mediation-platforms",
+        "publisher-review"
+      ]
+    },
+    "memory:memory/2026-04-14.md:144:191": {
+      "key": "memory:memory/2026-04-14.md:144:191",
+      "path": "memory/2026-04-14.md",
+      "startLine": 144,
+      "endLine": 191,
+      "source": "memory",
+      "snippet": "# 2026-04-14 - Daily Notes ## 今日进展 ### OpenClaw 升级 - 版本从 2026.4.10 → 2026.4.12 ✅ - Gateway 运行正常 ### 运营技能创建 - ad-analytics ✅ - us-timezone ✅ - content-generator ✅ - mediation-platforms ✅ - publisher-review ✅ - ad-monetization ✅ - sdk-integration ✅ - google-play-store ✅ - feishu-docs ✅ - excel-operations ✅ - ltv-calculator ✅ ### GitHub 推送 - SSH 密钥创建 ✅ - 代码推送成功 ✅ - 仓库: https://github.com/bianhaifeng789-hue/openclaw-config ### Stats - workspace skills: 541 个 - Gateway: 运行正常 (127.0.0.1:18789) ## 关键决策 - Git配置: bianhaifeng789-hue / bianhaifeng789@gmail.com - 用户身份确认 ## 下一步 - 另一台Mac部署检查（SSH连接失败，需要手动检查） --- ## 迁移与规则合并补充记录 ### Desktop OC 配置迁移判断 - 用户明确要求检查 `~/Desktop/oc`（另一台电脑的 OpenClaw 配置）并尽可",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 1,
+      "maxScore": 1,
+      "firstRecalledAt": "2026-04-17T11:59:52.802Z",
+      "lastRecalledAt": "2026-04-17T11:59:52.802Z",
+      "queryHashes": [
+        "7173d30fe636"
+      ],
+      "recallDays": [
+        "2026-04-17"
+      ],
+      "conceptTags": [
+        "gateway",
+        "2026.4.10",
+        "2026.4.12",
+        "ad-analytics",
+        "us-timezone",
+        "content-generator",
+        "mediation-platforms",
+        "publisher-review"
+      ]
+    }
+  }
+}

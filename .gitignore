@@ -1,30 +1,35 @@
-# Dependencies
-node_modules/
+# OpenClaw Workspace .gitignore
 
-# Logs
-logs/
-*.log
+# 环境变量（包含 API Key）
+.env
+.env.local
 
-# Runtime traces and temp
-traces/
+# 运行时状态文件
 .openclaw/
-
-# State and local runtime data
 state/
 
-# Build metadata / generated typings and sourcemaps
-impl/dist/**/*.d.ts
-impl/dist/**/*.d.ts.map
-impl/dist/**/*.js.map
+# Trace 日志
+_trace_*.jsonl
 
-# OS / editor
+# 临时文件
+*.log
+*.tmp
+*.bak
+
+# 测试输出
+_test_output/
+_screenshot.png
+
+# 系统文件
 .DS_Store
+Thumbs.db
+
+# IDE
 .vscode/
 .idea/
 
-# Local lock files and transient memory artifacts
-memory/.consolidate-lock
-memory/.dreams/
+# Node modules
+node_modules/
 
-# Local backups and one-off test scripts
-*.bak
+# 缓存
+.cache/

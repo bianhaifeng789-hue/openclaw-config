@@ -10,6 +10,8 @@ This workspace keeps session maintenance separate from the main heartbeat schedu
   - report session context pressure with warn/alert/critical thresholds
 - `impl/bin/session-recommend.js`
   - recommend whether to continue, wrap up, or switch to a new session based on pressure and compaction history
+- `impl/bin/session-handoff.js`
+  - generate a handoff markdown summary for starting a fresh session without dragging the old one further
 
 ## Config
 See `config/session-maintenance.json`.

@@ -17,6 +17,12 @@
       "interval": "6h",
       "cmd": "node impl/bin/session-recommend.js",
       "description": "Recommend whether to continue, compact, or switch to a new session"
+    },
+    {
+      "name": "session-handoff",
+      "interval": "on-demand",
+      "cmd": "node impl/bin/session-handoff.js",
+      "description": "Generate a fresh-session handoff summary from the active session"
     }
   ],
   "notes": "Separate session maintenance from heartbeat. Run manually or via dedicated cron if needed."

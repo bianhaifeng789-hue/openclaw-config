@@ -1,0 +1,78 @@
+{
+  "tasks": [
+    {
+      "name": "health-monitor",
+      "interval": "5m",
+      "priority": "critical",
+      "cmd": "node impl/bin/health-monitor.js check",
+      "prompt": "检查 Gateway/Node 健康，异常自动恢复",
+      "enabled": true
+    },
+    {
+      "name": "memory-compact",
+      "interval": "24h",
+      "priority": "medium",
+      "cmd": "node impl/bin/compact-cli.js memory",
+      "prompt": "检查 MEMORY.md token 数，超过 25k 自动压缩",
+      "enabled": true
+    },
+    {
+      "name": "extract-memories",
+      "interval": "24h",
+      "priority": "low",
+      "cmd": "node impl/bin/extract-memories-timer.js check",
+      "prompt": "检查是否需要提取近期会话记忆",
+      "enabled": true
+    },
+    {
+      "name": "auto-dream",
+      "interval": "24h",
+      "priority": "low",
+      "cmd": "node impl/bin/auto-dream-gates.js check",
+      "prompt": "检查长期记忆整理 gates 状态",
+      "enabled": true
+    }
+  ],
+  "disabled": [
+    "memory-maintenance",
+    "idle-session-compact",
+    "heartbeat-check",
+    "task-visualizer",
+    "phase1-8-stats-check",
+    "buddy-companion",
+    "mailbox-check",
+    "tool-use-summary",
+    "harness-planner-check",
+    "harness-builder-check",
+    "harness-evaluator-check",
+    "harness-browser-test-check",
+    "harness-score-trend-check",
+    "time-budget-check",
+    "task-tracking-check",
+    "error-guidance-check",
+    "loop-detection-check",
+    "loop-detection-enhanced-check",
+    "memory-signals-check",
+    "sandbox-audit-check",
+    "magic-docs-scan",
+    "insights-analysis",
+    "diagnostic-tracking",
+    "internal-logging",
+    "rate-limit-check",
+    "mcp-approval-poll",
+    "side-query-stats",
+    "argument-stats",
+    "away-summary",
+    "context-pressure-check",
+    "time-based-mc",
+    "role-based-compact-check",
+    "tool-auto-fix-check",
+    "anxiety-detection-check",
+    "split-safe-check",
+    "safe-split-optimization-check",
+    "enhanced-loop-detection-check"
+  ],
+  "created": "2026-04-14",
+  "optimized": "2026-04-19",
+  "notes": "Keep heartbeat minimal and production-only. Move experimental, visualization, and placeholder tasks out of formal heartbeat scheduling."
+}

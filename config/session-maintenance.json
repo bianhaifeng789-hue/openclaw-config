@@ -1,0 +1,17 @@
+{
+  "tasks": [
+    {
+      "name": "session-housekeeping",
+      "interval": "24h",
+      "cmd": "node impl/bin/session-housekeeping.js run",
+      "description": "Clean old reset/checkpoint artifacts and write a session directory report"
+    },
+    {
+      "name": "session-pressure",
+      "interval": "6h",
+      "cmd": "node impl/bin/session-pressure.js",
+      "description": "Check active session context pressure and surface hot sessions"
+    }
+  ],
+  "notes": "Separate session maintenance from heartbeat. Run manually or via dedicated cron if needed."
+}

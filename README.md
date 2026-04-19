@@ -1,97 +1,70 @@
-# OpenClaw Workspace - Claude Code Patterns
+# OpenClaw Infra Baseline
 
-我的 OpenClaw 配置，借鉴 Claude Code 核心机制。
+这是一个**轻量 OpenClaw 基础设施基线仓库**，用于在新机器上快速复用稳定、可诊断、可收口的基础设施层。
 
-## 目录结构
+## 这个仓库包含什么
 
-```
-workspace/
-├── MEMORY.md          # 长期记忆（不含敏感信息）
-├── HEARTBEAT.md       # 心跳任务定义
-├── AGENTS.md          # Agent 行为规范
-├── SOUL.md            # AI 人格定义
-├── USER.md            # 用户信息
-├── TOOLS.md           # 工具配置
-├── IDENTITY.md        # AI 身份
-├── impl/              # 扩展实现
-│   ├── utils/         # 300+ TypeScript 文件
-│   └── bin/           # CLI 工具
-│   └── package.json
-└── skills/            # 自定义 Skills
-```
+- 轻量 heartbeat 基线
+- runbook / baseline / capability / context 文档
+- `session-pressure`（只读 session 压力检查）
+- `health-monitor-lite`（只读健康汇总）
+- health / heartbeat guardrail 脚本
 
-## 部署步骤
+## 这个仓库不包含什么
 
-### 1. 克隆仓库
+以下内容应保持本地私有，或按机器自行准备，不作为基础设施仓库的一部分：
 
-```bash
-git clone https://github.com/你的用户名/openclaw-config.git
-cd openclaw-config
-```
+- `skills/`
+- `memory/*.md`
+- `USER.md`
+- `TOOLS.md`
+- `IDENTITY.md`
+- `_imports/`
+- `artifacts/`
+- `harness-projects/`
+- 机器相关 secrets / provider keys / token / 本地状态
 
-### 2. 安装依赖
+## 新机器建议阅读顺序
 
-```bash
-cd impl
-npm install
-npm run build
-```
+1. `OPENCLAW-BASELINE.md`
+2. `CAPABILITIES-openclaw-main.md`
+3. `INFRASTRUCTURE-INDEX.md`
+4. `RUNBOOK-openclaw-health.md`
+5. `RUNBOOK-session-context.md`
+6. `HEARTBEAT.md`
 
-### 3. 复制到 OpenClaw
+## 最小接入步骤
 
-```bash
-cp -r . ~/.openclaw/workspace/
-```
+1. clone 本仓库到你的 OpenClaw workspace
+2. 按本机实际情况补齐本地私有文件与配置
+3. 检查并确认 gateway / provider / channel 配置属于本机
+4. 运行基础检查：
+   - `openclaw status`
+   - `openclaw doctor --non-interactive`
+5. 按需使用：
+   - `node impl/bin/session-pressure.js`
+   - `node impl/bin/health-monitor-lite.js`
 
-### 4. 配置飞书（需手动）
+## 迁移原则
 
-创建 `~/.openclaw/openclaw.json`：
+- 只复用**基础设施层**，不要把另一台机器的个人记忆、技能库、实验残留整体搬过来
+- 优先复用：稳定性、可观测性、runbook、轻量 heartbeat
+- 不要默认复用：自动修复、重型 heartbeat、个人私有上下文、敏感配置
 
-```json
-{
-  "models": {
-    "models": ["bailian/glm-5"]
-  },
-  "heartbeat": {
-    "enabled": true,
-    "every": "30m"
-  },
-  "plugins": ["feishu"],
-  "channels": {
-    "feishu": {
-      "enabled": true,
-      "accounts": {
-        "default": {
-          "appId": "你的appId",
-          "appSecret": "你的appSecret",
-          "connectionMode": "websocket"
-        }
-      }
-    }
-  }
-}
-```
+## 本地私有内容边界
 
-### 5. 重启
+以下内容应继续留在每台机器本地维护：
 
-```bash
-openclaw gateway restart
-```
+- `~/.openclaw/openclaw.json`
+- `~/.openclaw/config.json`
+- provider keys / gateway tokens / 渠道凭证
+- 用户身份相关文件
+- daily memory / 长期 memory
 
-## 功能
+## 当前仓库定位
 
-- ✅ 心跳自动调度（22 任务）
-- ✅ 健康监控 + 自动修复
-- ✅ 记忆系统（MEMORY.md + daily notes）
-- ✅ 飞书卡片通知
-- ✅ Notifier/Bridge/Analytics 服务
+把它当成：
 
-## Stats
+> **可复用的 OpenClaw 轻量基础设施底座**
 
-- impl/utils: **300** TypeScript 文件
-- skills: **530** workspace skills
-- 编译状态: ✅ 成功
-
----
-
-**注意**: `openclaw.json` 不上传，因为包含 appSecret。
+而不是某一台机器全部状态的镜像。

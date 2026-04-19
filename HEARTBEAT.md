@@ -1,128 +1,47 @@
-# HEARTBEAT.md - 心跳任务清单
+# HEARTBEAT.md - 精简心跳任务清单
 
-每隔一段时间（约 30 分钟）自动检查以下任务。
+每隔一段时间（约 30 分钟）自动检查少量高价值任务，保持主会话轻、短、可收口。
 
-## 核心任务（保留）
-
-### P0 必执行
-- name: health-monitor
-  interval: 5m
-  priority: critical
-  cmd: node impl/bin/health-monitor.js check
-
-### P1 定期执行
-- name: memory-compact
-  interval: 6h
-  priority: high
-  cmd: node impl/bin/compact-cli.js memory
-
-- name: memory-maintenance
-  interval: 6h
-  priority: high
-  cmd: node impl/bin/memory-maintenance-cli.js check
-
-- name: idle-session-compact
-  interval: 6h
-  priority: medium
-  cmd: node impl/bin/idle-session-compact.js check
-
-### P2 低频执行
-- name: auto-dream
-  interval: 24h
-  priority: low
-  cmd: node impl/bin/auto-dream-cli.js check
-
-- name: extract-memories
-  interval: 12h
-  priority: low
-  cmd: node impl/bin/extract-memories-cli.js run
-
-- name: heartbeat-check
-  interval: 6h
-  priority: low
-  cmd: node impl/bin/heartbeat-cli.js check
-
-- name: task-visualizer
-  interval: 6h
-  priority: low
-  cmd: node impl/bin/heartbeat-cli.js tasks
-
-### P3 基础设施优化（新增）
-- name: cache-lru-cleanup
-  interval: 5m
-  priority: low
-  cmd: node impl/bin/cache-lru-manager.js cleanup
-
-- name: checkpoint-cleanup
-  interval: 24h
-  priority: low
-  cmd: node impl/bin/checkpoint-cleaner.js cleanup
-
-- name: transcript-compress
-  interval: 12h
-  priority: low
-  cmd: node impl/bin/transcript-compressor.js check
-
-- name: archive-cleanup
-  interval: 24h
-  priority: low
-  cmd: node impl/bin/archive-cleaner.js cleanup
-
-- name: session-store-flush
-  interval: 5m
-  priority: low
-  cmd: node impl/bin/session-store-manager.js flush
-
-### P4 架构级优化（P3 - 分布式存储）
-- name: sqlite-cleanup
-  interval: 24h
-  priority: low
-  cmd: node impl/bin/sqlite-session-store.js cleanup
-
-- name: distributed-backup
-  interval: 6h
-  priority: low
-  cmd: node impl/bin/distributed-backup.js backup
-
-### P5 可观测性优化（Tracing + Reflection）
-- name: tracing-cleanup
-  interval: 24h
-  priority: low
-  cmd: node impl/bin/tracing-system.js cleanup
-
-- name: reflection-summary
-  interval: 6h
-  priority: low
-  cmd: node impl/bin/reflection-system.js history
-
----
-
-## 执行规则
-
-1. 每次心跳只执行 1-2 个任务（按优先级）
-2. 必须先运行 `heartbeat-cli.js check` 确认需处理任务
-3. 有重要发现主动通知用户，否则返回 HEARTBEAT_OK
-
----
-
-## 详细配置
-
-任务详细配置（prompt、参数）已迁移到：
-- `config/heartbeat-tasks.json` - 任务定义
-- `memory/heartbeat-state.json` - 执行状态
-
----
+## 自动化机制
+- OpenClaw 配置 `agents.defaults.heartbeat.enabled: true`
+- 每 30 分钟自动触发轮询
+- heartbeat 只负责：check / route / notify
+- heartbeat 不是排障 worker，不是长分析线程，不是自动修复总控
 
 ## 手动调试
-
 ```bash
-node impl/bin/heartbeat-cli.js status   # 查看状态
-node impl/bin/heartbeat-cli.js check    # 检查需处理任务
-node impl/bin/heartbeat-cli.js run      # 执行任务
-node impl/bin/heartbeat-cli.js tasks    # 查看活动任务
+node /Users/mac/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check|run|tasks]
 ```
 
 ---
 
-创建时间：2026-04-14
-优化时间：2026-04-18（从 365 行精简到 60 行）
+## tasks
+
+- name: context-pressure-check
+  interval: 2h
+  priority: medium
+  prompt: "仅做轻量检查：运行 `node /Users/mac/.openclaw/workspace/impl/bin/compact-cli.js auto glm-5`。只有结果明确显示 needsAction=true 或 urgency >= 2 时，才发出简短警告或建议分流。不要在 heartbeat 中展开长分析。"
+
+- name: memory-maintenance
+  interval: 24h
+  priority: low
+  prompt: "检查 `memory/heartbeat-state.json` 的 `lastMemoryReview`。如果状态文件不存在，可以跳过或初始化最小状态，不要报错刷屏。只有距离上次回顾超过 24 小时时，才读取最近 1-2 天 daily notes，提炼少量长期有价值的信息更新 MEMORY.md。不要做大规模历史回放。"
+
+- name: doctor-check
+  interval: 24h
+  priority: low
+  prompt: "运行一次轻量系统检查（如 `openclaw doctor --non-interactive`）。只有出现新的 critical / 明显异常时，才发送简短诊断通知。不要在 heartbeat 中展开完整排障链路。"
+
+---
+
+## 执行硬规则
+
+- 每次心跳最多检查 1-2 个任务
+- 必须先运行 `heartbeat-cli.js check` 再决定是否继续
+- 脚本不存在、路径错误、状态文件缺失时：不要循环重试，不要扩散为更多任务
+- 只有在“有明确异常 / 有明确完成结果”时才主动通知用户
+- 如果一切正常，返回 `HEARTBEAT_OK`
+- 不要根据旧聊天内容推断今天该做什么
+- 不要在 heartbeat 中执行连续 3 步以上排查
+- 一旦需要连续 3 步以上诊断、日志追踪、配置修改或长分析：立即停止 heartbeat 内展开，转独立线程 / cron isolated / 后续主线程处理
+- 保持主会话轻量，避免把 heartbeat 变成后台总控

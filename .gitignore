@@ -1,20 +1,27 @@
 # OpenClaw Workspace .gitignore
 
+# Infra-only sync defaults
+skills/
+_imports/
+artifacts/
+harness-projects/
+benchmarks/
+.clawhub/
+.openclaw/
+state/
+tmp/
+memory/.dreams/
+
 # 环境变量（包含 API Key）
 .env
 .env.local
 
-# 运行时状态文件
-.openclaw/
-state/
-
-# Trace 日志
+# Trace / runtime logs
 _trace_*.jsonl
-
-# 临时文件
 *.log
 *.tmp
 *.bak
+.tmp_*
 
 # 测试输出
 _test_output/
@@ -28,8 +35,6 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Node modules
+# Node modules / cache
 node_modules/
-
-# 缓存
 .cache/

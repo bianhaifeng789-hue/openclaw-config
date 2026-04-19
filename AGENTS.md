@@ -22,6 +22,25 @@ Do not manually reread startup files unless:
 2. The provided context is missing something you need
 3. You need a deeper follow-up read beyond the provided startup context
 
+## Context Compression
+
+Default to the rules in `CONTEXT.md` for long-task handling and session hygiene:
+- keep one thread focused on one class of work when possible
+- push long logs and raw tool output into files or summaries instead of leaving them in the main thread
+- externalize durable conclusions into memory/runbook/scripts files instead of relying on chat history as long-term storage
+
+## System Navigation
+
+When work spans diagnostics, memory, context hygiene, local automation, or PM workflow, use these defaults:
+- `SYSTEM_MAP.md` as the shortest entry point / map of the local system
+- `INFRASTRUCTURE-INDEX.md` as the shortest entry point for OpenClaw health / session / context / memory infrastructure
+- `CONTEXT.md` for session compaction and thread-closing rules
+- `MEMORY_FLOW.md` for deciding what belongs in daily memory vs long-term memory vs runbook/scripts
+- `CLOSEOUT.md` for when to close a thread, write the final summary, and externalize results
+- `INSIGHTS.md` for user/market/competitor signals and product insights
+- `DECISIONS.md` for product decisions, tradeoffs, and rationale
+- `EXPERIMENTS.md` for growth/product experiments, results, and conclusions
+
 ## Memory
 
 You wake up fresh each session. These files are your continuity:
@@ -121,6 +140,16 @@ Reactions are lightweight social signals. Humans use them constantly — they sa
 ## Tools
 
 Skills provide your tools. When you need one, check its `SKILL.md`. Keep local notes (camera names, SSH details, voice preferences) in `TOOLS.md`.
+
+### OpenClaw 本地基础设施入口
+- 健康检查：`RUNBOOK-openclaw-health.md`
+- session/context：`RUNBOOK-session-context.md`
+- 基础设施索引：`INFRASTRUCTURE-INDEX.md`
+- 快速体检脚本：`scripts/openclaw-healthcheck.sh`
+- 轻量健康汇总：`node /Users/mac/.openclaw/workspace/impl/bin/health-monitor-lite.js`
+- session 压力只读检查：`node /Users/mac/.openclaw/workspace/impl/bin/session-pressure.js`
+- 收口模板：`CLOSEOUT-template.md`
+- 上下文卫生清单：`context-hygiene-checklist.md`
 
 **🎭 Voice Storytelling:** If you have `sag` (ElevenLabs TTS), use voice for stories, movie summaries, and "storytime" moments! Way more engaging than walls of text. Surprise people with funny voices.
 

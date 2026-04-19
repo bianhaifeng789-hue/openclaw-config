@@ -1,218 +1,222 @@
 #!/usr/bin/env node
 /**
- * Heartbeat CLI - 最小化正式心跳执行器
+ * Heartbeat CLI - 轻量 heartbeat 统一入口
  *
- * 单一事实源：config/heartbeat-tasks.json
- * 目标：
- * 1. 只按配置文件决定哪些任务存在、是否启用、多久运行一次
- * 2. 不在执行器里硬编码历史任务/旧间隔
- * 3. heartbeat 仅保留正式、可解释、可运行的生产任务
- *
- * Commands:
- *   status  - 显示配置与状态
- *   check   - 显示当前到期任务
- *   run     - 执行到期任务（按优先级排序）
- *   tasks   - 列出启用任务
+ * 仅保留当前 3 个轻任务相关能力：
+ *   status  - 显示轻量 heartbeat 状态
+ *   check   - 快速检查需处理任务
+ *   run     - 执行最多 2 个待处理任务
  */
 
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const { execSync } = require('child_process')
+const path = require('path')
+const fs = require('fs')
 
-const WORKSPACE = process.env.OPENCLAW_WORKSPACE || path.join(require('os').homedir(), '.openclaw', 'workspace');
-const CONFIG_FILE = path.join(WORKSPACE, 'config', 'heartbeat-tasks.json');
-const STATE_FILE = path.join(WORKSPACE, 'memory', 'heartbeat-state.json');
+const WORKSPACE = process.env.OPENCLAW_WORKSPACE || process.cwd()
+const MEMORY_DIR = path.join(WORKSPACE, 'memory')
+const STATE_FILE = path.join(MEMORY_DIR, 'heartbeat-state.json')
+const COMPACT_CLI = path.join(WORKSPACE, 'impl', 'bin', 'compact-cli.js')
 
-const PRIORITY_ORDER = {
-  critical: 0,
-  high: 1,
-  medium: 2,
-  low: 3
-};
+const LIGHTWEIGHT_TASKS = [
+  { name: 'context-pressure-check', intervalMs: 2 * 60 * 60 * 1000, priority: 'medium', stateKey: 'contextPressure' },
+  { name: 'memory-maintenance', intervalMs: 24 * 60 * 60 * 1000, priority: 'low', stateKey: 'memoryReview' },
+  { name: 'doctor-check', intervalMs: 24 * 60 * 60 * 1000, priority: 'low', stateKey: 'doctor' },
+]
 
-function loadJson(filePath, fallback) {
-  try {
-    if (!fs.existsSync(filePath)) return fallback;
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch {
-    return fallback;
+function defaultState() {
+  return {
+    lastChecks: {
+      heartbeat: null,
+      tasks: null,
+      contextPressure: null,
+      doctor: null,
+      memoryReview: null,
+    },
+    lastNotices: {
+      heartbeat: null,
+      tasks: null,
+      contextPressure: null,
+      doctor: null,
+      memoryReview: null,
+    },
+    notes: {
+      comment: 'Minimal heartbeat state schema. Keep small and stable.',
+    },
   }
-}
-
-function saveJson(filePath, data) {
-  fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-}
-
-function parseInterval(interval) {
-  if (typeof interval !== 'string') return null;
-  const m = interval.trim().match(/^(\d+)\s*([mhd])$/i);
-  if (!m) return null;
-  const value = Number(m[1]);
-  const unit = m[2].toLowerCase();
-  if (unit === 'm') return value * 60 * 1000;
-  if (unit === 'h') return value * 60 * 60 * 1000;
-  if (unit === 'd') return value * 24 * 60 * 60 * 1000;
-  return null;
-}
-
-function loadConfig() {
-  const config = loadJson(CONFIG_FILE, { tasks: [], disabled: [] });
-  const tasks = Array.isArray(config.tasks) ? config.tasks.filter(t => t && t.enabled !== false) : [];
-  return { ...config, tasks };
 }
 
 function loadState() {
-  const state = loadJson(STATE_FILE, {});
-  state.lastChecks = state.lastChecks || {};
-  state.lastRuns = state.lastRuns || {};
-  return state;
-}
-
-function sanitizeStateForConfig(state, config) {
-  const allowed = new Set(config.tasks.map(t => t.name));
-  const cleanLastRuns = {};
-  for (const [name, ts] of Object.entries(state.lastRuns || {})) {
-    if (allowed.has(name)) cleanLastRuns[name] = ts;
-  }
-  state.lastRuns = cleanLastRuns;
-  return state;
-}
-
-function getDueTasks() {
-  const config = loadConfig();
-  const state = sanitizeStateForConfig(loadState(), config);
-  const now = Date.now();
-  const dueTasks = [];
-
-  for (const task of config.tasks) {
-    const intervalMs = parseInterval(task.interval);
-    if (!intervalMs || !task.name || !task.cmd) continue;
-
-    const lastRun = Number(state.lastRuns[task.name] || 0);
-    const elapsedMs = now - lastRun;
-    const due = lastRun === 0 || elapsedMs >= intervalMs;
-
-    if (due) {
-      dueTasks.push({
-        ...task,
-        intervalMs,
-        lastRun,
-        elapsedMs
-      });
-    }
-  }
-
-  dueTasks.sort((a, b) => {
-    const pa = PRIORITY_ORDER[a.priority] ?? 99;
-    const pb = PRIORITY_ORDER[b.priority] ?? 99;
-    if (pa !== pb) return pa - pb;
-    return a.name.localeCompare(b.name);
-  });
-
-  return { config, state, dueTasks, now };
-}
-
-function runTask(task) {
   try {
-    const output = execSync(task.cmd, {
-      cwd: WORKSPACE,
-      encoding: 'utf8',
-      timeout: 30000
-    });
+    if (!fs.existsSync(STATE_FILE)) return defaultState()
+    const parsed = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'))
     return {
-      ok: true,
-      output: output?.trim() || ''
-    };
-  } catch (error) {
-    return {
-      ok: false,
-      output: (error.stdout || '').toString().trim(),
-      error: (error.stderr || error.message || '').toString().trim()
-    };
-  }
-}
-
-function status() {
-  const { config, state, dueTasks } = getDueTasks();
-  return {
-    workspace: WORKSPACE,
-    configFile: CONFIG_FILE,
-    stateFile: STATE_FILE,
-    enabledTasks: config.tasks.map(task => ({
-      name: task.name,
-      interval: task.interval,
-      priority: task.priority,
-      cmd: task.cmd,
-      lastRun: state.lastRuns[task.name] || null
-    })),
-    dueTasks: dueTasks.map(task => task.name),
-    disabledCount: Array.isArray(config.disabled) ? config.disabled.length : 0,
-    timestamp: Date.now()
-  };
-}
-
-function check() {
-  const { dueTasks } = getDueTasks();
-  return {
-    needsProcessing: dueTasks.map(task => task.name),
-    count: dueTasks.length,
-    timestamp: Date.now()
-  };
-}
-
-function run() {
-  const { config, state, dueTasks, now } = getDueTasks();
-  const results = [];
-
-  for (const task of dueTasks) {
-    const result = runTask(task);
-    if (result.ok) {
-      state.lastRuns[task.name] = now;
+      ...defaultState(),
+      ...parsed,
+      lastChecks: { ...defaultState().lastChecks, ...(parsed.lastChecks || {}) },
+      lastNotices: { ...defaultState().lastNotices, ...(parsed.lastNotices || {}) },
+      notes: { ...defaultState().notes, ...(parsed.notes || {}) },
     }
-    results.push({
-      task: task.name,
-      ok: result.ok,
-      output: result.output,
-      error: result.error || null
-    });
+  } catch {
+    return defaultState()
+  }
+}
+
+function saveState(state) {
+  fs.mkdirSync(MEMORY_DIR, { recursive: true })
+  fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2))
+}
+
+function getDueTasks(state) {
+  const now = Date.now()
+  return LIGHTWEIGHT_TASKS
+    .map(task => {
+      const lastRun = state.lastChecks?.[task.stateKey] || 0
+      const elapsed = now - lastRun
+      const due = elapsed >= task.intervalMs
+      return {
+        ...task,
+        lastRun,
+        due,
+        elapsed,
+      }
+    })
+    .filter(task => task.due)
+    .sort((a, b) => {
+      const priorityOrder = { high: 0, medium: 1, low: 2 }
+      return priorityOrder[a.priority] - priorityOrder[b.priority]
+    })
+}
+
+function runCompactCheck() {
+  try {
+    const out = execSync(`node "${COMPACT_CLI}" auto glm-5`, {
+      encoding: 'utf8',
+      cwd: WORKSPACE,
+      timeout: 30000,
+      env: { ...process.env, OPENCLAW_WORKSPACE: WORKSPACE },
+    })
+    return out.trim()
+  } catch (e) {
+    return (e.stdout || e.stderr || e.message || '').trim()
+  }
+}
+
+function runDoctor() {
+  try {
+    const out = execSync('openclaw doctor --non-interactive', {
+      encoding: 'utf8',
+      cwd: WORKSPACE,
+      timeout: 60000,
+      env: { ...process.env, OPENCLAW_WORKSPACE: WORKSPACE },
+    })
+    return out.trim()
+  } catch (e) {
+    return (e.stdout || e.stderr || e.message || '').trim()
+  }
+}
+
+function getTaskSummary() {
+  const dreamTasksPath = path.join(WORKSPACE, 'state', 'tasks', 'dream-tasks.json')
+  if (!fs.existsSync(dreamTasksPath)) {
+    return { active: 0, recentlyCompleted: 0 }
   }
 
-  saveJson(STATE_FILE, sanitizeStateForConfig(state, config));
+  try {
+    const data = JSON.parse(fs.readFileSync(dreamTasksPath, 'utf8'))
+    const tasks = Array.isArray(data.tasks) ? data.tasks : []
+    const recentThreshold = Date.now() - 5 * 60 * 1000
+    return {
+      active: tasks.filter(t => t.status === 'running').length,
+      recentlyCompleted: tasks.filter(t => t.status === 'completed' && t.completedAt >= recentThreshold).length,
+    }
+  } catch {
+    return { active: 0, recentlyCompleted: 0 }
+  }
+}
 
-  return {
-    tasksProcessed: results.map(r => r.task),
+async function cmdStatus() {
+  const state = loadState()
+  const due = getDueTasks(state)
+  console.log(JSON.stringify({
+    tasksDefined: LIGHTWEIGHT_TASKS.length,
+    taskNames: LIGHTWEIGHT_TASKS.map(t => t.name),
+    pendingCount: due.length,
+    pending: due.map(t => t.name),
+    lastChecks: state.lastChecks,
+  }, null, 2))
+}
+
+async function cmdCheck() {
+  const state = loadState()
+  state.lastChecks.heartbeat = Date.now()
+  saveState(state)
+
+  const due = getDueTasks(state)
+  if (due.length === 0) {
+    console.log('HEARTBEAT_OK')
+    return
+  }
+
+  console.log(`需处理: ${due.slice(0, 2).map(t => t.name).join(', ')}`)
+}
+
+async function cmdRun() {
+  const state = loadState()
+  const now = Date.now()
+  state.lastChecks.heartbeat = now
+  const due = getDueTasks(state).slice(0, 2)
+
+  const results = []
+  for (const task of due) {
+    let result
+    if (task.name === 'context-pressure-check') {
+      const out = runCompactCheck()
+      result = { task: task.name, status: /needsAction\":true|urgency\":\s*[2-9]/.test(out) ? 'needs_attention' : 'ok', data: out }
+    } else if (task.name === 'memory-maintenance') {
+      result = { task: task.name, status: 'ok', data: 'lightweight/routed only' }
+    } else if (task.name === 'doctor-check') {
+      const out = runDoctor()
+      result = { task: task.name, status: /critical|error/i.test(out) ? 'needs_attention' : 'ok', data: out.slice(-1500) }
+    }
+
+    state.lastChecks[task.stateKey] = now
+    results.push(result)
+  }
+
+  saveState(state)
+  console.log(JSON.stringify({
+    message: `Processed ${results.length} tasks`,
     results,
-    stateUpdated: true,
-    timestamp: now
-  };
+  }, null, 2))
 }
 
-function listTasks() {
-  const { config } = getDueTasks();
-  return config.tasks;
+async function cmdTasks() {
+  console.log(JSON.stringify(getTaskSummary(), null, 2))
 }
 
-function main() {
-  const command = process.argv[2] || 'status';
+async function main() {
+  const command = process.argv[2] || 'check'
 
   switch (command) {
     case 'status':
-      console.log(JSON.stringify(status(), null, 2));
-      break;
+      await cmdStatus()
+      break
     case 'check':
-      console.log(JSON.stringify(check(), null, 2));
-      break;
+      await cmdCheck()
+      break
     case 'run':
-      console.log(JSON.stringify(run(), null, 2));
-      break;
+      await cmdRun()
+      break
     case 'tasks':
-      console.log(JSON.stringify(listTasks(), null, 2));
-      break;
+      await cmdTasks()
+      break
     default:
-      console.log('Usage: node heartbeat-cli.js [status|check|run|tasks]');
-      process.exit(1);
+      console.error(`Unknown command: ${command}`)
+      process.exit(1)
   }
 }
 
-main();
+main().catch(err => {
+  console.error(err)
+  process.exit(1)
+})

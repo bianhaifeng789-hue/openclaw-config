@@ -8,7 +8,8 @@
     "typecheck": "tsc --noEmit",
     "test": "echo \"No tests configured\" && exit 0",
     "patch:openclaw": "python3 scripts/apply-openclaw-patches.py --all",
-    "patch:openclaw:check": "python3 scripts/apply-openclaw-patches.py --all --dry-run --json"
+    "patch:openclaw:check": "python3 scripts/apply-openclaw-patches.py --all --dry-run --json",
+    "diag:openclaw": "./scripts/openclaw-diag-capture.sh"
   },
   "devDependencies": {
     "husky": "^9.0.0",

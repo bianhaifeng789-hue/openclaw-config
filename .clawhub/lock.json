@@ -4,6 +4,10 @@
     "superpowers": {
       "version": "1.0.0",
       "installedAt": 1776582523716
+    },
+    "claude-memory-pro": {
+      "version": "1.0.0",
+      "installedAt": 1776704661971
     }
   }
 }

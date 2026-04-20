@@ -1,6 +1,6 @@
 # MEMORY.md - Long-Term Memory
 
-_Last updated: 2026-04-17 19:35_
+_Last updated: 2026-04-21 02:49_
 
 ---
 
@@ -67,7 +67,71 @@ _Last updated: 2026-04-17 19:35_
 
 ### Key Progress
 <!-- Updated by memory-maintenance heartbeat -->
+- 2026-04-21: 模板分类索引完成
+- 2026-04-21: 逆向工程工作流 skill 整合完成
+- 2026-04-21: 变现工作流 skill 整合完成
+- 2026-04-21: PM 工作流 skill 整合完成
+- 2026-04-21: Claude Code Mastery hooks 激活确认
 - 2026-04-17: Harness Engineering Phase 3 完成
+
+---
+
+## PM Workflow Skills
+
+**整合 skills (2026-04-21)**:
+- `pm-workflow` - PM 工作流总控
+- `prd-generator` - PRD 生成
+- `requirement-analysis` - 需求分析
+- `gap-analysis` - 差距分析
+- `competitive-analysis` - 竞品分析
+- `prototype-designer` - 原型设计
+
+---
+
+## Monetization Workflow Skills
+
+**整合 skills (2026-04-21)**:
+- `monetization-workflow` - 变现工作流总控
+- `monetization-teardown` - 商业化拆解
+- `ad-mediation-teardown` - 广告栈拆解
+- `paywall-analysis` - 付费墙分析
+- `ad-monetization-optimization` - 变现优化
+- `mediation-platforms` - 平台配置
+- `revenue-dashboard` - 收益 Dashboard
+- `ad-analytics` - 广告数据分析
+- `growth-teardown` - 增长拆解
+
+**联动**: monetization-workflow ↔ pm-workflow ↔ reverse-engineering-workflow
+
+---
+
+## Reverse Engineering Workflow Skills
+
+**整合 skills (2026-04-21)**:
+- `reverse-engineering-workflow` - 逆向工程总控
+- `apk-reverse-analysis` - APK 反编译
+- `adb-automation` - ADB 设备调试
+- `crack-7z-hash` - 7z 密码破解
+- `password-recovery` - 密码恢复/磁盘取证
+- `db-wal-recovery` - SQLite WAL 恢复
+- `feal-linear-cryptanalysis` - FEAL 密码分析
+- `vulnerable-secret` - 二进制漏洞分析
+
+---
+
+**整合 skills (2026-04-21)**:
+- `pm-workflow` - PM 工作流总控
+- `prd-generator` - PRD 生成
+- `requirement-analysis` - 需求分析
+- `gap-analysis` - 差距分析
+- `competitive-analysis` - 竞品分析
+- `prototype-designer` - 原型设计
+
+**文件流转**:
+- INSIGHTS.md → 用户/市场洞察
+- DECISIONS.md → 产品决策
+- EXPERIMENTS.md → 实验记录
+- PRD.md → 项目 PRD
 
 ---
 

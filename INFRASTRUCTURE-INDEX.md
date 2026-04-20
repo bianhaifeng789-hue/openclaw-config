@@ -20,6 +20,7 @@ OpenClaw 基础设施文件索引，减少重复排障与重复解释。
 - `scripts/openclaw-auto-recover.sh`：自动分类卡顿/掉线体感，输出最小修复建议与 diagnostics 快照；支持 `--capture-only`、`--restart-if-down`、`--fix-stale-lock`、`--notify`、`--feishu-summary`
 - `scripts/openclaw-stability-guard.sh`：5 行内稳定性摘要入口，适合看板/守护调用；健康时只返回简短 no action needed
 - `scripts/openclaw-self-heal.sh`：后台保守自愈入口，定时尝试单次 restart / stale lock fix，并写 guard 日志
+- `scripts/play-to-prd.sh`：Google Play → 逆向 → PRD 工作流统一入口，提供 check-app / reverse-status / prd-skills / smoke
 
 ## Memory
 - `memory/2026-04-19.md`：本轮收尾与基础设施整理记录

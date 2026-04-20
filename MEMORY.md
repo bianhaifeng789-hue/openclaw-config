@@ -47,10 +47,12 @@ _Last updated: 2026-04-20 10:18_
 ### Memory Architecture Choice
 - 当前采用“轻量结构化记忆”方案，而不是立即接入重型 memory engine
 - `claude-memory-pro` 可参考其分类思想，但不适合原样重度采用
-- `mnemon` 值得继续关注，但在未做隔离验证前，不直接接入主环境
-- 相关评估文档：
+- `mnemon` 已完成主环境低风险试装，并处于保守观察态：`remind=true`、`nudge=false`、`compact=false`
+- 相关评估与试装文档：
   - `docs/memory-architecture-proposal.md`
   - `docs/mnemon-openclaw-assessment.md`
+  - `docs/mnemon-trial-rollout-plan.md`
+  - `docs/mnemon-trial-result.md`
 
 ## Key References
 

@@ -89,6 +89,11 @@ scripts/play-to-prd.sh prd-skills
 scripts/play-to-prd.sh prd-template
 ```
 
+#### 直接初始化一份新 PRD 骨架
+```bash
+scripts/play-to-prd.sh init-prd <project-name>
+```
+
 ---
 
 ## 3. 当前约束与边界
@@ -119,7 +124,8 @@ scripts/play-to-prd.sh prd-template
 1. `scripts/play-to-prd.sh smoke <package> <artifact>`
 2. 确认逆向产物齐全
 3. 默认取 `scripts/play-to-prd.sh prd-template` 指向的高级模板
-4. 再进入 PRD / 竞品 / Gap 分析
+4. 如需直接起正式文档，运行 `scripts/play-to-prd.sh init-prd <project-name>`
+5. 再进入 PRD / 竞品 / Gap 分析
 
 ---
 

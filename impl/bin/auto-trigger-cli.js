@@ -1,69 +1,91 @@
 #!/usr/bin/env node
 /**
- * Auto Trigger CLI - 自动触发所有服务
+ * Auto Trigger CLI - heartbeat 轻状态初始化/查看
  */
 
 const path = require('path')
 const fs = require('fs')
+const os = require('os')
 
-// 动态导入编译后的模块
-const MODULES_PATH = path.join(__dirname, '..', 'utils')
-
-async function main() {
-  const command = process.argv[2] || 'init'
-  
-  if (command === 'init') {
-    console.log('=== 自动触发所有服务 ===')
-    
-    // 1. 初始化状态文件
-    const WORKSPACE = process.env.OPENCLAW_WORKSPACE || path.join(require('os').homedir(), '.openclaw', 'workspace')
-    const STATE_PATH = path.join(WORKSPACE, 'memory', 'heartbeat-state.json')
-    const now = Math.floor(Date.now() / 1000)
-    
-    if (!fs.existsSync(STATE_PATH)) {
-      fs.writeFileSync(STATE_PATH, JSON.stringify({
-        lastCheckTime: now,
-        lastRunTime: now,
-        tasks: {},
-        servicesEnabled: true
-      }, null, 2))
-      console.log('✅ 状态文件已创建')
-    }
-    
-    // 2. 标记服务已启用
-    try {
-      const state = JSON.parse(fs.readFileSync(STATE_PATH, 'utf8'))
-      state.servicesEnabled = true
-      state.lastInitTime = now
-      fs.writeFileSync(STATE_PATH, JSON.stringify(state, null, 2))
-      console.log('✅ 服务启用标记已写入')
-    } catch (e) {
-      console.log('⚠️ 无法更新状态文件:', e.message)
-    }
-    
-    console.log('\n=== 服务自动触发完成 ===')
-    console.log('- Gateway: ✅ 自动运行')
-    console.log('- Feishu: ✅ 自动连接')
-    console.log('- Compaction: ✅ 自动启用')
-    console.log('- Notifier: ✅ 已实现')
-    console.log('- Bridge: ✅ 已实现')
-    console.log('- Analytics: ✅ 已实现')
-    console.log('\n心跳触发时会自动调用所有服务')
-    
-  } else if (command === 'status') {
-    console.log('=== 服务状态 ===')
-    
-    try {
-      const { serviceRegistry } = await import(path.join(MODULES_PATH, 'service-registry.js'))
-      const stats = serviceRegistry.getStats()
-      console.log(JSON.stringify(stats, null, 2))
-    } catch (e) {
-      console.log('⚠️ 无法加载 service-registry:', e.message)
-    }
-    
-  } else {
-    console.log('用法: node auto-trigger-cli.js [init|status]')
+function defaultState() {
+  return {
+    lastChecks: {
+      heartbeat: null,
+      tasks: null,
+      contextPressure: null,
+      doctor: null,
+      memoryReview: null,
+    },
+    lastNotices: {
+      heartbeat: null,
+      tasks: null,
+      contextPressure: null,
+      doctor: null,
+      memoryReview: null,
+    },
+    notes: {
+      comment: 'Minimal heartbeat state schema. Keep small and stable.',
+      initializedBy: 'auto-trigger-cli',
+    },
   }
 }
 
-main().catch(console.error)
+function loadState(statePath) {
+  try {
+    if (!fs.existsSync(statePath)) return defaultState()
+    const parsed = JSON.parse(fs.readFileSync(statePath, 'utf8'))
+    const base = defaultState()
+    return {
+      ...base,
+      ...parsed,
+      lastChecks: { ...base.lastChecks, ...(parsed.lastChecks || {}) },
+      lastNotices: { ...base.lastNotices, ...(parsed.lastNotices || {}) },
+      notes: { ...base.notes, ...(parsed.notes || {}) },
+    }
+  } catch {
+    return defaultState()
+  }
+}
+
+function saveState(statePath, state) {
+  fs.mkdirSync(path.dirname(statePath), { recursive: true })
+  fs.writeFileSync(statePath, JSON.stringify(state, null, 2))
+}
+
+async function main() {
+  const command = process.argv[2] || 'init'
+  const WORKSPACE = process.env.OPENCLAW_WORKSPACE || path.join(os.homedir(), '.openclaw', 'workspace')
+  const STATE_PATH = path.join(WORKSPACE, 'memory', 'heartbeat-state.json')
+
+  if (command === 'init') {
+    const existed = fs.existsSync(STATE_PATH)
+    const state = loadState(STATE_PATH)
+    saveState(STATE_PATH, state)
+
+    console.log(JSON.stringify({
+      initialized: !existed,
+      statePath: STATE_PATH,
+      mode: 'minimal-heartbeat-state',
+      message: existed ? 'heartbeat 状态已存在，已按最小 schema 归并' : 'heartbeat 状态已按最小 schema 初始化',
+    }, null, 2))
+    return
+  }
+
+  if (command === 'status') {
+    const state = loadState(STATE_PATH)
+    console.log(JSON.stringify({
+      statePath: STATE_PATH,
+      lastChecks: state.lastChecks,
+      lastNotices: state.lastNotices,
+      notes: state.notes,
+    }, null, 2))
+    return
+  }
+
+  console.log('用法: node auto-trigger-cli.js [init|status]')
+}
+
+main().catch(err => {
+  console.error(err)
+  process.exit(1)
+})

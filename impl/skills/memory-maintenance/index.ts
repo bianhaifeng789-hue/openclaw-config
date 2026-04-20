@@ -18,7 +18,12 @@ interface MemoryMaintenanceConfig {
 }
 
 interface HeartbeatState {
-  lastMemoryReview: number
+  lastChecks?: {
+    memoryReview?: number | null
+    [key: string]: any
+  }
+  lastNotices?: Record<string, any>
+  notes?: Record<string, any>
   [key: string]: any
 }
 
@@ -42,9 +47,10 @@ class MemoryMaintenanceSkill {
    */
   shouldRun(): boolean {
     const state = this.readHeartbeatState()
-    if (!state?.lastMemoryReview) return true
+    const lastReview = state?.lastChecks?.memoryReview
+    if (!lastReview) return true
 
-    const elapsed = Date.now() - state.lastMemoryReview
+    const elapsed = Date.now() - lastReview
     return elapsed > this.config.checkIntervalMs
   }
 
@@ -109,7 +115,15 @@ class MemoryMaintenanceSkill {
       } catch {}
     }
 
-    state.lastMemoryReview = Date.now()
+    state.lastChecks = {
+      ...(state.lastChecks || {}),
+      memoryReview: Date.now(),
+    }
+    state.notes = {
+      ...(state.notes || {}),
+      comment: state.notes?.comment || 'Minimal heartbeat state schema. Keep small and stable.',
+    }
+
     writeFileSync(path, JSON.stringify(state, null, 2))
   }
 

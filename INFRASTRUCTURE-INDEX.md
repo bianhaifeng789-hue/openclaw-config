@@ -16,7 +16,7 @@ OpenClaw 基础设施文件索引，减少重复排障与重复解释。
 
 ## Automation
 - `HEARTBEAT.md`：heartbeat 的轻量任务边界与硬规则
-- `scripts/openclaw-auto-recover.sh`：自动分类卡顿/掉线体感，输出最小修复建议与 diagnostics 快照
+- `scripts/openclaw-auto-recover.sh`：自动分类卡顿/掉线体感，输出最小修复建议与 diagnostics 快照；支持 `--capture-only`、`--restart-if-down`、`--fix-stale-lock`
 
 ## Memory
 - `memory/2026-04-19.md`：本轮收尾与基础设施整理记录

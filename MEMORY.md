@@ -25,6 +25,7 @@ _Last updated: 2026-04-20 10:18_
   - `memory/typed/reference/`
   - `memory/bank/procedures/`
 - 这套结构优先解决“分类清晰”和“长期可维护”，暂不急于引入更重的外部 memory runtime
+- 日常维护规则见：`docs/memory-maintenance-rules.md`
 
 ## Durable Decisions
 

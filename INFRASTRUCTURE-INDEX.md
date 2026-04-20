@@ -4,6 +4,7 @@ OpenClaw 基础设施文件索引，减少重复排障与重复解释。
 
 ## Health / Runbook
 - `RUNBOOK-openclaw-health.md`：健康检查顺序、风险优先级、最小修复策略、复查模板
+- `RUNBOOK-openclaw-gateway-false-failure.md`：区分 Gateway 真故障、配置冲突误报、主会话过重导致的假卡死
 - `scripts/openclaw-healthcheck.sh`：把 status / doctor / security audit 落盘到 `state/health/`
 
 ## Session / Context

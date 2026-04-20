@@ -14,7 +14,7 @@
       "priority": "medium",
       "cmd": "node impl/bin/compact-cli.js memory",
       "prompt": "检查 MEMORY.md token 数，超过 25k 自动压缩",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "transcript-compress",
@@ -62,7 +62,7 @@
       "priority": "low",
       "cmd": "node impl/bin/extract-memories-timer.js check",
       "prompt": "检查是否需要提取近期会话记忆",
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "auto-dream",
@@ -70,7 +70,7 @@
       "priority": "low",
       "cmd": "node impl/bin/auto-dream-gates.js check",
       "prompt": "检查长期记忆整理 gates 状态",
-      "enabled": true
+      "enabled": false
     }
   ],
   "notes_runtime": {

@@ -25,5 +25,6 @@
       "description": "Generate a fresh-session handoff summary from the active session"
     }
   ],
-  "notes": "Separate session maintenance from heartbeat. Run manually or via dedicated cron if needed."
+  "notes": "Separate session maintenance from heartbeat. Run manually or via dedicated cron if needed.",
+  "migration_notes": "Heartbeat has been slimmed to health-first checks. Memory compaction/extraction/consolidation should live here or in dedicated cron, not in heartbeat-tasks.json."
 }

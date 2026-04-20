@@ -195,6 +195,65 @@ Manifest 和代码都表明：
 这中间的风险是：
 **如果恢复价值感不足，用户会迅速把它理解成一个高权限、高打扰、强广告的工具壳。**
 
+## 5.5 深挖后对“恢复逻辑”的最终判断
+这轮深挖后，最关键的结论是：
+
+### 它的主能力更像“媒体索引聚合”，不是底层数据恢复
+核心证据来自：
+- `calcrim/aggruen/quobury/bilampar/statha/jjIIl.java`（映射名 `Tenabmpath.kt`）
+
+这个类直接：
+- 查询 `MediaStore.Images.Media.getContentUri(...)`
+- 用 `ContentResolver.query(...)` 读媒体库
+- 提取 `_id / _display_name / _data / _size / mime_type / date_added`
+- 把这些媒体条目包装成应用内结果对象
+
+这说明它核心依赖的是：
+- 系统媒体库
+- 当前仍可索引的文件条目
+- 文件路径和媒体元数据
+
+而不是底层块扫描式的恢复。
+
+### 它还显式依赖缩略图层
+另一个关键类 `LjjjJ/iJlIL.java` 直接使用：
+- `MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI`
+- `MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI`
+
+这意味着其恢复展示很可能混合了：
+- 原始媒体文件
+- 缩略图
+- 缓存资源
+- 已能重新索引到的旧媒体项
+
+### 它还把删除/整理能力和恢复混在同一条媒体链路里
+同一个 `Tenabmpath.kt` 类里还有：
+- `delete(uri, ...)`
+- `MediaStore.createDeleteRequest(...)`
+
+所以它并不是单一恢复引擎，而是：
+**媒体库扫描 + 媒体整理删除 + 恢复叙事包装** 的组合体。
+
+### 最终判断
+因此我现在更明确地认为：
+
+**这款产品主要不是在做真正的底层删除恢复，而是在做媒体库扫描、缩略图/缓存命中和路径索引聚合，再把结果包装成“recoverable”。**
+
+这也解释了为什么这类产品：
+- 往往能很快扫出很多结果
+- 但用户最终容易觉得“找回来的不是真正删掉的那些内容”
+
+## 5.6 广告与通知不是补充能力，而是产品骨架
+深挖后这个判断也更明确：
+- `NotificationService` 是前台服务，不只是普通通知
+- `MyFirebaseMessagingService` 接入 FCM
+- Manifest 中直接声明了 TradPlus、MBridge、Pangle、AdMob、Facebook、Vungle、IronSource、InMobi、Bigo、Yandex 等广告组件
+- 还显式开启了 `OPTIMIZE_AD_LOADING`
+
+这说明它的真实结构不是“恢复 App + 一点广告”，而是：
+**恢复入口 + 清理留存 + 通知召回 + 广告聚合变现**
+
+
 ---
 
 ## 6. 对我们做产品的启发

@@ -67,6 +67,7 @@ _Last updated: 2026-04-21 02:49_
 
 ### Key Progress
 <!-- Updated by memory-maintenance heartbeat -->
+- 2026-04-21: hooks 使用说明文档完成
 - 2026-04-21: template-picker skill 完成
 - 2026-04-21: 模板分类索引完成
 - 2026-04-21: 逆向工程工作流 skill 整合完成

@@ -1,9 +1,23 @@
 {
   "lastChecks": {
+    "heartbeat": 1776651768534,
+    "tasks": null,
+    "contextPressure": 1776644239489,
+    "doctor": 1776617340069,
+    "memoryReview": "2026-04-17T19:12:00+08:00",
     "awaySummary": null,
     "rateLimit": "2026-04-17T19:12:00+08:00",
-    "memoryReview": "2026-04-17T19:12:00+08:00",
     "insightsAnalysis": null
+  },
+  "lastNotices": {
+    "heartbeat": null,
+    "tasks": null,
+    "contextPressure": null,
+    "doctor": null,
+    "memoryReview": null
+  },
+  "notes": {
+    "comment": "Minimal heartbeat state schema. Keep small and stable."
   },
   "idleSessionCount": 0,
   "created": "2026-04-17T19:12:00+08:00"

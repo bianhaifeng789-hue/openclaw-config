@@ -7,6 +7,7 @@ OpenClaw 基础设施文件索引，减少重复排障与重复解释。
 - `RUNBOOK-openclaw-gateway-false-failure.md`：区分 Gateway 真故障、配置冲突误报、主会话过重导致的假卡死
 - `RUNBOOK-openclaw-anti-stall.md`：防卡死操作清单，覆盖 Node / Gateway / session / 配置冲突的预防与最小修复
 - `RUNBOOK-openclaw-auto-recovery.md`：卡顿/掉线时的自动分类、最小修复、停止展开边界
+- `docs/openclaw-self-heal-setup.md`：本机 launchd 自愈守护安装说明
 - `scripts/openclaw-healthcheck.sh`：把 status / doctor / security audit 落盘到 `state/health/`
 
 ## Session / Context
@@ -18,6 +19,7 @@ OpenClaw 基础设施文件索引，减少重复排障与重复解释。
 - `HEARTBEAT.md`：heartbeat 的轻量任务边界与硬规则
 - `scripts/openclaw-auto-recover.sh`：自动分类卡顿/掉线体感，输出最小修复建议与 diagnostics 快照；支持 `--capture-only`、`--restart-if-down`、`--fix-stale-lock`、`--notify`、`--feishu-summary`
 - `scripts/openclaw-stability-guard.sh`：5 行内稳定性摘要入口，适合看板/守护调用；健康时只返回简短 no action needed
+- `scripts/openclaw-self-heal.sh`：后台保守自愈入口，定时尝试单次 restart / stale lock fix，并写 guard 日志
 
 ## Memory
 - `memory/2026-04-19.md`：本轮收尾与基础设施整理记录

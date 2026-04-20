@@ -14,24 +14,6 @@
   - 当前默认每 900 秒（15 分钟）执行一次
   - 加载时立即执行一次
 
-## 保守原则
-
-这个 self-heal 只做两类低风险动作：
-- 真正判定 Gateway down 时，尝试一次 restart
-- 真正判定 stale lock 时，尝试一次 `openclaw doctor --fix`
-
-不会做：
-- 多轮 restart
-- 连续 config patch
-- 长日志深挖
-- heartbeat 风格的长排障
-
-## 手动运行
-
-```bash
-/Users/mac/.openclaw/workspace/scripts/openclaw-self-heal.sh
-```
-
 ## 安装到 launchd
 
 先确保日志目录存在：
@@ -74,10 +56,22 @@ launchctl unload ~/Library/LaunchAgents/ai.openclaw.self-heal.plist
 rm -f ~/Library/LaunchAgents/ai.openclaw.self-heal.plist
 ```
 
+## 行为边界
+
+这个 self-heal 只做两类低风险动作：
+- 真正判定 Gateway down 时，尝试一次 restart
+- 真正判定 stale lock 时，尝试一次 `openclaw doctor --fix`
+
+不会做：
+- 多轮 restart
+- 连续 config patch
+- 长日志深挖
+- heartbeat 风格的长排障
+
 ## 推荐用法
 
-- 让 `openclaw-stability-guard.sh` 继续给人/看板看短摘要
-- 让 `openclaw-self-heal.sh` 在后台低频保守执行
+- `scripts/openclaw-stability-guard.sh` 继续给人/看板看短摘要
+- `scripts/openclaw-self-heal.sh` 在后台低频保守执行
 - 二者分工：
   - stability guard: 看状态
   - self-heal: 尝试一次最低风险恢复

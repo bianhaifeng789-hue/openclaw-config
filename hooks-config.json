@@ -19,6 +19,24 @@
       "description": "Check subagent limit before spawn"
     },
     {
+      "event": "PreToolUse",
+      "matcher": {
+        "toolName": "read|edit|write"
+      },
+      "command": "python3 ~/.openclaw/hooks/block-secrets.py",
+      "timeout": 5000,
+      "description": "Block access to .env and credentials files"
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": {
+        "toolName": "exec"
+      },
+      "command": "bash ~/.openclaw/hooks/block-dangerous-commands.sh",
+      "timeout": 3000,
+      "description": "Block dangerous bash commands (rm -rf, etc)"
+    },
+    {
       "event": "PostToolUse",
       "matcher": {
         "toolName": "*"
@@ -26,6 +44,15 @@
       "command": "node ~/.openclaw/workspace-dispatcher/impl/bin/tool-error-handler.js status",
       "timeout": 3000,
       "description": "Handle tool errors after execution"
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": {
+        "toolName": "edit|write"
+      },
+      "command": "bash ~/.openclaw/hooks/after-edit.sh",
+      "timeout": 10000,
+      "description": "Run formatters after file edits"
     },
     {
       "event": "PostModelUse",
@@ -38,12 +65,20 @@
     },
     {
       "event": "Stop",
+      "matcher": {},
+      "command": "bash ~/.openclaw/hooks/end-of-turn.sh",
+      "timeout": 5000,
+      "description": "Quality gates at end of turn"
+    },
+    {
+      "event": "Stop",
+      "matcher": {},
       "command": "node ~/.openclaw/workspace-dispatcher/impl/bin/title-generator.js status",
       "timeout": 5000,
       "description": "Generate session title on stop"
     }
   ],
   "enabled": true,
-  "version": "1.1.0",
-  "description": "DeerFlow integration: error handling + subagent limit + title generation"
+  "version": "1.2.0",
+  "description": "DeerFlow + Claude Code Mastery: safety hooks + error handling + quality gates"
 }

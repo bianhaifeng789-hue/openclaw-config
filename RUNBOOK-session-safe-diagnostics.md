@@ -112,6 +112,42 @@ MAX_LOG_LINES=300 MAX_STATUS_LINES=150 ./scripts/openclaw-diag-capture.sh
 2. large-output auto-file
 3. 诊断任务自动分流到 isolated / sub-agent
 
+## 轻量护栏（已落地）
+
+### `scripts/session-pressure-guard.py`
+
+作用：
+
+- 读取 `~/.openclaw/agents/main/sessions/sessions.json`
+- 检查当前主 session 的：
+  - session file 大小
+  - line count
+  - compaction count
+- 输出 `ok / warn / danger`
+- 给出是否应该继续在主线程里做重诊断的建议
+
+### 用法
+
+```bash
+npm run guard:session
+```
+
+或 JSON 输出：
+
+```bash
+npm run guard:session:json
+```
+
+### 建议接法
+
+在准备做重日志 / 重排障前，先跑一遍：
+
+1. `npm run guard:session`
+2. 如果结果是 `warn` 或 `danger`
+   - 不要继续在主 session 打大输出
+   - 改用 `npm run diag:openclaw`
+   - 或切 isolated / sub-agent 继续
+
 当前这份 runbook 先解决最现实的问题：
 
 > 不让主 session 一边诊断，一边把自己诊断死。

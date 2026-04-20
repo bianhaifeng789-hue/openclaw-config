@@ -807,3 +807,199 @@
 - 接口字段定义
 - 测试用例清单
 - 服务端配置字段说明
+
+
+---
+
+# 22. 页面字段定义
+
+## 22.1 首页字段
+| 字段/模块 | 类型 | 说明 | 规则 |
+|---|---|---|---|
+| top_value_banner | 展示模块 | 首页顶部价值说明 | 首次打开优先展示“本地扫描、结果可解释” |
+| recover_photo_entry | 按钮/卡片 | 恢复照片入口 | 点击进入照片恢复流程 |
+| recover_video_entry | 按钮/卡片 | 恢复视频入口 | 点击进入视频恢复流程 |
+| recover_file_entry | 按钮/卡片 | 恢复文件入口 | 点击进入文件恢复流程 |
+| clean_space_entry | 按钮/卡片 | 整理空间入口 | 点击进入整理模块 |
+| recovered_history_entry | 按钮/卡片 | 已恢复内容入口 | 有历史记录时优先展示 |
+| home_bottom_banner | 广告位 | 首页底部 Banner | 加载失败不阻断主流程 |
+
+## 22.2 结果页字段
+| 字段/模块 | 类型 | 说明 | 规则 |
+|---|---|---|---|
+| result_tab | Tab | 结果分类 Tab | 默认进入高价值候选 |
+| file_thumbnail | 图片/图标 | 文件缩略图或类型图标 | 无图时显示默认图标 |
+| file_name | 文本 | 文件名称 | 超长截断，保留后缀 |
+| file_type | 文本 | 文件类型 | 图片/视频/文档等 |
+| file_size | 文本 | 文件大小 | 统一 B/KB/MB/GB 格式 |
+| file_time | 文本 | 文件时间 | 默认展示最近修改或索引时间 |
+| source_tag | 标签 | 来源标签 | 必须展示 |
+| select_status | 选择态 | 是否勾选 | 默认不全选 |
+| preview_entry | 点击区域 | 进入预览 | 点击列表项主体进入 |
+| recover_action | 按钮 | 执行恢复 | 至少选择 1 项后可点击 |
+
+## 22.3 恢复完成页字段
+| 字段/模块 | 类型 | 说明 | 规则 |
+|---|---|---|---|
+| success_count | 文本 | 恢复成功数量 | 必显 |
+| fail_count | 文本 | 恢复失败数量 | 有失败时展示 |
+| save_path | 文本 | 保存路径 | 支持复制或打开 |
+| view_recovered_btn | 按钮 | 查看已恢复内容 | 主按钮 |
+| go_clean_btn | 按钮 | 去整理空间 | 次按钮 |
+| back_home_btn | 按钮 | 返回首页 | 始终可用 |
+
+---
+
+# 23. 状态机设计
+
+## 23.1 扫描流程状态机
+| 当前状态 | 触发条件 | 下一状态 | 用户可见表现 |
+|---|---|---|---|
+| idle | 用户点击恢复入口 | permission_check | 进入权限说明或直接校验权限 |
+| permission_check | 权限已授权 | scanning | 展示扫描中页 |
+| permission_check | 权限未授权 | permission_explain | 展示权限说明页 |
+| permission_explain | 用户授权成功 | scanning | 开始扫描 |
+| permission_explain | 用户拒绝 | permission_denied | 展示拒绝说明 |
+| scanning | 扫描完成且有结果 | result_ready | 进入结果页 |
+| scanning | 扫描完成且无结果 | result_empty | 进入空态结果页 |
+| scanning | 扫描失败 | scan_failed | 展示失败说明与重试 |
+| result_ready | 用户点击恢复 | recovering | 进入恢复执行态 |
+| recovering | 全部成功 | recover_success | 进入完成页 |
+| recovering | 部分失败 | recover_partial_success | 展示成功失败汇总 |
+| recovering | 全部失败 | recover_failed | 展示失败结果页 |
+
+## 23.2 权限状态机
+| 状态 | 条件 | 页面/动作 |
+|---|---|---|
+| unknown | 首次进入 | 展示权限说明页 |
+| granted | 用户同意 | 开始扫描 |
+| denied_once | 用户拒绝一次 | 展示二次解释 |
+| denied_forever | 用户永久拒绝 | 引导去设置页 |
+
+## 23.3 广告状态机
+| 状态 | 触发 | 下一状态 | 说明 |
+|---|---|---|---|
+| ad_idle | 进入广告机会点 | ad_loading | 开始请求广告 |
+| ad_loading | 广告加载成功 | ad_showing | 展示广告 |
+| ad_loading | 广告加载失败/超时 | ad_skip | 直接放行 |
+| ad_showing | 广告关闭 | ad_finish | 返回业务流程 |
+
+---
+
+# 24. 服务端配置字段建议
+
+## 24.1 广告配置字段
+| 字段 | 类型 | 说明 |
+|---|---|---|
+| ad_open_enabled | bool | 是否开启开屏广告 |
+| ad_home_banner_enabled | bool | 是否开启首页 Banner |
+| ad_result_interstitial_enabled | bool | 是否开启结果页插屏 |
+| ad_recover_finish_enabled | bool | 是否开启恢复完成插屏 |
+| ad_clean_finish_enabled | bool | 是否开启整理完成插屏 |
+| ad_interstitial_frequency_n | int | 插屏频率参数 |
+| ad_interstitial_max_per_day | int | 每日插屏上限 |
+| ad_interstitial_cooldown_hours | int | 插屏冷却时长 |
+| ad_first_user_exempt | bool | 首次用户是否豁免 |
+
+## 24.2 PUSH 配置字段
+| 字段 | 类型 | 说明 |
+|---|---|---|
+| push_permission_nudge_enabled | bool | 是否开启权限引导通知 |
+| push_recover_finish_enabled | bool | 是否开启恢复完成通知 |
+| push_daily_limit | int | 每日推送上限 |
+| push_weekly_limit | int | 每周推送上限 |
+| push_copy_strategy | string | 文案策略版本 |
+
+## 24.3 实验字段
+| 字段 | 类型 | 说明 |
+|---|---|---|
+| exp_home_copy_version | string | 首页文案实验版本 |
+| exp_result_sort_strategy | string | 结果排序实验版本 |
+| exp_ad_strategy_version | string | 广告策略实验版本 |
+
+---
+
+# 25. 接口与数据输出建议
+
+## 25.1 扫描结果对象
+```json
+{
+  "id": "string",
+  "name": "string",
+  "type": "photo|video|file|other",
+  "size": 12345,
+  "timestamp": 1710000000,
+  "sourceTag": "high_value|existing|cache|thumbnail|other",
+  "previewUri": "string",
+  "originPath": "string",
+  "recoverable": true,
+  "reason": "string"
+}
+```
+
+## 25.2 恢复结果对象
+```json
+{
+  "taskId": "string",
+  "successCount": 10,
+  "failCount": 2,
+  "savePath": "string",
+  "failItems": [
+    {
+      "id": "string",
+      "reasonCode": "SPACE_NOT_ENOUGH"
+    }
+  ]
+}
+```
+
+## 25.3 错误码建议
+| 错误码 | 含义 |
+|---|---|
+| PERMISSION_DENIED | 权限被拒绝 |
+| PERMISSION_DENIED_FOREVER | 权限被永久拒绝 |
+| SCAN_TIMEOUT | 扫描超时 |
+| RESULT_EMPTY | 扫描结果为空 |
+| SAVE_PATH_UNAVAILABLE | 保存路径不可用 |
+| SPACE_NOT_ENOUGH | 设备空间不足 |
+| FILE_SOURCE_INVALID | 文件源失效 |
+| AD_LOAD_TIMEOUT | 广告加载超时 |
+
+---
+
+# 26. QA测试清单（首批）
+
+## 26.1 功能测试
+- 照片恢复主链路
+- 视频恢复主链路
+- 文件恢复主链路
+- 已恢复记录查看
+- 相似图整理
+- 截图整理
+
+## 26.2 异常测试
+- 权限拒绝一次
+- 权限永久拒绝
+- 扫描过程被中断
+- 扫描结果为空
+- 恢复部分失败
+- 恢复全部失败
+- 广告请求失败
+- 通知关闭
+
+## 26.3 兼容性测试
+- Android 8 ~ Android 15 主流机型
+- 不同存储容量机型
+- 不同相册/文件数量级样本
+
+---
+
+# 27. 评审决策项
+
+| 编号 | 问题 | 影响范围 | 建议方案 | 负责人 |
+|---|---|---|---|---|
+| D1 | 文档恢复支持到什么类型 | 产品/研发/测试 | 首期支持 PDF、DOC、XLS、PPT、TXT 常见类型 | 待定 |
+| D2 | 恢复目录是否支持自定义 | 产品/研发 | 首期默认固定目录，后续版本开放 | 待定 |
+| D3 | 激励广告承接点放在哪里 | 商业化/产品 | 建议放在“解锁额外恢复数量”而非主链路前置 | 待定 |
+| D4 | 是否首期接入去广告付费 | 商业化/产品 | 建议不上订阅，先验证广告+体验平衡 | 待定 |
+| D5 | 结果页是否加入智能推荐排序 | 产品/算法/研发 | 首期先固定规则，二期再做实验 | 待定 |

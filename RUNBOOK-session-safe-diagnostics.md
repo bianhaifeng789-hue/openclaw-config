@@ -78,16 +78,34 @@ npm run diag:openclaw
 MAX_LOG_LINES=300 MAX_STATUS_LINES=150 ./scripts/openclaw-diag-capture.sh
 ```
 
+### `scripts/session-safe-diag-entry.py`
+
+作用：
+
+- 先跑 `session-pressure-guard`
+- 如果主 session 是 `warn` 或 `danger`
+  - 自动切到文件化诊断模式
+  - 调用 `openclaw-diag-capture.sh`
+- 如果是 `ok`
+  - 不自动采集，避免无意义地扩大会话和文件噪音
+
+### 用法
+
+```bash
+npm run diag:smart
+```
+
 ## 实操模板
 
 ### 当用户说“OpenClaw 又挂了”
 
 优先流程：
 
-1. 运行 `npm run diag:openclaw`
-2. 查看生成的 markdown 文件
-3. 从文件中提炼少量关键证据
-4. 在主线程只回复：
+1. 运行 `npm run diag:smart`
+2. 如果 guard 处于 `warn/danger`，脚本会自动生成诊断文件
+3. 查看生成的 markdown 文件
+4. 从文件中提炼少量关键证据
+5. 在主线程只回复：
    - daemon 是否存活
    - 是否是 context overflow
    - 是否是 config conflict / channel issue

@@ -1,0 +1,48 @@
+{
+  "hooks": [
+    {
+      "event": "PreToolUse",
+      "matcher": {
+        "toolName": "read|edit|write"
+      },
+      "command": "python3 ~/.openclaw/hooks/block-secrets.py",
+      "timeout": 5000,
+      "description": "Block access to .env and credentials files"
+    },
+    {
+      "event": "PreToolUse",
+      "matcher": {
+        "toolName": "exec"
+      },
+      "command": "~/.openclaw/hooks/block-dangerous-commands.sh",
+      "timeout": 3000,
+      "description": "Block dangerous bash commands (rm -rf, etc)"
+    },
+    {
+      "event": "PostToolUse",
+      "matcher": {
+        "toolName": "edit|write"
+      },
+      "command": "~/.openclaw/hooks/after-edit.sh",
+      "timeout": 10000,
+      "description": "Run formatters after file edits"
+    },
+    {
+      "event": "Stop",
+      "matcher": {},
+      "command": "~/.openclaw/hooks/end-of-turn.sh",
+      "timeout": 5000,
+      "description": "Quality gates at end of turn"
+    },
+    {
+      "event": "Notification",
+      "matcher": {},
+      "command": "~/.openclaw/hooks/notify.sh",
+      "timeout": 3000,
+      "description": "Desktop notifications"
+    }
+  ],
+  "enabled": true,
+  "version": "1.2.0",
+  "description": "Claude Code Mastery safety hooks: block secrets, dangerous commands, quality gates"
+}

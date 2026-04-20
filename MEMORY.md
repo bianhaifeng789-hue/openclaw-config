@@ -67,12 +67,25 @@ _Last updated: 2026-04-21 02:49_
 
 ### Key Progress
 <!-- Updated by memory-maintenance heartbeat -->
+- 2026-04-21: template-picker skill 完成
 - 2026-04-21: 模板分类索引完成
 - 2026-04-21: 逆向工程工作流 skill 整合完成
 - 2026-04-21: 变现工作流 skill 整合完成
 - 2026-04-21: PM 工作流 skill 整合完成
 - 2026-04-21: Claude Code Mastery hooks 激活确认
 - 2026-04-17: Harness Engineering Phase 3 完成
+
+---
+
+## Template Workflow
+
+**新增 skill (2026-04-21)**:
+- `template-picker` - 项目模板推荐器
+- `templates-index.md` - 401+ 模板分类索引
+
+**用途**:
+- 根据项目类型快速推荐模板
+- 支持组合推荐（AI SaaS / API / Mobile / Infra）
 
 ---
 

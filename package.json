@@ -11,7 +11,9 @@
     "patch:openclaw:check": "python3 scripts/apply-openclaw-patches.py --all --dry-run --json",
     "diag:openclaw": "./scripts/openclaw-diag-capture.sh",
     "guard:session": "python3 scripts/session-pressure-guard.py",
-    "guard:session:json": "python3 scripts/session-pressure-guard.py --json"
+    "guard:session:json": "python3 scripts/session-pressure-guard.py --json",
+    "guard:routing": "python3 scripts/task-routing-guard.py",
+    "guard:routing:json": "python3 scripts/task-routing-guard.py --json"
   },
   "devDependencies": {
     "husky": "^9.0.0",

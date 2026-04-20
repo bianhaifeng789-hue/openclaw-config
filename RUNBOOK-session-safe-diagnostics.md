@@ -156,15 +156,39 @@ npm run guard:session
 npm run guard:session:json
 ```
 
+### `scripts/task-routing-guard.py`
+
+作用：
+
+- 判断一个任务是否像“重排障 / 重日志 / 重代码检查”
+- 结合 `session-pressure-guard` 的结果给出路由建议
+- 当任务本身重、且主 session 已经 `warn/danger` 时
+  - 自动触发 `diag:smart`
+  - 转入文件化诊断路径
+
+### 用法
+
+```bash
+npm run guard:routing -- "帮我看 openclaw 日志并排障 context overflow"
+```
+
+或 JSON 输出：
+
+```bash
+npm run guard:routing:json -- "帮我看 openclaw 日志并排障 context overflow"
+```
+
 ### 建议接法
 
 在准备做重日志 / 重排障前，先跑一遍：
 
-1. `npm run guard:session`
-2. 如果结果是 `warn` 或 `danger`
+1. `npm run guard:routing -- "你的任务描述"`
+2. 如果结果是 `route-file-backed`
    - 不要继续在主 session 打大输出
-   - 改用 `npm run diag:openclaw`
+   - 走 `diag:smart`
    - 或切 isolated / sub-agent 继续
+3. 如果结果是 `consider-isolated`
+   - 优先切独立 session
 
 当前这份 runbook 先解决最现实的问题：
 

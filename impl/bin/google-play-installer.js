@@ -147,6 +147,47 @@ function getScreenSize(deviceId) {
 // 尝试点击安装按钮（多位置策略）
 function tryClickInstall(deviceId, screenSize) {
   const { width, height } = screenSize;
+
+  const dumpPath = '/sdcard/window_dump.xml';
+  const localDumpPath = path.join(process.cwd(), 'tmp', 'play-ui', 'window_dump.xml');
+  fs.mkdirSync(path.dirname(localDumpPath), { recursive: true });
+
+  try {
+    adb(deviceId, `shell uiautomator dump ${dumpPath}`);
+    adb(deviceId, `pull ${shellQuote(dumpPath)} ${shellQuote(localDumpPath)}`);
+    const xml = fs.readFileSync(localDumpPath, 'utf-8');
+
+    const uiCandidates = [
+      { label: '安装', text: '安装' },
+      { label: 'Install', text: 'Install' },
+      { label: '更新', text: '更新' },
+      { label: 'Update', text: 'Update' },
+      { label: '下载', text: '下载' },
+      { label: 'Get', text: 'Get' },
+    ];
+
+    for (const candidate of uiCandidates) {
+      const re = new RegExp(`<node[^>]*text="${candidate.text}"[^>]*bounds="\\[(\\d+),(\\d+)\\]\\[(\\d+),(\\d+)\\]"`, 'i');
+      const m = xml.match(re);
+      if (m) {
+        const x1 = parseInt(m[1], 10), y1 = parseInt(m[2], 10), x2 = parseInt(m[3], 10), y2 = parseInt(m[4], 10);
+        const cx = Math.floor((x1 + x2) / 2);
+        const cy = Math.floor((y1 + y2) / 2);
+        console.log(`UI识别到按钮: ${candidate.label} @ (${cx}, ${cy})`);
+        adb(deviceId, `shell input tap ${cx} ${cy}`);
+        execSync('sleep 3');
+        return true;
+      }
+    }
+
+    const downloadingSignals = ['取消', 'Cancel', '20%', '下载中'];
+    if (downloadingSignals.some(s => xml.includes(s))) {
+      console.log('✅ 检测到已进入下载/安装流程，无需再点安装');
+      return true;
+    }
+  } catch (e) {
+    console.log(`UI识别失败，回退坐标方案: ${e.message}`);
+  }
   
   const INSTALL_BUTTON_COORDINATES = [
     { x: 813, y: 1374, desc: '中间偏右（确认）' },

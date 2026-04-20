@@ -16,12 +16,16 @@
 .env
 .env.local
 
-# Trace / runtime logs
+# Trace / runtime logs / runtime state
 _trace_*.jsonl
 *.log
 *.tmp
 *.bak
 .tmp_*
+memory/.consolidate-lock
+memory/*-state.json
+memory/heartbeat-state.backup-*.json
+memory/stability-guard-*
 
 # 测试输出
 _test_output/

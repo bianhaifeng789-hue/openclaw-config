@@ -2,6 +2,27 @@
 
 这是一个**轻量 OpenClaw 基础设施基线仓库**，用于在新机器上快速复用稳定、可诊断、可收口的基础设施层。
 
+## 快速入口（Mnemon + Karpathy branch）
+
+如果你正在使用 `mnemon-config-note` 分支，并想在另一台 Mac 上快速接入 Mnemon：
+
+```bash
+git fetch origin mnemon-config-note
+git checkout mnemon-config-note
+bash scripts/install-mnemon-openclaw.sh
+```
+
+这个分支当前额外包含：
+- `scripts/install-mnemon-openclaw.sh` - Mnemon 一键安装脚本
+- `docs/install-mnemon-on-another-mac.md` - 另一台 Mac 安装说明
+- `skills/karpathy-coding-guidelines/SKILL.md` - 轻量行为约束 skill
+
+安装成功后，Mnemon 默认采用保守配置：
+- `remind=true`
+- `nudge=false`
+- `compact=false`
+
+
 ## 这个仓库包含什么
 
 - 轻量 heartbeat 基线

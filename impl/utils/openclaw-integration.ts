@@ -1,16 +1,11 @@
 /**
  * OpenClaw Integration Entry Point.
  *
- * Unified integration for all Claude Code patterns:
- * - AutoDream (background memory consolidation)
- * - SessionMemoryCompact (memory compression protection)
- * - AgentSummary (progress summaries)
- * - ForkedAgentCache (cache sharing)
+ * Unified integration for experimental Claude Code patterns.
  *
- * This module provides hooks that integrate with OpenClaw's:
- * - HEARTBEAT.md periodic checks
- * - Plugin hooks (postSampling, sessionStart)
- * - Feishu card notifications
+ * Note: heartbeat 主状态现已收敛到最小 schema；
+ * 不应再向 heartbeat-state.json 回写新的顶层业务块。
+ * 更丰富的子系统状态应写入各自独立 state 文件。
  */
 
 import { runAutoDream, getAutoDreamState, setAutoDreamEnabled, type AutoDreamConfig } from './auto-dream.js'
@@ -108,9 +103,8 @@ export async function hookAutoDreamCheck(): Promise<void> {
     return
   }
 
-  const state = loadHeartbeatState()
-  const lastCheck = (state?.autoDream as Record<string, unknown>)?.lastCheckAt as number ?? 0
-  const hoursSince = (Date.now() - lastCheck) / 3_600_000
+  const lastCheck = integrationState.lastAutoDreamAt || 0
+  const hoursSince = lastCheck ? (Date.now() - lastCheck) / 3_600_000 : Infinity
 
   // Skip if checked recently (< 1h)
   if (hoursSince < 1) {
@@ -121,16 +115,6 @@ export async function hookAutoDreamCheck(): Promise<void> {
   // Run AutoDream
   console.log('[Integration] Running AutoDream...')
   await runAutoDream(MEMORY_DIR)
-
-  // Update state
-  const newState = {
-    ...state,
-    autoDream: {
-      lastCheckAt: Date.now(),
-      enabled: true,
-    },
-  }
-  saveHeartbeatState(newState)
 
   integrationState.lastAutoDreamAt = Date.now()
 }

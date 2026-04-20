@@ -1,7 +1,8 @@
 /**
  * Smart Heartbeat Scheduler - 轻量 heartbeat 调度器
  *
- * 自动检测 HEARTBEAT.md 中定义的任务，但状态模型与当前轻量 heartbeat 一致。
+ * 自动检测 HEARTBEAT.md 中定义的轻任务，状态模型与当前最小 heartbeat schema 一致。
+ * 仅使用 memory/heartbeat-state.json 作为主状态来源。
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';

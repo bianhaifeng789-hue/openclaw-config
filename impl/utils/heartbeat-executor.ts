@@ -64,7 +64,6 @@ type HeartbeatState = {
 const WORKSPACE_ROOT = process.env.OPENCLAW_WORKSPACE || process.cwd()
 const MEMORY_DIR = path.join(WORKSPACE_ROOT, 'memory')
 const HEARTBEAT_STATE_PATH = path.join(MEMORY_DIR, 'heartbeat-state.json')
-const HEARTBEAT_CLI = path.join(WORKSPACE_ROOT, 'impl', 'bin', 'heartbeat-cli.js')
 const COMPACT_CLI = path.join(WORKSPACE_ROOT, 'impl', 'bin', 'compact-cli.js')
 const MAX_TASKS_PER_RUN = 2
 

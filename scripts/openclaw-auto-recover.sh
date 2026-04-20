@@ -15,6 +15,8 @@ GATEWAY_LOG="${GATEWAY_LOG:-/tmp/openclaw/openclaw-$(date +%F).log}"
 CAPTURE_ONLY=0
 RESTART_IF_DOWN=0
 FIX_STALE_LOCK=0
+NOTIFY=0
+FEISHU_SUMMARY=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -27,6 +29,12 @@ while [[ $# -gt 0 ]]; do
     --fix-stale-lock)
       FIX_STALE_LOCK=1
       ;;
+    --notify)
+      NOTIFY=1
+      ;;
+    --feishu-summary)
+      FEISHU_SUMMARY=1
+      ;;
     -h|--help)
       cat <<'EOF'
 Usage: scripts/openclaw-auto-recover.sh [options]
@@ -35,6 +43,8 @@ Options:
   --capture-only     Only diagnose and write diagnostics snapshot.
   --restart-if-down  If Gateway is truly down, do one restart attempt.
   --fix-stale-lock   If a stale session lock is detected, run doctor --fix once.
+  --notify           Print a short user-facing summary after diagnosis.
+  --feishu-summary   Print a Feishu-friendly short summary block.
   -h, --help         Show this help.
 EOF
       exit 0
@@ -54,6 +64,7 @@ LOG_SIGNALS=""
 FIX_OUTPUT=""
 RESTART_OUTPUT=""
 FOLLOWUP_NOTES=()
+USER_SUMMARY=""
 
 if [[ -f "$GATEWAY_LOG" ]]; then
   LOG_TAIL="$(tail -n "$MAX_LOG_LINES" "$GATEWAY_LOG" 2>&1 || true)"
@@ -128,6 +139,24 @@ else
   DOCTOR_AFTER=""
 fi
 
+case "$classification" in
+  real_gateway_failure)
+    USER_SUMMARY="我确认到更像是真 Gateway 故障，不是普通假警报。当前建议是做一次单次重启审慎修复。"
+    ;;
+  config_conflict_false_failure)
+    USER_SUMMARY="这次更像配置基线冲突，不是 Gateway 真挂。优先重新读取配置后再重试，不建议直接重启。"
+    ;;
+  session_context_pressure)
+    USER_SUMMARY="服务大概率还活着，但主 session 压力偏高，体感会像卡死。优先收口当前线程、外置长输出，再继续。"
+    ;;
+  service_alive_observe_session_weight)
+    USER_SUMMARY="当前 Gateway 和通道都活着，更像主会话负担偏重，不建议直接重启。先按 session hygiene 处理更稳。"
+    ;;
+  *)
+    USER_SUMMARY="当前结论还不够硬，建议先看 diagnostics 快照，再决定是否做修复动作。"
+    ;;
+esac
+
 {
   echo "# OpenClaw Auto Recovery Snapshot"
   echo
@@ -141,6 +170,8 @@ fi
   echo "- capture_only: $CAPTURE_ONLY"
   echo "- restart_if_down: $RESTART_IF_DOWN"
   echo "- fix_stale_lock: $FIX_STALE_LOCK"
+  echo "- notify: $NOTIFY"
+  echo "- feishu_summary: $FEISHU_SUMMARY"
   echo
   echo "## Classification"
   echo
@@ -153,6 +184,7 @@ fi
   echo "- real_gateway_failure: $real_gateway_failure"
   echo "- classification: $classification"
   echo "- recommended_action: $action"
+  echo "- user_summary: $USER_SUMMARY"
   if (( ${#FOLLOWUP_NOTES[@]} > 0 )); then
     echo "- followup_actions: ${FOLLOWUP_NOTES[*]}"
   fi
@@ -220,4 +252,17 @@ printf 'classification=%s\n' "$classification"
 printf 'recommended_action=%s\n' "$action"
 if (( ${#FOLLOWUP_NOTES[@]} > 0 )); then
   printf 'followup_actions=%s\n' "${FOLLOWUP_NOTES[*]}"
+fi
+
+if [[ "$NOTIFY" == "1" ]]; then
+  printf 'notify_summary=%s\n' "$USER_SUMMARY"
+fi
+
+if [[ "$FEISHU_SUMMARY" == "1" ]]; then
+  printf '\n[Feishu Summary]\n'
+  printf 'OpenClaw 自动恢复检查结果\n'
+  printf '- 分类: %s\n' "$classification"
+  printf '- 建议动作: %s\n' "$action"
+  printf '- 结论: %s\n' "$USER_SUMMARY"
+  printf '- 诊断文件: %s\n' "$OUT"
 fi

@@ -1,6 +1,6 @@
 # Install Mnemon on Another Mac (OpenClaw)
 
-_Last updated: 2026-04-20_
+_Last updated: 2026-04-21_
 
 目标：在另一台 Mac 上，以和当前机器一致的**保守观察态**接入 Mnemon 到 OpenClaw。
 
@@ -20,6 +20,16 @@ _Last updated: 2026-04-20_
 不要直接复制整套 `~/.openclaw/` 或 `~/.mnemon/`。
 建议在目标机器上**重新安装并重新 setup**，这样路径、hook、extension 和本机环境保持一致。
 
+如果你已经在这个仓库分支上，优先直接使用：
+
+```bash
+bash scripts/install-mnemon-openclaw.sh
+```
+
+这个脚本现在支持两条安装路径：
+- **有 Homebrew**: 走 `brew install mnemon-dev/tap/mnemon`
+- **没有 Homebrew**: 自动回退到 GitHub release 安装，并放到 `~/.local/bin/mnemon`
+
 ## Steps
 
 ### 1. Clone repository
@@ -36,58 +46,47 @@ git fetch origin mnemon-config-note
 git checkout mnemon-config-note
 ```
 
-### 2. Install mnemon
-
-优先使用 Homebrew：
+### 2. One-command install
 
 ```bash
-brew install mnemon-dev/tap/mnemon
+bash scripts/install-mnemon-openclaw.sh
 ```
 
-验证：
+### 3. What the script does
+
+脚本会：
+1. 检查 `mnemon` 是否已安装
+2. 若未安装：
+   - 优先用 Homebrew
+   - 若无 Homebrew，则从 GitHub release 下载对应 macOS 二进制
+3. 执行：
+   ```bash
+   mnemon setup --target openclaw --global --yes
+   ```
+4. 把 OpenClaw Mnemon 配置设置为保守模式：
+   - `remind=true`
+   - `nudge=false`
+   - `compact=false`
+5. 重启 gateway
+6. 执行基本验证：
+   - `mnemon status`
+   - `openclaw status`
+
+### 4. PATH note for fallback install
+
+如果走的是 GitHub release fallback 路径，脚本会把 `mnemon` 安装到：
 
 ```bash
-mnemon --version
+~/.local/bin/mnemon
 ```
 
-### 3. Set up OpenClaw global integration
+并自动尝试把下面这一行写入 shell 配置：
 
 ```bash
-mnemon setup --target openclaw --global --yes
+export PATH="$HOME/.local/bin:$PATH"
 ```
 
-注意：
-- 必须带 `--global`
-- 否则 Mnemon 可能会装到 repo 本地 `.openclaw/`，而不是正在运行的 `~/.openclaw/`
-
-### 4. Adjust to conservative config
-
-将 `~/.openclaw/openclaw.json` 中的 Mnemon 配置调整为：
-
-```json
-{
-  "plugins": {
-    "entries": {
-      "mnemon": {
-        "enabled": true,
-        "config": {
-          "remind": true,
-          "nudge": false,
-          "compact": false
-        }
-      }
-    }
-  }
-}
-```
-
-### 5. Restart gateway
-
-```bash
-openclaw gateway restart
-```
-
-### 6. Verify
+### 5. Verify
 
 ```bash
 mnemon status

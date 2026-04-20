@@ -155,6 +155,7 @@ heartbeat 不允许：
 ### session 过重
 - 服务还活着
 - 更像主 session 太重，我会先收口并分流
+- 如果后续还要继续长任务，建议直接用 `/new` 开新线程
 
 ### 真 Gateway 故障
 - 我确认到 Gateway / service 异常

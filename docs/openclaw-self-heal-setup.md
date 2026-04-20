@@ -11,7 +11,7 @@
 
 - `config/ai.openclaw.self-heal.plist`
   - macOS launchd 示例
-  - 默认每 1800 秒（30 分钟）执行一次
+  - 当前默认每 900 秒（15 分钟）执行一次
   - 加载时立即执行一次
 
 ## 保守原则

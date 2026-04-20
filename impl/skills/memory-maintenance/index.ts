@@ -2,7 +2,7 @@
  * Memory Maintenance Skill - 记忆维护自动化
  * 
  * Source: Claude Code skills/memory-maintenance/SKILL.md
- * Pattern: Periodic check + daily notes extraction + MEMORY.md update + heartbeat state
+ * Pattern: Periodic check + daily notes extraction + MEMORY.md update + minimal heartbeat review timestamp
  */
 
 import { readFileSync, writeFileSync, existsSync, readdirSync, appendFileSync } from 'fs'
@@ -43,7 +43,7 @@ class MemoryMaintenanceSkill {
 
   /**
    * Check if memory maintenance is needed
-   * Returns true if lastMemoryReview > checkIntervalMs ago
+   * Returns true if lastChecks.memoryReview > checkIntervalMs ago
    */
   shouldRun(): boolean {
     const state = this.readHeartbeatState()

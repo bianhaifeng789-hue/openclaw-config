@@ -2,7 +2,7 @@
 /**
  * Heartbeat CLI - 轻量 heartbeat 统一入口
  *
- * 仅保留当前 3 个轻任务相关能力：
+ * 仅保留当前 3 个轻任务相关能力（状态文件仅使用最小 schema）：
  *   status  - 显示轻量 heartbeat 状态
  *   check   - 快速检查需处理任务
  *   run     - 执行最多 2 个待处理任务

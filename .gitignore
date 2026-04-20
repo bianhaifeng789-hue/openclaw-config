@@ -1,16 +1,16 @@
 # OpenClaw Workspace .gitignore
 
-# Infra-only sync defaults
-skills/
-_imports/
-artifacts/
-harness-projects/
-benchmarks/
-.clawhub/
-.openclaw/
-state/
-tmp/
-memory/.dreams/
+# Infra-only sync defaults (root-level only)
+/skills/
+/_imports/
+/artifacts/
+/harness-projects/
+/benchmarks/
+/.clawhub/
+/.openclaw/
+/state/
+/tmp/
+/memory/.dreams/
 
 # 环境变量（包含 API Key）
 .env

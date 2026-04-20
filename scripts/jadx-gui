@@ -1,0 +1,14 @@
+#!/bin/zsh
+set -euo pipefail
+
+export JAVA_HOME="$HOME/Tools/zulu17.54.21-ca-jdk17.0.13-macosx_aarch64/zulu-17.jdk/Contents/Home"
+export PATH="$JAVA_HOME/bin:$HOME/Tools/jadx/bin:$PATH"
+
+JADX_GUI_REAL="$HOME/Tools/jadx/bin/jadx-gui"
+
+if [[ ! -x "$JADX_GUI_REAL" ]]; then
+  echo "jadx-gui shim error: real binary not found at $JADX_GUI_REAL" >&2
+  exit 1
+fi
+
+exec "$JADX_GUI_REAL" "$@"

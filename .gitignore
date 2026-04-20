@@ -35,6 +35,8 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Node modules / cache
+# Node modules / build artifacts (global)
 node_modules/
+**/dist/
 .cache/
+*.tsbuildinfo

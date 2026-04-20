@@ -15,12 +15,14 @@ Modes:
   check-app <package>          Quick package sanity check via google-play helper
   reverse-status <artifact>    Check whether reverse-analysis artifacts already exist
   prd-skills                   Verify required skills for Play -> reverse -> PRD chain
+  prd-template                 Show the default advanced PRD template path
   smoke <package> <artifact>   Run a lightweight end-to-end smoke check summary
 
 Examples:
   scripts/play-to-prd.sh check-app com.game.my
   scripts/play-to-prd.sh reverse-status com.stormlibs.musictune
   scripts/play-to-prd.sh prd-skills
+  scripts/play-to-prd.sh prd-template
   scripts/play-to-prd.sh smoke com.stormlibs.musictune com.stormlibs.musictune
 EOF
 }
@@ -67,6 +69,11 @@ case "$MODE" in
     do
       [[ -f "$d/SKILL.md" ]] && echo "skill=ok path=$d" || echo "skill=missing path=$d"
     done
+    echo "template=default path=$ROOT/PRD-template-advanced.md"
+    ;;
+  prd-template)
+    echo "template_path=$ROOT/PRD-template-advanced.md"
+    echo "template_note=for formal project docs, use this advanced template by default after Play -> reverse analysis"
     ;;
   smoke)
     [[ $# -eq 2 ]] || { usage; exit 2; }

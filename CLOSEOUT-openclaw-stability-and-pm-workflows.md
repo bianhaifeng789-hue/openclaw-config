@@ -79,9 +79,14 @@ scripts/play-to-prd.sh smoke <package> <artifact>
 scripts/play-to-prd.sh reverse-status <artifact>
 ```
 
-#### 看技能链是否完整
+#### 看技能链和默认模板是否完整
 ```bash
 scripts/play-to-prd.sh prd-skills
+```
+
+#### 开正式项目文档时默认取高级模板
+```bash
+scripts/play-to-prd.sh prd-template
 ```
 
 ---
@@ -113,7 +118,8 @@ scripts/play-to-prd.sh prd-skills
 ### 要做“Google Play → 逆向 → PRD”
 1. `scripts/play-to-prd.sh smoke <package> <artifact>`
 2. 确认逆向产物齐全
-3. 再进入 PRD / 竞品 / Gap 分析
+3. 默认取 `scripts/play-to-prd.sh prd-template` 指向的高级模板
+4. 再进入 PRD / 竞品 / Gap 分析
 
 ---
 

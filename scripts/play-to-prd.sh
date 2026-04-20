@@ -6,6 +6,7 @@ set -euo pipefail
 
 ROOT="/Users/mac/.openclaw/workspace"
 HELPER="$ROOT/impl/bin/google-play-helper.js"
+INSTALLER="$ROOT/impl/bin/google-play-installer.js"
 PRD_TEMPLATE="$ROOT/PRD-template-advanced.md"
 PRD_OUT_DIR="$ROOT/plans/prd"
 
@@ -14,15 +15,22 @@ usage() {
 Usage: scripts/play-to-prd.sh <mode> [args]
 
 Modes:
-  check-app <package>          Quick package sanity check via google-play helper
-  reverse-status <artifact>    Check whether reverse-analysis artifacts already exist
-  prd-skills                   Verify required skills for Play -> reverse -> PRD chain
-  prd-template                 Show the default advanced PRD template path
-  init-prd <project-name>      Create a new PRD skeleton from the advanced template
-  smoke <package> <artifact>   Run a lightweight end-to-end smoke check summary
+  check-app <package>                 Quick package sanity check via google-play helper
+  install-play <package> [device]     Open Google Play on device and try auto-install
+  device-check <package> [device]     Check whether package is installed on connected device
+  pull-apk <package> [artifact] [device]
+                                     Pull base/split APKs from connected device
+  reverse-status <artifact>           Check whether reverse-analysis artifacts already exist
+  prd-skills                          Verify required skills for Play -> reverse -> PRD chain
+  prd-template                        Show the default advanced PRD template path
+  init-prd <project-name>             Create a new PRD skeleton from the advanced template
+  smoke <package> <artifact>          Run a lightweight end-to-end smoke check summary
 
 Examples:
   scripts/play-to-prd.sh check-app com.game.my
+  scripts/play-to-prd.sh install-play com.game.my 42170DLJH001W3
+  scripts/play-to-prd.sh device-check com.game.my 42170DLJH001W3
+  scripts/play-to-prd.sh pull-apk com.game.my com.game.my 42170DLJH001W3
   scripts/play-to-prd.sh reverse-status com.stormlibs.musictune
   scripts/play-to-prd.sh prd-skills
   scripts/play-to-prd.sh prd-template
@@ -55,11 +63,52 @@ case "$MODE" in
       echo "helper_note=google-play-helper check-app parameter parsing is flaky; using wrapper fallback summary"
     fi
     ;;
+  install-play)
+    [[ $# -ge 1 && $# -le 2 ]] || { usage; exit 2; }
+    PACKAGE="$1"
+    DEVICE_ID="${2:-}"
+    if [[ -n "$DEVICE_ID" ]]; then
+      node "$INSTALLER" install "$PACKAGE" "$DEVICE_ID"
+    else
+      node "$INSTALLER" install "$PACKAGE"
+    fi
+    ;;
+  device-check)
+    [[ $# -ge 1 && $# -le 2 ]] || { usage; exit 2; }
+    PACKAGE="$1"
+    DEVICE_ID="${2:-}"
+    if [[ -n "$DEVICE_ID" ]]; then
+      node "$INSTALLER" check "$PACKAGE" "$DEVICE_ID"
+    else
+      node "$INSTALLER" check "$PACKAGE"
+    fi
+    ;;
+  pull-apk)
+    [[ $# -ge 1 && $# -le 3 ]] || { usage; exit 2; }
+    PACKAGE="$1"
+    ARTIFACT_NAME="${2:-$PACKAGE}"
+    DEVICE_ID="${3:-}"
+    OUT_DIR="$ROOT/artifacts/$ARTIFACT_NAME"
+    mkdir -p "$OUT_DIR"
+    if [[ -n "$DEVICE_ID" ]]; then
+      node "$INSTALLER" pull "$PACKAGE" "$OUT_DIR" "$DEVICE_ID"
+    else
+      node "$INSTALLER" pull "$PACKAGE" "$OUT_DIR"
+    fi
+    ;;
   reverse-status)
     [[ $# -eq 1 ]] || { usage; exit 2; }
     ART_DIR="$ROOT/artifacts/$1"
     echo "artifact_dir=$ART_DIR"
     [[ -f "$ART_DIR/base.apk" ]] && echo "base_apk=ok" || echo "base_apk=missing"
+    set +o nomatch 2>/dev/null || true
+    APK_GLOB=("$ART_DIR"/*.apk)
+    set -o nomatch 2>/dev/null || true
+    if [[ -e "${APK_GLOB[1]:-}" ]]; then
+      echo "apk_files=present"
+    else
+      echo "apk_files=missing"
+    fi
     [[ -d "$ART_DIR/jadx-base" ]] && echo "jadx_dir=ok" || echo "jadx_dir=missing"
     [[ -f "$ART_DIR/APK_REVERSE_ANALYSIS.md" ]] && echo "reverse_report=ok" || echo "reverse_report=missing"
     ;;
@@ -96,6 +145,9 @@ case "$MODE" in
     ARTIFACT="$2"
     echo "== check-app =="
     "$0" check-app "$PACKAGE"
+    echo
+    echo "== device-check =="
+    "$0" device-check "$PACKAGE" || true
     echo
     echo "== reverse-status =="
     "$0" reverse-status "$ARTIFACT"

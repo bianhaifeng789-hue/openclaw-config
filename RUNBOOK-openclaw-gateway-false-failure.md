@@ -148,30 +148,11 @@ openclaw doctor --non-interactive
 
 ## 6. 防复发原则
 
-### 6.1 降低配置写入并发
 - 同一轮修复尽量合并成更少次 `config.patch`
 - 每次写配置前先重新 `config.get`
 - 避免多个线程/多个会话同时改 Gateway 配置
-
-### 6.2 把长排障从主会话分流
-符合以下任一条件就不要继续堆在主线程：
-- 连续 3 步以上排障
-- 同时看 status / doctor / logs / config
-- 多轮修改配置并验证
-- 需要大量日志和长输出
-
-优先：
-- 独立线程
-- 子会话
-- 外置到 runbook / diagnostics 文件
-
-### 6.3 减少“假挂”传播
-- 对 `config changed since last load` 一律按“配置冲突”理解
-- 不把这类错误解释成 Gateway daemon 掉线
-- 用户侧文案优先写清：
-  - 配置基线变了
-  - 需要重读配置再重试
-  - 不是网关崩溃
+- 长排障不要继续堆在主线程，优先独立线程、子会话、或落 diagnostics
+- 对 `config changed since last load` 一律按“配置冲突”理解，不解释成 Gateway 真挂
 
 ---
 

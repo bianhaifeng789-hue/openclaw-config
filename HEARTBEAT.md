@@ -54,3 +54,4 @@ node /Users/mac/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check|run|
 - `memory/heartbeat-state.json` 作为 heartbeat 轻状态主文件；避免与其他通用 state 文件重复承担同类节流/已执行判断
 - `state/heartbeat-state.json` 仅保留兼容占位，不再作为主判断来源
 - `memory/heartbeat-state.json` 只保留最小 schema：`lastChecks` / `lastNotices` / `notes`；其他子系统状态必须拆到各自独立文件
+- 例如：away-summary → `memory/away-summary-state.json`，rate-limit → `state/rate-limit/*`，dream gates → `state/dreams/*`

@@ -5,6 +5,7 @@
  * 
  * 功能：用户离开后回来时，生成"while you were away"摘要
  * 飞书场景：用户离开飞书聊天一段时间后，回来时发送摘要卡片
+ * 状态文件独立保存在 memory/away-summary-state.json，不占用 heartbeat-state.json
  */
 
 import * as fs from 'fs/promises'
@@ -199,11 +200,11 @@ function getTypeIcon(type: string): string {
 }
 
 // ============================================================================
-// HEARTBEAT Integration
+// Heartbeat-facing Check Hook
 // ============================================================================
 
 /**
- * Heartbeat 检查点
+ * 提供给 heartbeat 的轻量检查点（仅返回是否应提醒，不写 heartbeat-state）
  */
 export async function checkAwaySummaryForHeartbeat(): Promise<{
   isAway: boolean

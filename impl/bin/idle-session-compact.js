@@ -6,6 +6,8 @@
  * 1. 检测空闲会话（混合判定：时间+消息+任务+状态）
  * 2. 分级压缩策略（Level 0-3）
  * 3. 发送飞书卡片通知
+ *
+ * 注意：本脚本使用独立 state/idle-session-state.json，不依赖 heartbeat-state.json
  * 
  * 用法：
  *   node idle-session-compact.js check     - 检查空闲会话
@@ -20,7 +22,6 @@ const path = require('path');
 const CONFIG = {
   workspace: '/Users/mar2game/.openclaw/workspace',
   stateFile: 'state/idle-session-state.json',
-  heartbeatStateFile: 'memory/heartbeat-state.json',
   
   // 空闲判定阈值（分钟）
   idleThresholds: {

@@ -6,6 +6,8 @@
  *   1. Time: hours since lastConsolidatedAt >= minHours (default 24h)
  *   2. Sessions: transcript count with mtime > lastConsolidatedAt >= minSessions (default 5)
  *   3. Lock: no other process mid-consolidation
+ *
+ * State is isolated under state/dreams/*. Do not store dream gate metadata in heartbeat-state.json.
  * 
  * Usage:
  *   node auto-dream-gates.js check
@@ -46,7 +48,7 @@ function readLastConsolidatedAt() {
 function writeLastConsolidatedAt(timestamp) {
   const meta = {
     lastConsolidatedAt: timestamp,
-    lastCheckTime: Date.now(),
+    checkedAt: Date.now(),
     sessionsConsolidated: 0
   };
   fs.mkdirSync(STATE_DIR, { recursive: true });

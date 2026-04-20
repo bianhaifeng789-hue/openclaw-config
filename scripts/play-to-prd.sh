@@ -1,6 +1,9 @@
 #!/bin/zsh
 set -euo pipefail
 
+# Unified operator entrypoint for the Google Play -> reverse -> PRD workflow.
+# Keeps package checks, artifact checks, and skill-chain checks in one place.
+
 ROOT="/Users/mac/.openclaw/workspace"
 HELPER="$ROOT/impl/bin/google-play-helper.js"
 

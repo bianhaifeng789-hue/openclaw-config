@@ -1,6 +1,9 @@
 #!/bin/zsh
 set -euo pipefail
 
+# Short human-facing wrapper around openclaw-auto-recover.sh.
+# Use this for dashboards, quick checks, or lightweight operator summaries.
+
 ROOT="/Users/mac/.openclaw/workspace"
 AUTO_RECOVER="$ROOT/scripts/openclaw-auto-recover.sh"
 

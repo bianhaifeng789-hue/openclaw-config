@@ -1,6 +1,12 @@
 #!/bin/zsh
 set -euo pipefail
 
+# Core stability triage entrypoint.
+# Responsibilities:
+# - classify whether the issue is real gateway failure, config conflict, or session weight
+# - optionally apply one guarded repair action
+# - write a diagnostics snapshot for later review
+
 ROOT="/Users/mac/.openclaw/workspace"
 OUT_DIR="$ROOT/state/diagnostics"
 STAMP="$(date +%F-%H%M%S)"

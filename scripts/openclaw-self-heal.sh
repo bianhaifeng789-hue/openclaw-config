@@ -1,6 +1,9 @@
 #!/bin/zsh
 set -euo pipefail
 
+# Background guarded self-heal wrapper for launchd.
+# Use this for low-frequency unattended recovery attempts.
+
 ROOT="/Users/mac/.openclaw/workspace"
 AUTO_RECOVER="$ROOT/scripts/openclaw-auto-recover.sh"
 GUARD_LOG_DIR="$ROOT/state/guard"

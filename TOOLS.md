@@ -2,39 +2,60 @@
 
 Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
 
-## What Goes Here
+## 逆向工程工具
 
-Things like:
+### Java JDK
+- **路径**: `~/Tools/zulu17.54.21-ca-jdk17.0.13-macosx_aarch64/zulu-17.jdk/Contents/Home`
+- **版本**: OpenJDK 17.0.13 LTS
+- **环境变量**: `JAVA_HOME=~/Tools/zulu17.54.21-ca-jdk17.0.13-macosx_aarch64/zulu-17.jdk/Contents/Home`
 
-- Camera names and locations
-- SSH hosts and aliases
-- Preferred voices for TTS
-- Speaker/room names
-- Device nicknames
-- Anything environment-specific
+### ADB (Android Debug Bridge)
+- **路径**: `~/android-sdk/platform-tools/adb`
+- **版本**: v1.0.41
+- **设备**: Pixel 42170DLJH001W3
 
-## Examples
+### Jadx (APK反编译)
+- **路径**: `~/Tools/jadx/bin/jadx`
+- **用途**: 反编译APK为Java源码
+- **GUI**: `~/Tools/jadx/bin/jadx-gui`
 
-```markdown
-### Cameras
+### Apktool (APK解包)
+- **路径**: `~/Tools/apktool.jar`
+- **用途**: 解包APK资源、smali代码
+- **命令**: `java -jar ~/Tools/apktool.jar d <apk> -o <output>`
 
-- living-room → Main area, 180° wide angle
-- front-door → Entrance, motion-triggered
+### Frida (动态分析)
+- **路径**: `~/Downloads/frida-server.xz`（待解压安装）
+- **用途**: 动态Hook、运行时分析
 
-### SSH
+## 使用示例
 
-- home-server → 192.168.1.100, user: admin
+### 反编译APK
+```bash
+# 设置Java环境
+export JAVA_HOME=~/Tools/zulu17.54.21-ca-jdk17.0.13-macosx_aarch64/zulu-17.jdk/Contents/Home
+export PATH=$JAVA_HOME/bin:~/Tools/jadx/bin:~/android-sdk/platform-tools:$PATH
 
-### TTS
+# 使用Jadx反编译
+jadx -d ~/Desktop/app_source/ ~/Desktop/app.apk
 
-- Preferred voice: "Nova" (warm, slightly British)
-- Default speaker: Kitchen HomePod
+# 使用Apktool解包
+java -jar ~/Tools/apktool.jar d ~/Desktop/app.apk -o ~/Desktop/app_decoded/
 ```
 
-## Why Separate?
+### ADB操作
+```bash
+# 连接设备
+~/android-sdk/platform-tools/adb devices
 
-Skills are shared. Your setup is yours. Keeping them apart means you can update skills without losing your notes, and share skills without leaking your infrastructure.
+# 拉取APK
+~/android-sdk/platform-tools/adb pull <apk_path> ~/Desktop/
+```
 
 ---
 
-Add whatever helps you do your job. This is your cheat sheet.
+## 为什么分开配置
+
+Skills是共享的，你的工具路径是你的。这样配置后，Skills可以引用这些路径，而你不需要修改Skills本身。
+
+更新时间: 2026-04-17 22:22 Asia/Shanghai

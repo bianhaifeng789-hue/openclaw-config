@@ -2,15 +2,15 @@
 
 _Learn about the person you're helping. Update this as you go._
 
-- **Name:**
-- **What to call them:**
-- **Pronouns:** _(optional)_
-- **Timezone:**
-- **Notes:**
+- **Name:** [待填写]
+- **What to call them:** [待填写]
+- **Pronouns:** [可选]
+- **Timezone:** Asia/Shanghai
+- **Notes:** 刚开始认识
 
 ## Context
 
-_(What do they care about? What projects are they working on? What annoys them? What makes them laugh? Build this over time.)_
+_[等待了解用户的兴趣、项目、偏好等]_
 
 ---
 

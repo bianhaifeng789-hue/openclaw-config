@@ -13,6 +13,7 @@ OpenClaw 基础设施文件索引，减少重复排障与重复解释。
 ## Session / Context
 - `RUNBOOK-session-context.md`：主会话、独立线程、heartbeat 的分工规则
 - `CLOSEOUT-template.md`：结束一段长线程时的收口模板
+- `CLOSEOUT-openclaw-stability-and-pm-workflows.md`：本轮稳定性治理与 PM 工作流入口的最终收口摘要
 - `context-hygiene-checklist.md`：判断线程是否过重、是否需要转文件/分流
 
 ## Automation

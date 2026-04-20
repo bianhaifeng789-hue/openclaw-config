@@ -8,6 +8,7 @@ OpenClaw 基础设施文件索引，减少重复排障与重复解释。
 - `RUNBOOK-openclaw-anti-stall.md`：防卡死操作清单，覆盖 Node / Gateway / session / 配置冲突的预防与最小修复
 - `RUNBOOK-openclaw-auto-recovery.md`：卡顿/掉线时的自动分类、最小修复、停止展开边界
 - `docs/openclaw-self-heal-setup.md`：本机 launchd 自愈守护安装说明
+- `PRD-template-advanced.md`：对齐真实项目协作的高级 PRD 模板，适合 Google Play / 逆向 / 商业化 / PUSH / 埋点类项目
 - `scripts/openclaw-healthcheck.sh`：把 status / doctor / security audit 落盘到 `state/health/`
 
 ## Session / Context

@@ -33,6 +33,8 @@
 - `scripts/jadx`
 - `scripts/jadx-gui`
   - 本地 Jadx + Java 环境 shim，避免 PATH / JAVA_HOME 掉链子
+- `PRD-template-advanced.md`
+  - 面向真实项目推进的高级 PRD 模板，补齐版本治理、商业化、推送、审核/买量模式、埋点、项目规划等正式文档层
 
 相关技能：
 - `skills/google-play-to-prd`

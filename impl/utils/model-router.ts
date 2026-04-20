@@ -1,6 +1,9 @@
 import { ensureModelRouterStateFile, readModelRouterState, writeModelRouterState } from './model-router-state'
 import type { FailoverDecision, ModelFailureKind, ModelRouterState } from './model-router-types'
 
+// Model router state is isolated in memory/model-router-state.json.
+// It tracks model failover only and must not reuse heartbeat-state.json.
+
 const RATE_LIMIT_THRESHOLD = 1
 const TIMEOUT_THRESHOLD = 2
 const SERVER_ERROR_THRESHOLD = 2

@@ -2,6 +2,7 @@
  * Rate Limit Messages Service
  * 借鉴 Claude Code rateLimitMessages.ts
  * 飞书场景：API限速通知，提前预警
+ * 独立于 heartbeat-state；如需持久化，应使用专门的 rate-limit state 文件
  */
 
 // 限速类型

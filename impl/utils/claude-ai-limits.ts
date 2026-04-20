@@ -4,6 +4,8 @@
  * 
  * 借鉴 Claude Code services/claudeAiLimits.ts
  * 功能: 5h/7d 限额追踪、Early Warning、Rate limit 消息生成
+ *
+ * This module keeps in-memory quota state only; do not persist quota snapshots into heartbeat-state.json.
  */
 
 // ============================================

@@ -2,7 +2,8 @@ import fs from 'node:fs'
 import path from 'node:path'
 import type { ModelFailureCounters, ModelRouterState } from './model-router-types'
 
-const STATE_PATH = path.resolve(process.cwd(), 'memory/model-router-state.json')
+const WORKSPACE_ROOT = process.env.OPENCLAW_WORKSPACE || process.cwd()
+const STATE_PATH = path.join(WORKSPACE_ROOT, 'memory', 'model-router-state.json')
 
 function createFailureCounters(): ModelFailureCounters {
   return {

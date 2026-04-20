@@ -62,6 +62,7 @@ _Last updated: 2026-04-20 10:18_
 - `memory/typed/project/openclaw-workspace-dispatcher.md`
 - `memory/typed/reference/openclaw-entrypoints.md`
 - `memory/bank/procedures/openclaw-healthcheck.md`
+- `docs/karpathy-coding-guidelines-local-adaptation.md`
 
 ## Notes
 

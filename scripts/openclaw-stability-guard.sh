@@ -27,6 +27,7 @@ if [[ "$CLASSIFICATION" == "service_alive_observe_session_weight" ]]; then
   echo "OpenClaw stability: healthy enough, no restart needed"
   echo "Classification: $CLASSIFICATION"
   echo "Action: $ACTION"
+  echo "Hint: close out and use /new for long follow-up work"
   [[ -n "$SNAPSHOT" ]] && echo "Diagnostics: $SNAPSHOT"
   exit 0
 fi
@@ -35,6 +36,7 @@ if [[ -n "$SUMMARY" ]]; then
   echo "OpenClaw stability: attention needed"
   echo "Classification: $CLASSIFICATION"
   echo "Action: $ACTION"
+  echo "Hint: if work continues, close out and use /new"
   echo "Summary: $SUMMARY"
   [[ -n "$SNAPSHOT" ]] && echo "Diagnostics: $SNAPSHOT"
   exit 0

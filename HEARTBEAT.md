@@ -8,6 +8,7 @@
 - heartbeat 只负责：check / route / notify
 - heartbeat 不是排障 worker，不是长分析线程，不是自动修复总控
 - 若检测到疑似“卡死 / 假掉线 / 主 session 过重”，先按 `RUNBOOK-openclaw-auto-recovery.md` 的 Level 0/1 执行，只做轻量分类与必要提醒，不在 heartbeat 内展开重修复
+- 若结果明显指向 session 偏重，只做简短收口提醒，建议用户或同事用 `/new` 开新线程，不在 heartbeat 内继续长链路处理
 
 ## 手动调试
 ```bash

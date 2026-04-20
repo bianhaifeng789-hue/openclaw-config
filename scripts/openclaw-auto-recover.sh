@@ -147,10 +147,10 @@ case "$classification" in
     USER_SUMMARY="这次更像配置基线冲突，不是 Gateway 真挂。优先重新读取配置后再重试，不建议直接重启。"
     ;;
   session_context_pressure)
-    USER_SUMMARY="服务大概率还活着，但主 session 压力偏高，体感会像卡死。优先收口当前线程、外置长输出，再继续。"
+    USER_SUMMARY="服务大概率还活着，但主 session 压力偏高，体感会像卡死。优先收口当前线程、外置长输出，并建议用 /new 开新线程继续。"
     ;;
   service_alive_observe_session_weight)
-    USER_SUMMARY="当前 Gateway 和通道都活着，更像主会话负担偏重，不建议直接重启。先按 session hygiene 处理更稳。"
+    USER_SUMMARY="当前 Gateway 和通道都活着，更像主会话负担偏重，不建议直接重启。建议尽快收口，并用 /new 开新线程继续后续长任务。"
     ;;
   *)
     USER_SUMMARY="当前结论还不够硬，建议先看 diagnostics 快照，再决定是否做修复动作。"

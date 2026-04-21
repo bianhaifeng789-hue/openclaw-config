@@ -114,6 +114,7 @@ prototype-designer → 原型规格
 **输出文件**: `EXPERIMENTS.md`
 
 **相关 skills**:
+- `product-data-analysis` - 漏斗/留存/A\/B 测试分析
 - `growth-teardown` - 增长拆解
 - `paywall-analysis` - 变现分析
 
@@ -121,6 +122,9 @@ prototype-designer → 原型规格
 ```bash
 # 设计实验
 edit EXPERIMENTS.md # 记录实验假设、指标、结果
+
+# 数据分析
+product-data-analysis → 漏斗/留存/A\/B 结果解读
 
 # 分析结果
 growth-teardown → 增长机会点
@@ -139,15 +143,15 @@ edit DECISIONS.md # 记录最终决策
 ```
 适用：想法清晰、范围明确、无需竞品调研
 
-### 跹径 B: 从竞品到 PRD（对标）
+### 路径 B: 从竞品链接到 PRD（主流程）
 ```
-competitive-analysis → gap-analysis → prd-generator → PRD.md
+飞书发 Google Play 链接 → google-play-to-prd（ADB 安装 → 逆向分析）→ competitive-analysis → gap-analysis → prd-generator → PRD.md → 飞书云文档
 ```
-适用：竞品对标、功能差距分析、对标落地
+适用：竞品对标、逆向拆解、功能差距分析、对标落地
 
 ### 路径 C: 全流程（立项）
 ```
-INSIGHTS.md → requirement-analysis → DECISIONS.md → prd-generator → prototype-designer → EXPERIMENTS.md
+INSIGHTS.md → google-play-to-prd（多竞品逆向）→ competitive-analysis → requirement-analysis → DECISIONS.md → gap-analysis → prd-generator → prototype-designer → EXPERIMENTS.md
 ```
 适用：新产品立项、完整产品迭代周期
 
@@ -161,29 +165,21 @@ INSIGHTS.md → requirement-analysis → DECISIONS.md → prd-generator → prot
 | 决策草案 | `DECISIONS.md` | 带选项和理由 |
 | 最终决策 | `DECISIONS.md` | 标记 ⭐ 最终方案 |
 | PRD 文档 | `项目/PRD.md` | 项目目录 |
+| 产品描述/ASO文案 | `项目/aso/` 或 PRD 附录 | 商店描述、更新日志 |
 | 实验记录 | `EXPERIMENTS.md` | 增长验证库 |
 
 ---
 
 ## PM 工作流 Hook 建议
 
-可在 `hooks-config.json` 中添加 PM 工作流相关 hook：
-
-```json
-{
-  "event": "PreToolUse",
-  "matcher": { "toolName": "write|edit" },
-  "command": "node ~/.openclaw/workspace/scripts/pm-file-validator.js",
-  "timeout": 3000,
-  "description": "Validate PM output files structure"
-}
-```
+如需对 PM 输出文件做结构校验，可在 `hooks-config.json` 中添加 PreToolUse hook，指向自定义校验脚本。
 
 ---
 
 ## 与其他工作流的联动
 
 - **研发工作流**: PRD → 开发 → 测试
+- **数据分析**: `product-data-analysis` → 迭代决策
 - **增长工作流**: `EXPERIMENTS.md` → `growth-teardown`
 - **商业化工作流**: `ad-monetization-optimization` → PRD 商业化章节
 

@@ -52,6 +52,16 @@
 - `INCIDENT_TEMPLATE.md`：重大事件模板
 - `MEMORY_FLOW.md`：记忆流转规则
 
+## 子 Session 同等适用
+
+以上所有规则对 subagent、isolated cron、sessions_spawn 创建的子 session 同样生效。
+
+子 session 额外约束：
+- 禁止无 path 参数的 `config.get`（全量拉取）
+- 日志读取用 `tail -30` + grep，不要 `tail -200`
+- 工具输出超过 2000 字符时，写文件 + 返回摘要
+- 任务完成即收口返回，不在子 session 内展开新话题
+
 ## 一句话规则
 
 能写进文件的，就不要一直背在主会话里；能用摘要表达的，就不要把原始长输出反复塞进上下文。

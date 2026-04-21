@@ -69,6 +69,35 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - When you make a mistake → document it so future-you doesn't repeat it
 - **Text > Brain** 📝
 
+## Sub-Session / Subagent 行为规范
+
+子 session（subagent、isolated cron、sessions_spawn）同样必须遵守主 session 的上下文卫生制度。
+
+### 核心规则
+
+1. **结果写文件，不留 history**：长输出（日志、config dump、诊断结果）写入 workspace 文件（如 `memory/YYYY-MM-DD.md`、`tmp/` 目录），只在 session 内保留摘要。
+2. **不调 config.get 全量**：如需查配置，用 `config.schema.lookup` 或 `config.get` + `path` 参数只取子路径，绝不拉完整配置。
+3. **不做长链路排障**：子 session 的职责是执行单一任务并返回结论。如果发现需要 3 步以上的连续诊断，停下来，把当前结论写文件，返回主 session 决策。
+4. **toolResult 自觉截断**：大段工具输出优先用 `| head -N` 或 `--limit` 控制长度，不要把几万字符的原始输出塞进 history。
+5. **收口即返回**：任务完成后立即返回结论，不要在子 session 里继续展开新话题。
+
+### 参考文件
+
+子 session 如需了解完整规则，读这些文件：
+- `CONTEXT.md` — 上下文压缩与会话治理
+- `CLOSEOUT-template.md` — 收口模板
+- `context-hygiene-checklist.md` — 卫生检查清单
+- `MEMORY_FLOW.md` — 信息该写到哪里
+
+### 高危操作黑名单（子 session 禁止）
+
+- `gateway config.get`（无 path 参数的全量拉取）
+- `tail -200` 或更长的日志读取（用 `tail -30` + grep 代替）
+- 连续多次 `read` 读取完整大文件（用 offset/limit 分段）
+- 在 session 内保留超过 2000 字符的原始工具输出
+
+---
+
 ## Red Lines
 
 - Don't exfiltrate private data. Ever.

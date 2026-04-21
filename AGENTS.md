@@ -96,6 +96,13 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - 连续多次 `read` 读取完整大文件（用 offset/limit 分段）
 - 在 session 内保留超过 2000 字符的原始工具输出
 
+### 主 Session 行为约束
+
+- 单 turn 工具调用不超过 3-4 次；超过的任务 spawn 子 session
+- 排障、日志检查、config 查看、memory 维护全部走子 session
+- 主 session 只做：回答问题、给结论、发通知、轻量文件编辑
+- 运维类操作已部署为独立 cron isolated job，不在主 session 或 heartbeat 中执行
+
 ---
 
 ## Red Lines

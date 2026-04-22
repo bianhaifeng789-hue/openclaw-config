@@ -16,8 +16,10 @@ const WORKSPACE = process.env.OPENCLAW_WORKSPACE || process.cwd()
 const MEMORY_DIR = path.join(WORKSPACE, 'memory')
 const STATE_FILE = path.join(MEMORY_DIR, 'heartbeat-state.json')
 const COMPACT_CLI = path.join(WORKSPACE, 'impl', 'bin', 'compact-cli.js')
+const COMPACTION_ALERT = path.join(WORKSPACE, 'impl', 'bin', 'compaction-alert.js')
 
 const LIGHTWEIGHT_TASKS = [
+  { name: 'compaction-alert-scan', intervalMs: 15 * 60 * 1000, priority: 'high', stateKey: 'compactionAlert' },
   { name: 'context-pressure-check', intervalMs: 2 * 60 * 60 * 1000, priority: 'medium', stateKey: 'contextPressure' },
   { name: 'memory-maintenance', intervalMs: 24 * 60 * 60 * 1000, priority: 'low', stateKey: 'memoryReview' },
   { name: 'doctor-check', intervalMs: 24 * 60 * 60 * 1000, priority: 'low', stateKey: 'doctor' },
@@ -28,6 +30,7 @@ function defaultState() {
     lastChecks: {
       heartbeat: null,
       tasks: null,
+      compactionAlert: null,
       contextPressure: null,
       doctor: null,
       memoryReview: null,
@@ -35,6 +38,7 @@ function defaultState() {
     lastNotices: {
       heartbeat: null,
       tasks: null,
+      compactionAlert: null,
       contextPressure: null,
       doctor: null,
       memoryReview: null,
@@ -169,7 +173,24 @@ async function cmdRun() {
   const results = []
   for (const task of due) {
     let result
-    if (task.name === 'context-pressure-check') {
+    if (task.name === 'compaction-alert-scan') {
+      try {
+        const out = execSync(`node "${COMPACTION_ALERT}" scan`, {
+          encoding: 'utf8',
+          cwd: WORKSPACE,
+          timeout: 15000,
+          env: { ...process.env, OPENCLAW_WORKSPACE: WORKSPACE },
+        }).trim()
+        const parsed = JSON.parse(out)
+        result = {
+          task: task.name,
+          status: parsed.status === 'alert' ? 'needs_attention' : 'ok',
+          data: parsed
+        }
+      } catch (e) {
+        result = { task: task.name, status: 'error', data: (e.stdout || e.message || '').slice(0, 500) }
+      }
+    } else if (task.name === 'context-pressure-check') {
       const out = runCompactCheck()
       result = { task: task.name, status: /needsAction\":true|urgency\":\s*[2-9]/.test(out) ? 'needs_attention' : 'ok', data: out }
     } else if (task.name === 'memory-maintenance') {

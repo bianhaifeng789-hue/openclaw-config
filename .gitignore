@@ -38,3 +38,8 @@ Thumbs.db
 # Node modules / cache
 node_modules/
 .cache/
+# Experimental / local-only research content
+skills-experimental/
+projects/
+openclaw-config/
+

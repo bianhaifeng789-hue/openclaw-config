@@ -1,6 +1,6 @@
 # MEMORY.md - Long-Term Memory
 
-_Last updated: 2026-04-21 02:49_
+_Last updated: 2026-04-22 11:57_
 
 ---
 
@@ -67,6 +67,8 @@ _Last updated: 2026-04-21 02:49_
 
 ### Key Progress
 <!-- Updated by memory-maintenance heartbeat -->
+- 2026-04-22: OpenClaw 已升级并稳定到 2026.4.21；Feishu 依赖、Gateway、本地 doctor 修复完成，当前基线记录在 `RUNBOOK-openclaw-4.21-baseline.md`
+- 2026-04-22: 记忆现状确认：文件记忆可用、mnemon 数据库可用；内建 memory search 保持关闭作为当前稳定策略
 - 2026-04-21: Google Play → Reverse → PRD workflow 固化为默认交付结构，采用 PRD v5 开发可落地版
 - 2026-04-21: 子 session 上下文卫生制度同步到 AGENTS.md / CONTEXT.md，并将 `toolResultMaxChars` 下调到 4000
 - 2026-04-21: toolUse 内部文本泄露修复（四层收口）

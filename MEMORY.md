@@ -67,6 +67,10 @@ _Last updated: 2026-04-21 02:49_
 
 ### Key Progress
 <!-- Updated by memory-maintenance heartbeat -->
+- 2026-04-21: Google Play → Reverse → PRD workflow 固化为默认交付结构，采用 PRD v5 开发可落地版
+- 2026-04-21: 子 session 上下文卫生制度同步到 AGENTS.md / CONTEXT.md，并将 `toolResultMaxChars` 下调到 4000
+- 2026-04-21: toolUse 内部文本泄露修复（四层收口）
+- 2026-04-21: hooks 模式化完成
 - 2026-04-21: hooks 使用说明文档完成
 - 2026-04-21: template-picker skill 完成
 - 2026-04-21: 模板分类索引完成
@@ -149,7 +153,46 @@ _Last updated: 2026-04-21 02:49_
 
 ---
 
-## Heartbeat Services
+## PM / Reverse Workflow Defaults
+
+- 默认采用 `google-play-to-prd` 工作流，把 Google Play 拆解、逆向分析和正式 PRD 交付串成一条链路。
+- 当前定稿基线是「PRD v5 - File Recovery 开发可落地版」。
+- 标准交付结构固定为：1-14 正式 PRD，15 逆向分析 5 模块，16 相关文档。
+- 前文必须保留完整功能规格、页面规格、技术约束、埋点、实验、上线与规划。
+- 流程图要求覆盖主流程、权限分支、扫描、恢复、广告、异常兜底，代码复现粒度要接近研发可直接开发。
+
+---
+
+## Session Hygiene Rules
+
+- 子 session 也必须遵守主 session 的上下文卫生制度，重点避免长日志、全量配置树和大段原始 tool 输出进入 history。
+- 已把该制度同步进 `AGENTS.md` 和 `CONTEXT.md`，并把 `toolResultMaxChars` 从 6000 下调到 4000 作为配置层硬截断。
+- 关键教训是 `config.get` 不带 path 或 path 过浅时，会返回完整配置树，是 context 膨胀的主要来源。
+
+---
+
+## Runtime Patches (2026-04-21)
+
+### toolUse 内部文本泄露修复
+
+**问题**: 模型在 toolUse 回合会把内部执行短句（如 "Need inspect docs maybe no skill."）当成 assistant text block 写进 transcript 并发到用户面。
+
+**根因**: 不是单一出口问题，而是从消息生成/落盘阶段就接受了这类文本。
+
+**修复（四层收口）**:
+
+1. **流式输出收紧**: 仅 `phase=final_answer` 才对外可见
+2. **toolUse 回合抑制**: `stopReason=toolUse` + 无 `final_answer` → 不发送
+3. **outbound reply 抑制**: 最终 payload 组装时再次过滤
+4. **transcript 落盘前清洗**: `sanitizeToolUseAssistantMessageContent()` 在 `handleMessageStart/Update/End` 三处调用，只保留 `phase=final_answer` 的 text block
+
+**修改文件**:
+- `pi-embedded-runner-DN0VbqlW.js`: 流式/回合抑制 + outbound 抑制
+- `pi-embedded-utils-CzYG7ldK.js`: 新增 `sanitizeToolUseAssistantMessageContent()`
+
+**验证**: 回归测试确认补丁后无新泄露。
+
+---
 
 ### Active Tasks (24 defined, 17 scripts)
 - health-monitor (critical, 5m)

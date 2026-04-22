@@ -215,7 +215,7 @@ adb-automation → APK 拉取 → apk-reverse-analysis → 运行数据
 ```
 适用：需要运行时数据补充静态分析
 
-### 跹径 C: 密码破解流程
+### 路径 C: 密码破解流程
 ```
 crack-7z-hash → hashcat/john → 验证密码
 ```
@@ -328,17 +328,29 @@ reverse-engineering-workflow (总控)
 
 ## 与其他工作流联动
 
+### 与 PM 工作流联动
+```
+apk-reverse-analysis → competitive-analysis → gap-analysis → prd-generator → PRD.md
+```
+APK 拆解的 SDK 清单 + 技术栈 + 商业化路径 → 竞品分析 → 差距分析 → PRD 生成
+
 ### 与变现工作流联动
 ```
 apk-reverse-analysis → monetization-teardown → ad-mediation-teardown
 ```
 APK 拆解的 SDK 清单 → 变现分析输入
 
-### 与 PM 工作流联动
+### 完整端到端链路（Google Play → PRD）
 ```
-apk-reverse-analysis → competitive-analysis → PRD.md
+google-play-to-prd:
+  Step 1: Play 页面信息采集
+  Step 2: APK 下载（adb / apkeep / 手动）
+  Step 3: 反编译（jadx + apktool）
+  Step 4: 结构化分析（apk-reverse-analysis）
+  Step 5: 输出 prd-input.md
+  Step 6: prd-generator 生成完整 PRD
 ```
-竞品技术栈分析 → PRD 技术规格章节
+这条链路可以一口气跑完，也可以在任何一步停下来让用户确认方向。
 
 ---
 

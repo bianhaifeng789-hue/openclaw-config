@@ -62,9 +62,16 @@
       "command": "node ~/.openclaw/workspace-dispatcher/impl/bin/title-generator.js status",
       "timeout": 5000,
       "description": "Generate session title on stop"
+    },
+    {
+      "event": "Stop",
+      "matcher": {},
+      "command": "python3 ~/.openclaw/hooks/tts_notify.py",
+      "timeout": 10000,
+      "description": "TTS notification on task completion"
     }
   ],
   "enabled": true,
-  "version": "1.3.0-dev",
-  "description": "Dev mode: balanced safety, formatting, and quality gates"
+  "version": "1.3.0-strict",
+  "description": "Strict mode: all safety and notification hooks enabled"
 }

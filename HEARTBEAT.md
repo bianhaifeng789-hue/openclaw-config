@@ -19,6 +19,12 @@ node /Users/mac/.openclaw/workspace/impl/bin/heartbeat-cli.js [status|check|run|
 
 ## tasks
 
+- name: compaction-alert-scan
+  interval: 15m
+  priority: critical
+  prompt: "运行 `node /Users/mac/.openclaw/workspace/impl/bin/compaction-alert.js scan`。如果 status=alert 且 level=critical，立刻发飞书通知用户 session 过重建议 /new。warning 级别不通知。这是最高优先级任务，每次心跳必须执行。"
+  note: "也已部署为独立 cron job (每15分钟)，heartbeat 作为双保险"
+
 - name: context-pressure-check
   interval: 2h
   priority: medium

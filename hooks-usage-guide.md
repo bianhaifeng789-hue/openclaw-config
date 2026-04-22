@@ -1,10 +1,39 @@
 # Hooks 使用说明文档
 
-更新时间: 2026-04-21 02:56 Asia/Shanghai
+更新时间: 2026-04-21 02:58 Asia/Shanghai
 配置文件: `hooks-config.json`
 当前版本: `1.3.0`
+当前模式状态文件: `hooks-mode.json`
+可切换配置:
+- `hooks-config.quiet.json`
+- `hooks-config.dev.json`
+- `hooks-config.strict.json`
+切换脚本: `scripts/set-hooks-mode.sh`
 
 这份文档说明当前已启用的 hooks 做什么、什么时候触发、常见影响，以及后续怎么调整，避免误判成“系统坏了”或“不知道为什么被拦了”。
+
+---
+
+## 0. 快速切换模式
+
+当前支持 3 种模式：
+- `quiet`
+- `dev`
+- `strict`
+
+切换命令：
+```bash
+/Users/mac/.openclaw/workspace/scripts/set-hooks-mode.sh quiet
+/Users/mac/.openclaw/workspace/scripts/set-hooks-mode.sh dev
+/Users/mac/.openclaw/workspace/scripts/set-hooks-mode.sh strict
+```
+
+当前模式会写入：`hooks-mode.json`
+
+模式说明：
+- `quiet`: 保留安全，减少打扰
+- `dev`: 默认推荐，平衡开发效率与质量
+- `strict`: 全保护开启，适合敏感操作
 
 ---
 

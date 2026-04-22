@@ -25,7 +25,7 @@ const expanded = expandEnv({
 
 // 返回
 {
-  apiKey: 'actual_key_value',
+  apiKey: '<redacted>',
   url: 'http://localhost' // 如果MCP_URL未设置
 }
 ```

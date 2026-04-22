@@ -103,7 +103,7 @@ node impl/bin/mcp-oauth-refresh.js status
 ```bash
 # .env 文件
 MCP_OAUTH_CLIENT_ID=your_client_id
-MCP_OAUTH_CLIENT_SECRET=your_client_secret
+MCP_OAUTH_CLIENT_SECRET=<redacted>
 ```
 
 **优势**: Secrets 不写入配置文件，完全隔离。
@@ -115,7 +115,7 @@ MCP_OAUTH_CLIENT_SECRET=your_client_secret
 {
   "tokens": {
     "github-mcp": {
-      "access_token": "gho_xxxx",
+      "access_token": "<redacted>",
       "expires_at": 1703275200,
       "expires_in": 3600,
       "refresh_token": null,

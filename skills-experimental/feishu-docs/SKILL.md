@@ -231,7 +231,7 @@ metadata:
 
 示例：
 读取文档：
-feishu_doc(action="read", doc_token="xxx")
+feishu_doc(action="read", doc_token="<redacted>")
 ```
 
 ### feishu_bitable工具
@@ -246,7 +246,7 @@ feishu_doc(action="read", doc_token="xxx")
 示例：
 创建记录：
 feishu_bitable_create_record(
-  app_token="xxx",
+  app_token="<redacted>",
   table_id="yyy",
   fields={"APP名称": "TestApp", "状态": "待审核"}
 )

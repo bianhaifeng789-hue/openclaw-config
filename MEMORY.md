@@ -63,11 +63,14 @@ _Last updated: 2026-04-17 19:35_
 
 ### Work Patterns
 <!-- Updated by insights-analysis heartbeat -->
-- Pending analysis
+- 倾向把子 session 用于后台维护任务，并要求严格遵守子 session 规则（限制读取范围、避免冗长输出、完成后直接收口）
+- 会根据体验直接调整模型配置，偏好普通版 `openai/gpt-5.4` 作为当前工作模型
 
 ### Key Progress
 <!-- Updated by memory-maintenance heartbeat -->
 - 2026-04-17: Harness Engineering Phase 3 完成
+- 2026-04-21: memory 维护流程已形成固定规则：先预览最近 daily notes、去重流水账、仅把长期有效结论写入 MEMORY.md、完成后 git commit
+- 2026-04-22: 已将主会话模型切换为 `openai/gpt-5.4` 普通版
 
 ---
 

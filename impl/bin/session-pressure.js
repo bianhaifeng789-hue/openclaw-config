@@ -29,7 +29,22 @@ function extractSessions(data) {
 
 function pct(item) {
   const total = item.contextWindow || item.maxContextTokens || item.maxTokens || 128000;
-  const used = item.totalTokens || item.tokens || item.contextTokens || item.totalTokensFresh || 0;
+  // sessions.json only stores session metadata for many entries; totalTokens/contextTokens
+  // can be absent or hold placeholder values (for example 200000 for a model limit),
+  // which creates false 100%+ pressure alerts. Prefer explicit usage fields and ignore
+  // impossible/placeholder values that are >= total context window.
+  const candidates = [
+    item.tokensUsed,
+    item.usageTokens,
+    item.promptTokens,
+    item.completionTokens && item.promptTokens ? item.completionTokens + item.promptTokens : null,
+    item.totalTokensFresh,
+    item.contextTokens,
+    item.totalTokens,
+    item.tokens
+  ].filter((v) => Number.isFinite(v) && v >= 0);
+
+  const used = candidates.find((v) => v > 0 && v < total) || 0;
   if (!total) return null;
   return Math.round((used / total) * 100);
 }
@@ -51,7 +66,7 @@ const sessions = extractSessions(data)
       sessionId: s.sessionId || null,
       model: s.model || s.modelId || null,
       provider: s.modelProvider || null,
-      totalTokens: s.totalTokens || s.contextTokens || s.totalTokensFresh || 0,
+      totalTokens: s.tokensUsed || s.usageTokens || s.promptTokens || s.contextTokens || s.totalTokensFresh || 0,
       compactionCount: s.compactionCount || 0,
       updatedAt: s.updatedAt || null,
       usedPct: p,

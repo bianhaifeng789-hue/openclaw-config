@@ -31,6 +31,7 @@ const HEALTH_DIR = path.join(WORKSPACE, 'state', 'health');
 const STATUS_FILE = path.join(HEALTH_DIR, 'status.json');
 const LOG_FILE = path.join(HEALTH_DIR, 'health-log.jsonl');
 const RECOVERY_FILE = path.join(HEALTH_DIR, 'recovery-state.json');
+const AUTO_RECOVERY_ALLOW_STOP = process.env.OPENCLAW_ALLOW_GATEWAY_STOP_RECOVERY === '1';
 
 // Thresholds
 const THRESHOLDS = {
@@ -56,6 +57,23 @@ function logHealthEvent(event) {
   return entry;
 }
 
+function sleepMs(ms) {
+  const waitUntil = Date.now() + ms;
+  while (Date.now() < waitUntil) {}
+}
+
+function getCommandErrorText(error) {
+  return [
+    error?.stdout,
+    error?.stderr,
+    error?.message
+  ].filter(Boolean).join('\n');
+}
+
+function isAlreadyRunningError(error) {
+  return /already running locally|already loaded|service already running/i.test(getCommandErrorText(error));
+}
+
 function checkGatewayProcess() {
   try {
     // 使用 openclaw gateway status 获取状态
@@ -71,6 +89,7 @@ function checkGatewayProcess() {
     const state = stateMatch ? stateMatch[1] : 'unknown';
     const port = portMatch ? parseInt(portMatch[1], 10) : null;
     const rpcOk = rpcMatch ? rpcMatch[1] === 'ok' : false;
+    const processOk = state === 'active' && !!pid;
     
     // 检查进程资源
     let cpu = 0, memory = 0;
@@ -89,7 +108,8 @@ function checkGatewayProcess() {
     }
     
     return {
-      ok: state === 'active' && rpcOk,
+      ok: processOk,
+      degraded: processOk && !rpcOk,
       pid,
       state,
       port,
@@ -201,14 +221,32 @@ function recoverGateway() {
   }
   
   try {
-    // 停止 Gateway
-    execSync('openclaw gateway stop', { encoding: 'utf8', timeout: 10000 });
-    
-    // 等待 2 秒
-    setTimeout(() => {}, 2000);
-    
-    // 启动 Gateway
-    execSync('openclaw gateway start', { encoding: 'utf8', timeout: 10000 });
+    logHealthEvent({
+      process: 'gateway',
+      type: 'recovery-start',
+      severity: 'warning',
+      message: AUTO_RECOVERY_ALLOW_STOP
+        ? 'Gateway recovery started with force-stop enabled'
+        : 'Gateway recovery started in non-disruptive mode'
+    });
+
+    if (AUTO_RECOVERY_ALLOW_STOP) {
+      execSync('openclaw gateway stop', { encoding: 'utf8', timeout: 10000 });
+      sleepMs(2000);
+    }
+
+    try {
+      execSync('openclaw gateway start', { encoding: 'utf8', timeout: 10000 });
+    } catch (e) {
+      if (!isAlreadyRunningError(e)) {
+        throw e;
+      }
+    }
+
+    const health = checkGatewayProcess();
+    if (!health.ok) {
+      throw new Error(health.error || `Gateway still unhealthy after recovery (state=${health.state}, pid=${health.pid || 'none'})`);
+    }
     
     // 更新恢复状态
     const newState = {
@@ -291,6 +329,19 @@ function checkHealth() {
       message: `Gateway memory ${gateway.memory}% exceeds threshold ${THRESHOLDS.memoryPercent}%`,
       pid: gateway.pid,
       memory: gateway.memory
+    });
+  }
+
+  if (gateway.degraded) {
+    warningIssues++;
+    logHealthEvent({
+      process: 'gateway',
+      type: 'rpc-degraded',
+      severity: 'warning',
+      message: 'Gateway process is active but RPC probe is not healthy',
+      pid: gateway.pid,
+      state: gateway.state,
+      port: gateway.port
     });
   }
   

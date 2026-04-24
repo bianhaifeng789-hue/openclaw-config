@@ -1,0 +1,24 @@
+{
+  "id": "task-createdat-startedat-alignment",
+  "description": "Ensure installed OpenClaw task registry reuses startedAt for createdAt when present, preventing millisecond timestamp inversion warnings for freshly created running tasks.",
+  "packageName": "openclaw",
+  "targetFileGlobs": [
+    "dist/task-registry-*.js"
+  ],
+  "match": {
+    "mustInclude": [
+      "function createTaskRecord(params)",
+      "const now = Date.now();",
+      "createdAt: now,",
+      "startedAt: params.startedAt,"
+    ],
+    "alreadyPatched": [
+      "createdAt: params.startedAt ?? now,",
+      "startedAt: params.startedAt,"
+    ]
+  },
+  "replace": {
+    "oldText": "\t\tcreatedAt: now,\n\t\tstartedAt: params.startedAt,\n",
+    "newText": "\t\tcreatedAt: params.startedAt ?? now,\n\t\tstartedAt: params.startedAt,\n"
+  }
+}

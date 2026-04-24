@@ -12,6 +12,7 @@ export interface BackgroundTask {
   name: string
   progress: number
   status: 'running' | 'completed' | 'failed' | 'cancelled'
+  createdAt: number
   startedAt: number
   completedAt?: number
   error?: string
@@ -26,14 +27,16 @@ class BackgroundTaskService {
    * Create background task
    */
   create(name: string): BackgroundTask {
-    const id = `bg-${++this.taskCounter}-${Date.now()}`
+    const now = Date.now()
+    const id = `bg-${++this.taskCounter}-${now}`
 
     const task: BackgroundTask = {
       id,
       name,
       progress: 0,
       status: 'running',
-      startedAt: Date.now()
+      createdAt: now,
+      startedAt: now
     }
 
     this.tasks.set(id, task)

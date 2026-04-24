@@ -1,6 +1,6 @@
 # MEMORY.md - Long-Term Memory
 
-_Last updated: 2026-04-17 19:35_
+- **Last updated: 2026-04-24 11:00**
 
 ---
 
@@ -71,6 +71,9 @@ _Last updated: 2026-04-17 19:35_
 - 2026-04-17: Harness Engineering Phase 3 完成
 - 2026-04-21: memory 维护流程已形成固定规则：先预览最近 daily notes、去重流水账、仅把长期有效结论写入 MEMORY.md、完成后 git commit
 - 2026-04-22: 已将主会话模型切换为 `openai/gpt-5.4` 普通版
+- 2026-04-24: 用 `openclaw doctor --fix --non-interactive` 安全归档了 `~/.openclaw/agents/main/sessions` 下 30 个 orphan transcript 文件；复查确认 Gateway / Feishu / 主 session / 模型链均正常
+- 2026-04-24: 将 `openai/gpt-5.4` 设为默认模型，fallback 调整为 `openai_balance/gpt-5.4` → `bailian/glm-5`，并验证配置链路正常
+- 2026-04-24: 诊断出 `openclaw tasks audit` 中 144 个 `inconsistent_timestamps` warning 的主因是任务记录存在 `startedAt < createdAt` 的毫秒级写入顺序问题；已先在工作区实现中为 `impl/utils/background-task-service.ts` 补上 `createdAt` 并统一复用同一个 `now`
 
 ---
 

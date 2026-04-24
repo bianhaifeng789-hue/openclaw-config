@@ -73,7 +73,7 @@
 - 2026-04-22: 已将主会话模型切换为 `openai/gpt-5.4` 普通版
 - 2026-04-24: 用 `openclaw doctor --fix --non-interactive` 安全归档了 `~/.openclaw/agents/main/sessions` 下 30 个 orphan transcript 文件；复查确认 Gateway / Feishu / 主 session / 模型链均正常
 - 2026-04-24: 将 `openai/gpt-5.4` 设为默认模型，fallback 调整为 `openai_balance/gpt-5.4` → `bailian/glm-5`，并验证配置链路正常
-- 2026-04-24: 诊断出 `openclaw tasks audit` 中 144 个 `inconsistent_timestamps` warning 的主因是任务记录存在 `startedAt < createdAt` 的毫秒级写入顺序问题；已确认生产版 `dist/task-registry-BdqH6Lnx.js` 在 `createTaskRecord()` 中把 `createdAt` 固定写成新的 `Date.now()`，而上游多处（如 cron / cli / acp / media tool / subagent）会预先传入 `startedAt`，因此真实运行中确实会稳定制造这类 warning。工作区里已先落一个本地最小修复，生产代码后续还需补丁
+- 2026-04-24: 诊断出 `openclaw tasks audit` 中 144+ 个 `inconsistent_timestamps` warning 的主因是任务记录存在 `startedAt < createdAt` 的毫秒级写入顺序问题；已确认生产版 `dist/task-registry-BdqH6Lnx.js` 在 `createTaskRecord()` 中把 `createdAt` 固定写成新的 `Date.now()`，而上游多处（如 cron / cli / acp / media tool / subagent）会预先传入 `startedAt`，因此真实运行中会稳定制造这类 warning。随后已直接热补丁生产文件，把 `createdAt` 改为优先复用 `params.startedAt`。历史 warning 不会自动消失，但新建任务应不再继续按同原因累积
 
 ---
 

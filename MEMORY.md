@@ -1,6 +1,6 @@
 # MEMORY.md - Long-Term Memory
 
-- **Last updated: 2026-04-24 11:00**
+- **Last updated: 2026-04-25 14:13**
 
 ---
 
@@ -16,6 +16,11 @@
 - Feishu integration for notifications
 
 ---
+
+### OpenClaw Task Timestamp Audit/Fix (2026-04-24)
+- `openclaw tasks audit` 的大量 `inconsistent_timestamps` warning 根因已确认：生产包 `createTaskRecord()` 会用新的 `Date.now()` 覆盖 `createdAt`，而上游运行中任务已先传入 `startedAt`，导致 1–2ms 的低风险倒挂。
+- 已热补当前真实运行文件 `dist/task-registry-BJCE3lhL.js`，将 `createdAt` 对齐为 `params.startedAt ?? now`；重启 gateway 后新增验证任务未增加 warning，说明新记录倒挂已止住。
+- 已在 workspace 增加持久补丁机制：`scripts/openclaw-patches/task-createdat-startedat-alignment.patchspec.json`，并提交 `8b3fe63` (`Add durable OpenClaw task timestamp patch`)；后续升级/重装后应先运行 `npm run patch:openclaw:task-timestamps:check` / `npm run patch:openclaw:task-timestamps`。
 
 ## Recent Decisions (2026-04-17)
 

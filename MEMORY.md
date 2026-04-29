@@ -1,6 +1,6 @@
 # MEMORY.md - Long-Term Memory
 
-- **Last updated: 2026-04-25 14:13**
+- **Last updated: 2026-04-29 10:00**
 
 ---
 
@@ -82,6 +82,7 @@
 - 2026-04-24: 诊断出 `openclaw tasks audit` 中 144+ 个 `inconsistent_timestamps` warning 的主因是任务记录存在 `startedAt < createdAt` 的毫秒级写入顺序问题；已确认生产版 `dist/task-registry-BdqH6Lnx.js` 在 `createTaskRecord()` 中把 `createdAt` 固定写成新的 `Date.now()`，而上游多处（如 cron / cli / acp / media tool / subagent）会预先传入 `startedAt`，因此真实运行中会稳定制造这类 warning。随后已直接热补丁生产文件，把 `createdAt` 改为优先复用 `params.startedAt`。历史 warning 不会自动消失，但新建任务应不再继续按同原因累积
 - 2026-04-24: 继续核实发现 2026.4.22 当前实际运行文件已漂移为 `dist/task-registry-BJCE3lhL.js`；完成二次热补、重启 gateway，并用最小新任务验证 `openclaw tasks audit` warning 未继续增长（维持 149）
 - 2026-04-24: 为避免升级/重装覆盖热补丁，在 workspace 增加了持久补丁机制：新增 `scripts/openclaw-patches/task-createdat-startedat-alignment.patchspec.json` 与 `patch:openclaw:task-timestamps` / `patch:openclaw:task-timestamps:check` 脚本，并提交 git `8b3fe63` (`Add durable OpenClaw task timestamp patch`)
+- 2026-04-25: 用户确认将飞书 DM "执行优先"流程形成长期记忆：本地可逆任务先执行/验证再汇报，仅高风险或歧义时先问；已写入 Work Patterns
 
 ---
 

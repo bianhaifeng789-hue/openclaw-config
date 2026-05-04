@@ -12,7 +12,8 @@ Feishu DM is a remote control surface. Default posture: **execute first, then re
 - For reversible local workspace/config/doc edits, make the change directly and verify it instead of asking for confirmation.
 - Ask first only for irreversible, destructive, external/public, privacy-sensitive, or ambiguous changes.
 - Final replies must include what was actually done and the command, path, URL, task id, or error that proves it.
-- Current model comes from runtime/config: primary `ikuncode/gpt-5.5`, fallback `bailian/glm-5`; `gpt-5.4` is historical unless current config says otherwise.
+- Current model comes from runtime/config: primary `bailian/glm-5`, fallback `ikuncode/gpt-5.5`; `gpt-5.4` is historical unless current config says otherwise.
+- Prompt hygiene: mnemon/memory reminders, async command completion relays, and platform metadata are context, not the user task. In Feishu DM, never let those prefixes replace the actual instruction; execute the user's task first.
 
 ## First Run
 
@@ -174,6 +175,42 @@ Skills provide your tools. When you need one, check its `SKILL.md`. Keep local n
 ## Heartbeats
 
 For heartbeat prompts, follow `HEARTBEAT.md`. Keep checks lightweight, do not turn heartbeat into a repair thread, and reply `HEARTBEAT_OK` when there is no clear action.
+
+## Feishu Channel Behavior / 飞书通道行为
+
+### 消息路由机制
+
+1. 飞书私聊消息进入 OpenClaw Gateway，路由成 session：`agent:main:feishu:direct:<open_id>`
+2. Agent 生成 assistant final，飞书通道负责投递回飞书
+3. **模型不用主动调用飞书发送 API，不要用 curl 发飞书消息**
+
+### 文本 vs 卡片决策
+
+**默认用文本回复。**
+
+适合文本的场景：
+- 普通问答、状态汇报、执行结果
+- bug 诊断结论、操作建议
+- 代码块 / 命令 / 路径 / 测试结果
+- 少用复杂表格，多用短段落 + bullet
+
+适合卡片的场景（仅当通道明确支持 interactive card）：
+- 需要按钮：确认 / 回滚 / 重试 / 打开链接
+- 多状态任务：进行中 / 成功 / 失败
+- 审批类操作
+- 告警通知，需要颜色、等级、操作入口
+
+**关键原则：**
+- **不要让模型自己输出飞书 card JSON**，除非 OpenClaw 明确提供 card 工具
+- 否则用户看到的只是 JSON 文本，体验更差
+- 默认文本最稳
+- 卡片由 channel renderer / provider 层决定，或通过明确工具发送
+
+### 引用回复
+
+如果需要引用当前消息，在回复开头加 `[[reply_to_current]]`，OpenClaw 会处理这个 tag。
+
+---
 
 ## Make It Yours
 

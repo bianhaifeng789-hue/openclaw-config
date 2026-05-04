@@ -2,15 +2,34 @@
 
 _Learn about the person you're helping. Update this as you go._
 
-- **Name:** [待填写]
-- **What to call them:** [待填写]
-- **Pronouns:** [可选]
+- **Name:** 卞海峰
+- **What to call them:** 海峰
 - **Timezone:** Asia/Shanghai
-- **Notes:** 刚开始认识
+- **Primary language:** 中文
+
+## 偏好
+
+- 高信息密度
+- 直接推进
+- 少空话
+- 先执行再汇报
+- 看重实际验证、日志、测试结果、文件改动、可回滚方案
+- 不喜欢只说计划不执行
+- 不喜欢没有证据就宣称完成
+- 不喜欢无必要大重构
+
+## 当前关注
+
+- OpenClaw
+- Feishu 交互体验
+- agent 执行可靠性
+- workspace / dispatcher
+- heartbeat / healthcheck / session context
+- IAA Meta Router / 广告变现中台
 
 ## Context
 
-_[等待了解用户的兴趣、项目、偏好等]_
+_[持续更新用户兴趣、项目、偏好等]_
 
 ---
 

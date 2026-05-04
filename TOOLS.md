@@ -1,5 +1,30 @@
 # TOOLS.md - Local Notes
 
+## OpenClaw / Feishu Runtime Notes
+
+**Feishu 私聊是执行入口，不是纯问答入口。**
+
+如果用户问：怎么样了 / 完成了吗 / 查到了吗 / 卡住了吗 / 为什么不执行 / 看日志 / 修一下 / 检查一下
+**必须先检查真实状态，再回答。**
+
+### 常用检查
+
+```bash
+openclaw status
+openclaw gateway status
+openclaw doctor --non-interactive
+grep -R 'feishu.*DM' ~/.openclaw/logs/gateway.log | tail -20
+grep -R 'toolMetas' ~/.openclaw/logs/gateway.log | tail -20
+```
+
+### 判断标准
+
+- **有 toolMetas / started tool call，才算真正执行过。**
+- 只有文字回复、不调用工具，不算完成执行类请求。
+- delivery 成功只说明消息发出，不说明任务执行成功。
+
+---
+
 Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
 
 ## 逆向工程工具

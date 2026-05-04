@@ -1,0 +1,23 @@
+{
+  "id": "feishu-immediate-ack",
+  "description": "Send a delayed lightweight Feishu acknowledgement when an agent turn has not completed quickly, reducing the no-feedback gap before streaming cards or final replies.",
+  "packageName": "openclaw",
+  "targetFileGlobs": [
+    "dist/extensions/feishu/monitor.account-*.js"
+  ],
+  "match": {
+    "mustInclude": [
+      "async function handleFeishuMessage(params)",
+      "log(`feishu[${account.accountId}]: dispatching to agent (session=${route.sessionKey})`);",
+      "const { queuedFinal, counts } = await core.channel.reply.withReplyDispatcher({"
+    ],
+    "alreadyPatched": [
+      "const ackDelayMs = 1200;",
+      "text: \"收到，正在处理...\","
+    ]
+  },
+  "replace": {
+    "oldText": "\t\t\tlog(`feishu[${account.accountId}]: dispatching to agent (session=${route.sessionKey})`);\n\t\t\tconst { queuedFinal, counts } = await core.channel.reply.withReplyDispatcher({\n\t\t\t\tdispatcher,\n\t\t\t\tonSettled: () => {\n\t\t\t\t\tmarkDispatchIdle();\n\t\t\t\t},\n\t\t\t\trun: () => core.channel.reply.dispatchReplyFromConfig({\n\t\t\t\t\tctx: ctxPayload,\n\t\t\t\t\tcfg,\n\t\t\t\t\tdispatcher,\n\t\t\t\t\treplyOptions\n\t\t\t\t})\n\t\t\t});\n\t\t\tif (isGroup && historyKey && chatHistories) clearHistoryEntriesIfEnabled({",
+    "newText": "\t\t\tlog(`feishu[${account.accountId}]: dispatching to agent (session=${route.sessionKey})`);\n\t\t\tconst ackDelayMs = 1200;\n\t\t\tlet ackTimer;\n\t\t\tconst clearAckTimer = () => {\n\t\t\t\tif (!ackTimer) return;\n\t\t\t\tclearTimeout(ackTimer);\n\t\t\t\tackTimer = void 0;\n\t\t\t};\n\t\t\tackTimer = setTimeout(() => {\n\t\t\t\tackTimer = void 0;\n\t\t\t\tsendMessageFeishu({\n\t\t\t\t\tcfg: effectiveCfg,\n\t\t\t\t\tto: `chat:${ctx.chatId}`,\n\t\t\t\t\ttext: \"收到，正在处理...\",\n\t\t\t\t\treplyToMessageId: isGroup ? replyTargetMessageId : void 0,\n\t\t\t\t\treplyInThread: isGroup ? replyInThread : false,\n\t\t\t\t\taccountId: account.accountId\n\t\t\t\t}).catch((err) => {\n\t\t\t\t\tlog(`feishu[${account.accountId}]: immediate ack failed: ${String(err)}`);\n\t\t\t\t});\n\t\t\t}, ackDelayMs);\n\t\t\tackTimer.unref?.();\n\t\t\tlet dispatchResult;\n\t\t\ttry {\n\t\t\t\tdispatchResult = await core.channel.reply.withReplyDispatcher({\n\t\t\t\t\tdispatcher,\n\t\t\t\t\tonSettled: () => {\n\t\t\t\t\t\tmarkDispatchIdle();\n\t\t\t\t\t},\n\t\t\t\t\trun: () => core.channel.reply.dispatchReplyFromConfig({\n\t\t\t\t\t\tctx: ctxPayload,\n\t\t\t\t\t\tcfg,\n\t\t\t\t\t\tdispatcher,\n\t\t\t\t\t\treplyOptions\n\t\t\t\t\t})\n\t\t\t\t});\n\t\t\t} finally {\n\t\t\t\tclearAckTimer();\n\t\t\t}\n\t\t\tconst { queuedFinal, counts } = dispatchResult;\n\t\t\tif (isGroup && historyKey && chatHistories) clearHistoryEntriesIfEnabled({"
+  }
+}

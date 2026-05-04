@@ -36,35 +36,14 @@
       "description": "Handle tool errors after execution"
     },
     {
-      "event": "PostToolUse",
-      "matcher": { "toolName": "edit|write" },
-      "command": "bash ~/.openclaw/hooks/after-edit.sh",
-      "timeout": 10000,
-      "description": "Run formatters after file edits"
-    },
-    {
-      "event": "PostModelUse",
-      "matcher": { "firstExchange": true },
-      "command": "node ~/.openclaw/workspace-dispatcher/impl/bin/session-startup-hook.js run",
-      "timeout": 10000,
-      "description": "Generate session title after first exchange"
-    },
-    {
       "event": "Stop",
       "matcher": {},
       "command": "bash ~/.openclaw/hooks/end-of-turn.sh",
-      "timeout": 5000,
-      "description": "Quality gates at end of turn"
-    },
-    {
-      "event": "Stop",
-      "matcher": {},
-      "command": "node ~/.openclaw/workspace-dispatcher/impl/bin/title-generator.js status",
-      "timeout": 5000,
-      "description": "Generate session title on stop"
+      "timeout": 3000,
+      "description": "Light quality gates at end of turn"
     }
   ],
   "enabled": true,
-  "version": "1.3.0-dev",
-  "description": "Dev mode: balanced safety, formatting, and quality gates"
+  "version": "1.3.0-quiet",
+  "description": "Quiet mode: keep safety, reduce noise and post-processing"
 }

@@ -5,7 +5,6 @@ set -euo pipefail
 # Keeps package checks, artifact checks, and skill-chain checks in one place.
 
 ROOT="/Users/mac/.openclaw/workspace"
-HELPER="$ROOT/impl/bin/google-play-helper.js"
 INSTALLER="$ROOT/impl/bin/google-play-installer.js"
 PRD_TEMPLATE="$ROOT/PRD-template-advanced.md"
 PRD_OUT_DIR="$ROOT/plans/prd"
@@ -21,6 +20,7 @@ Modes:
   pull-apk <package> [artifact] [device]
                                      Pull base/split APKs from connected device
   reverse-status <artifact>           Check whether reverse-analysis artifacts already exist
+  ensure-reverse-dirs <artifact>      Create reverse-for-prd directory and expected input files if missing
   prd-skills                          Verify required skills for Play -> reverse -> PRD chain
   prd-template                        Show the default advanced PRD template path
   init-prd <project-name>             Create a new PRD skeleton from the advanced template
@@ -32,6 +32,7 @@ Examples:
   scripts/play-to-prd.sh device-check com.game.my 42170DLJH001W3
   scripts/play-to-prd.sh pull-apk com.game.my com.game.my 42170DLJH001W3
   scripts/play-to-prd.sh reverse-status com.stormlibs.musictune
+  scripts/play-to-prd.sh ensure-reverse-dirs com.stormlibs.musictune
   scripts/play-to-prd.sh prd-skills
   scripts/play-to-prd.sh prd-template
   scripts/play-to-prd.sh init-prd file-recovery-v2
@@ -51,16 +52,11 @@ case "$MODE" in
   check-app)
     [[ $# -eq 1 ]] || { usage; exit 2; }
     PACKAGE="$1"
-    if node "$HELPER" check-app --package "$PACKAGE" | grep -q '"packageName": "'$PACKAGE'"'; then
-      node "$HELPER" check-app --package "$PACKAGE"
+    echo "package=$PACKAGE"
+    if [[ "$PACKAGE" =~ ^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)+$ ]]; then
+      echo "package_format=ok"
     else
-      echo "package=$PACKAGE"
-      if [[ "$PACKAGE" =~ ^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)+$ ]]; then
-        echo "package_format=ok"
-      else
-        echo "package_format=invalid"
-      fi
-      echo "helper_note=google-play-helper check-app parameter parsing is flaky; using wrapper fallback summary"
+      echo "package_format=invalid"
     fi
     ;;
   install-play)
@@ -110,7 +106,29 @@ case "$MODE" in
       echo "apk_files=missing"
     fi
     [[ -d "$ART_DIR/jadx-base" ]] && echo "jadx_dir=ok" || echo "jadx_dir=missing"
+    [[ -d "$ART_DIR/apktool-out" ]] && echo "apktool_dir=ok" || echo "apktool_dir=missing"
+    [[ -d "$ART_DIR/reverse-for-prd" ]] && echo "reverse_prd_dir=ok" || echo "reverse_prd_dir=missing"
     [[ -f "$ART_DIR/APK_REVERSE_ANALYSIS.md" ]] && echo "reverse_report=ok" || echo "reverse_report=missing"
+    ;;
+  ensure-reverse-dirs)
+    [[ $# -eq 1 ]] || { usage; exit 2; }
+    ART_DIR="$ROOT/artifacts/$1"
+    REV_DIR="$ART_DIR/reverse-for-prd"
+    mkdir -p "$REV_DIR"
+    for f in \
+      product-positioning.md \
+      feature-spec-input.md \
+      page-spec-input.md \
+      api-contracts.md \
+      monetization-impl.md \
+      permissions-compliance.md \
+      technical-architecture.md \
+      code-reuse-notes.md \
+      reverse-evidence-index.md
+    do
+      touch "$REV_DIR/$f"
+      echo "reverse_input=ready path=$REV_DIR/$f"
+    done
     ;;
   prd-skills)
     for d in \
@@ -151,6 +169,9 @@ case "$MODE" in
     echo
     echo "== reverse-status =="
     "$0" reverse-status "$ARTIFACT"
+    echo
+    echo "== ensure-reverse-dirs =="
+    "$0" ensure-reverse-dirs "$ARTIFACT"
     echo
     echo "== prd-skills =="
     "$0" prd-skills

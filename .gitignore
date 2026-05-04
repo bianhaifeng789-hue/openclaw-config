@@ -10,6 +10,8 @@ benchmarks/
 .openclaw/
 state/
 tmp/
+memory/
+!memory/.gitkeep
 memory/.dreams/
 
 # 环境变量（包含 API Key）
@@ -38,3 +40,8 @@ Thumbs.db
 # Node modules / cache
 node_modules/
 .cache/
+# Experimental / local-only research content
+skills-experimental/
+projects/
+openclaw-config/
+

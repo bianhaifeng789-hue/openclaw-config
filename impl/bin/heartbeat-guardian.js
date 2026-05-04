@@ -23,6 +23,7 @@ const WORKSPACE = process.env.OPENCLAW_WORKSPACE || path.join(require('os').home
 const GUARDIAN_DIR = path.join(WORKSPACE, 'state', 'guardian');
 const GUARDIAN_FILE = path.join(GUARDIAN_DIR, 'guardian-state.json');
 const LOG_FILE = path.join(GUARDIAN_DIR, 'guardian-log.jsonl');
+const AUTO_RECOVERY_ALLOW_STOP = process.env.OPENCLAW_ALLOW_GATEWAY_STOP_RECOVERY === '1';
 
 const DEFAULT_INTERVAL = 60000; // 60 seconds
 
@@ -38,6 +39,23 @@ function logGuardianEvent(event) {
   fs.mkdirSync(GUARDIAN_DIR, { recursive: true });
   fs.appendFileSync(LOG_FILE, JSON.stringify(entry) + '\n');
   return entry;
+}
+
+function sleepMs(ms) {
+  const waitUntil = Date.now() + ms;
+  while (Date.now() < waitUntil) {}
+}
+
+function getCommandErrorText(error) {
+  return [
+    error?.stdout,
+    error?.stderr,
+    error?.message
+  ].filter(Boolean).join('\n');
+}
+
+function isAlreadyRunningError(error) {
+  return /already running locally|already loaded|service already running/i.test(getCommandErrorText(error));
 }
 
 function getGuardianState() {
@@ -79,9 +97,11 @@ function checkGatewayHealth() {
     const pid = pidMatch ? parseInt(pidMatch[1], 10) : null;
     const state = stateMatch ? stateMatch[1] : 'unknown';
     const rpcOk = rpcMatch ? rpcMatch[1] === 'ok' : false;
+    const processOk = state === 'active' && !!pid;
     
     return {
-      ok: state === 'active' && rpcOk,
+      ok: processOk,
+      degraded: processOk && !rpcOk,
       pid,
       state,
       rpcOk
@@ -99,19 +119,24 @@ function recoverGateway() {
   logGuardianEvent({
     type: 'recovery_start',
     severity: 'warning',
-    message: 'Gateway not running, attempting recovery'
+    message: AUTO_RECOVERY_ALLOW_STOP
+      ? 'Gateway unhealthy, attempting force-stop recovery'
+      : 'Gateway unhealthy, attempting non-disruptive recovery'
   });
   
   try {
-    // Stop Gateway (if exists)
-    execSync('openclaw gateway stop', { encoding: 'utf8', timeout: 10000 });
-    
-    // Wait 2 seconds
-    const waitUntil = Date.now() + 2000;
-    while (Date.now() < waitUntil) {}
-    
-    // Start Gateway
-    execSync('openclaw gateway start', { encoding: 'utf8', timeout: 10000 });
+    if (AUTO_RECOVERY_ALLOW_STOP) {
+      execSync('openclaw gateway stop', { encoding: 'utf8', timeout: 10000 });
+      sleepMs(2000);
+    }
+
+    try {
+      execSync('openclaw gateway start', { encoding: 'utf8', timeout: 10000 });
+    } catch (e) {
+      if (!isAlreadyRunningError(e)) {
+        throw e;
+      }
+    }
     
     // Verify
     const health = checkGatewayHealth();

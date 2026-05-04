@@ -1,6 +1,6 @@
 # MEMORY.md - Long-Term Memory
 
-_Last updated: 2026-04-17 19:35_
+- **Last updated: 2026-05-01 10:00**
 
 ---
 
@@ -16,6 +16,11 @@ _Last updated: 2026-04-17 19:35_
 - Feishu integration for notifications
 
 ---
+
+### OpenClaw Task Timestamp Audit/Fix (2026-04-24)
+- `openclaw tasks audit` 的大量 `inconsistent_timestamps` warning 根因已确认：生产包 `createTaskRecord()` 会用新的 `Date.now()` 覆盖 `createdAt`，而上游运行中任务已先传入 `startedAt`，导致 1–2ms 的低风险倒挂。
+- 已热补当前真实运行文件 `dist/task-registry-BJCE3lhL.js`，将 `createdAt` 对齐为 `params.startedAt ?? now`；重启 gateway 后新增验证任务未增加 warning，说明新记录倒挂已止住。
+- 已在 workspace 增加持久补丁机制：`scripts/openclaw-patches/task-createdat-startedat-alignment.patchspec.json`，并提交 `8b3fe63` (`Add durable OpenClaw task timestamp patch`)；后续升级/重装后应先运行 `npm run patch:openclaw:task-timestamps:check` / `npm run patch:openclaw:task-timestamps`。
 
 ## Recent Decisions (2026-04-17)
 
@@ -63,11 +68,21 @@ _Last updated: 2026-04-17 19:35_
 
 ### Work Patterns
 <!-- Updated by insights-analysis heartbeat -->
-- Pending analysis
+- 飞书 DM 交互采用“执行优先”：对本地可逆的开发/检查/修复/验证任务，先实际执行工具和验证，再用简短证据汇报；仅破坏性、外部公开、隐私敏感或歧义大的情况先确认。
+- 倾向把子 session 用于后台维护任务，并要求严格遵守子 session 规则（限制读取范围、避免冗长输出、完成后直接收口）
+- 会根据体验直接调整模型配置，偏好普通版 `openai/gpt-5.4` 作为当前工作模型
 
 ### Key Progress
 <!-- Updated by memory-maintenance heartbeat -->
 - 2026-04-17: Harness Engineering Phase 3 完成
+- 2026-04-21: memory 维护流程已形成固定规则：先预览最近 daily notes、去重流水账、仅把长期有效结论写入 MEMORY.md、完成后 git commit
+- 2026-04-22: 已将主会话模型切换为 `openai/gpt-5.4` 普通版
+- 2026-04-24: 用 `openclaw doctor --fix --non-interactive` 安全归档了 `~/.openclaw/agents/main/sessions` 下 30 个 orphan transcript 文件；复查确认 Gateway / Feishu / 主 session / 模型链均正常
+- 2026-04-24: 将 `openai/gpt-5.4` 设为默认模型，fallback 调整为 `openai_balance/gpt-5.4` → `bailian/glm-5`，并验证配置链路正常
+- 2026-04-24: 诊断出 `openclaw tasks audit` 中 144+ 个 `inconsistent_timestamps` warning 的主因是任务记录存在 `startedAt < createdAt` 的毫秒级写入顺序问题；已确认生产版 `dist/task-registry-BdqH6Lnx.js` 在 `createTaskRecord()` 中把 `createdAt` 固定写成新的 `Date.now()`，而上游多处（如 cron / cli / acp / media tool / subagent）会预先传入 `startedAt`，因此真实运行中会稳定制造这类 warning。随后已直接热补丁生产文件，把 `createdAt` 改为优先复用 `params.startedAt`。历史 warning 不会自动消失，但新建任务应不再继续按同原因累积
+- 2026-04-24: 继续核实发现 2026.4.22 当前实际运行文件已漂移为 `dist/task-registry-BJCE3lhL.js`；完成二次热补、重启 gateway，并用最小新任务验证 `openclaw tasks audit` warning 未继续增长（维持 149）
+- 2026-04-24: 为避免升级/重装覆盖热补丁，在 workspace 增加了持久补丁机制：新增 `scripts/openclaw-patches/task-createdat-startedat-alignment.patchspec.json` 与 `patch:openclaw:task-timestamps` / `patch:openclaw:task-timestamps:check` 脚本，并提交 git `8b3fe63` (`Add durable OpenClaw task timestamp patch`)
+- 2026-04-25: 用户确认将飞书 DM "执行优先"流程形成长期记忆：本地可逆任务先执行/验证再汇报，仅高风险或歧义时先问；已写入 Work Patterns
 
 ---
 
